@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>top-level-items</key>
+	<array>
+		<dict>
+			<key>destination</key>
+			<dict>
+				<key>location-parameters</key>
+				<dict>
+					<key>EndingColumnNumber</key>
+					<string>0</string>
+					<key>EndingLineNumber</key>
+					<string>70</string>
+					<key>StartingColumnNumber</key>
+					<string>20</string>
+					<key>StartingLineNumber</key>
+					<string>69</string>
+					<key>Timestamp</key>
+					<string>802689092.854324</string>
+				</dict>
+				<key>rebasable-url</key>
+				<dict>
+					<key>base</key>
+					<string>workspace</string>
+					<key>payload</key>
+					<dict>
+						<key>relative-path</key>
+						<string>CampuraOne/Views/Avatar/AccountMiniCard.swift</string>
+					</dict>
+				</dict>
+			</dict>
+			<key>text-context</key>
+			<dict>
+				<key>focused</key>
+				<string>更新学生数据,更新时头像旋转
+</string>
+				<key>leading</key>
+				<string>    
+    @ViewBuilder func LoggedIn() -&gt; some View {
+        //每次打开app时都会</string>
+				<key>trailing</key>
+				<string>        if let currentUser {
+            HStack {
+                Text(currentUser.userName)
+</string>
+			</dict>
+			<key>type</key>
+			<string>bookmark</string>
+		</dict>
+		<dict>
+			<key>destination</key>
+			<dict>
+				<key>rebasable-url</key>
+				<dict>
+					<key>base</key>
+					<string>workspace</string>
+					<key>payload</key>
+					<dict>
+						<key>relative-path</key>
+						<string>CampuraOne/Views/Magnetic Stickers/Details/DetailViews/SalesLineDetail.swift</string>
+					</dict>
+				</dict>
+				<key>type</key>
+				<string>DVTDocumentLocation</string>
+			</dict>
+			<key>type</key>
+			<string>bookmark</string>
+		</dict>
+		<dict>
+			<key>destination</key>
+			<dict>
+				<key>location-parameters</key>
+				<dict>
+					<key>EndingColumnNumber</key>
+					<string>24</string>
+					<key>EndingLineNumber</key>
+					<string>36</string>
+					<key>StartingColumnNumber</key>
+					<string>12</string>
+					<key>StartingLineNumber</key>
+					<string>36</string>
+					<key>Timestamp</key>
+					<string>803217156.672452</string>
+				</dict>
+				<key>rebasable-url</key>
+				<dict>
+					<key>base</key>
+					<string>workspace</string>
+					<key>payload</key>
+					<dict>
+						<key>relative-path</key>
+						<string>CampuraOne/Views/Magnetic Stickers/Details/DetailViews/SalesLineDetail.swift</string>
+					</dict>
+				</dict>
+			</dict>
+			<key>text-context</key>
+			<dict>
+				<key>focused</key>
+				<string>///真实热度字段接入前</string>
+				<key>leading</key>
+				<string>        switch mode {
+        case .hot:
+            </string>
+				<key>trailing</key>
+				<string>，暂时用“越接近结束越靠前”占位。
+            return viewModel.items.sorted {
+                ($0.endTime ?? .distantFuture) &lt; ($1.endTime ?? .distantFuture)
+</string>
+			</dict>
+			<key>type</key>
+			<string>bookmark</string>
+		</dict>
+	</array>
+</dict>
+</plist>

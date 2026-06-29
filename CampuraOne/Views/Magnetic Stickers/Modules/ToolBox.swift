@@ -1,0 +1,25 @@
+//
+//  ToolBox.swift
+//  CampuraOne
+//
+//  Created by LShayc1own on 25/05/2026.
+//
+
+import SwiftUI
+import SwiftData
+
+#Preview("app - 已登录") {
+    ContentView()
+        .modelContainer(PreviewContainer.app)
+}
+
+#Preview("app - 未登录") {
+    ContentView()
+        .modelContainer(PreviewContainer.empty)
+}
+
+struct ToolBoxModule: View {
+    var body: some View {
+        Text("功能开发ing…\n期待下个版本见~")
+    }
+}
