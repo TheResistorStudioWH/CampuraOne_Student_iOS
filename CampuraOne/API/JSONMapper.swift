@@ -17,7 +17,6 @@ enum JSONMapper {
             userID: json["userID"].intValue,
             userName: json["userName"].stringValue,
             userImg: json["userImg"].string,
-            passwordHash: json["passwordHash"].stringValue,
             shopIDs: json["shopIDs"].arrayValue.map { $0.intValue },
             studentID: json["studentID"].int,
             createdAt: json["createdAt"].string?.toDate(),

@@ -35,7 +35,6 @@ enum PreviewContainer {
                 userID: 1,
                 userName: "琳曦",
                 userImg: "https://picsum.photos/200",
-                passwordHash: "123456",
                 shopIDs: [1001, 1002],
                 studentID: 20260001
             )

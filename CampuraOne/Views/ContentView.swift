@@ -462,7 +462,7 @@ struct topToolbar: View {
                         isSource: isToolbarVisible
                     )
                 
-                toolbarAnnouncementLabels()
+                toolbar_AnnouncementLabels()
                     .announcementMatchedGeometry(
                         id: "announcement.short.labels",
                         namespace: announcementNamespace,
@@ -488,10 +488,9 @@ struct topToolbar: View {
     }
     
     @ViewBuilder
-    private func toolbarAnnouncementLabels() -> some View {
+    private func toolbar_AnnouncementLabels() -> some View {
         if shortAnnounces.isEmpty {
             Text("0")
-                .font(.caption.bold())
                 .foregroundStyle(.secondary)
         } else {
             HStack(spacing: 5) {

@@ -16,9 +16,6 @@ final class AppUser {
     var userName: String // 用户名称
     var userImg: String? // 用户头像，可为空
     
-    // 登录密码哈希
-    // 注意：正式项目里不建议在本地保存明文密码，这里只对齐服务器的 passwordHash 字段。
-    var passwordHash: String
     
     var shopIDs: [Int] // 管理的商户ID列表，可为空
     var studentID: Int? // 绑定的学生ID，可为空
@@ -29,7 +26,6 @@ final class AppUser {
         userID: Int,
         userName: String,
         userImg: String? = nil,
-        passwordHash: String,
         shopIDs: [Int] = [],
         studentID: Int? = nil,
         createdAt: Date? = nil,
@@ -38,7 +34,6 @@ final class AppUser {
         self.userID = userID
         self.userName = userName
         self.userImg = userImg
-        self.passwordHash = passwordHash
         self.shopIDs = shopIDs
         self.studentID = studentID
         self.createdAt = createdAt

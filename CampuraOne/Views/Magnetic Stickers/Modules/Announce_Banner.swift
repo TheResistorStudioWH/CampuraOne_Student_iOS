@@ -33,26 +33,17 @@ struct Announce_BannerRemoteModule: View {
                 ProgressView()
                     .frame(maxWidth: .infinity, minHeight: 72)
             } else if userProfile?.studentID == nil {
-                ContentUnavailableView(
-                    "暂无通知",
-                    systemImage: "megaphone",
-                    description: Text("当前用户没有绑定学生信息。")
-                )
+               
             } else if announcementStore.isLoading && announcementStore.announces.isEmpty {
                 ProgressView()
                     .frame(maxWidth: .infinity, minHeight: 72)
             } else if let errorMessage = announcementStore.errorMessage,
                       announcementStore.announces.isEmpty {
-                ContentUnavailableView(
-                    "通知加载失败",
-                    systemImage: "exclamationmark.triangle",
-                    description: Text(errorMessage)
-                )
-            } else if announcementStore.announces.isEmpty {
-                ContentUnavailableView(
-                    "暂无通知",
-                    systemImage: "megaphone"
-                )
+//                ContentUnavailableView(
+//                    "通知加载失败",
+//                    systemImage: "exclamationmark.triangle",
+//                    description: Text(errorMessage)
+//                )
             } else {
                 Announce_BannerModule(
                     announces: announcementStore.announces

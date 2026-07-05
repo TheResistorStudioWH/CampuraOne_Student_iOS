@@ -20,7 +20,11 @@ enum APIConfig {
         baseURL + "/api/upload" + path
     }
     
-    enum Path {
+    static func api_auth(_ path: String) -> String {
+        baseURL + "/api/auth" + path
+    }
+    
+    enum DLPath {
         static let currentUser = "/user_profile.php"
         static let studentProfile = "/student_profile.php"
         
@@ -42,5 +46,14 @@ enum APIConfig {
         static let announcements = "/announcements.php"
         
         static let search = "/search.php"
+    }
+    
+    enum ULPath {
+        
+    }
+    
+    enum AuthPath {
+        static let login = "/login.php"
+        static let signin = "/register.php"
     }
 }

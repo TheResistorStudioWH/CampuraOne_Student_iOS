@@ -42,7 +42,6 @@ struct UserProfileDemo: View {
                         UserProfileRow(title: "用户 ID", value: String(user.userID))
                         UserProfileRow(title: "用户名", value: user.userName)
                         UserProfileRow(title: "头像链接", value: user.userImg ?? "无")
-                        UserProfileRow(title: "密码哈希", value: user.passwordHash)
                         UserProfileRow(title: "管理商户", value: user.shopIDs.isEmpty ? "无" : user.shopIDs.map(String.init).joined(separator: ", "))
                         UserProfileRow(title: "绑定学生", value: user.studentID.map(String.init) ?? "无")
                         UserProfileRow(title: "创建时间", value: formatDate(user.createdAt))

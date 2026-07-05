@@ -556,7 +556,7 @@ private final class RemoteSchoolCalendarService {
     }
     
     func fetchSchoolCalendar(schoolID: Int) async throws -> [RemoteSchoolCalendarEvent] {
-        var components = URLComponents(string: APIConfig.api_download(APIConfig.Path.schoolCalendar))
+        var components = URLComponents(string: APIConfig.api_download(APIConfig.DLPath.schoolCalendar))
         components?.queryItems = [
             URLQueryItem(name: "schoolID", value: "\(schoolID)")
         ]

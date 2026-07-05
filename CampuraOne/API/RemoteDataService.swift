@@ -18,7 +18,7 @@ final class RemoteDataService {
     // MARK: - 请求当前用户
     
     func fetchCurrentUser() async throws -> AppUser {
-        let json = try await APIClient.shared.get(url: APIConfig.api_download(APIConfig.Path.currentUser))
+        let json = try await APIClient.shared.get(url: APIConfig.api_download(APIConfig.DLPath.currentUser))
         
         // 假设后端返回：
         // {
@@ -34,7 +34,7 @@ final class RemoteDataService {
     
     func fetchUserProfile(userID: Int) async throws -> AppUser {
         let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.Path.currentUser),
+            url: APIConfig.api_download(APIConfig.DLPath.currentUser),
             parameters: [
                 "userID": userID
             ]
@@ -47,7 +47,7 @@ final class RemoteDataService {
     
     func fetchStudentProfile(studentID: Int) async throws -> Student {
         let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.Path.studentProfile),
+            url: APIConfig.api_download(APIConfig.DLPath.studentProfile),
             parameters: [
                 "studentID": studentID
             ]
@@ -60,7 +60,7 @@ final class RemoteDataService {
     
     func fetchSchool(schoolID: Int) async throws -> School {
         let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.Path.school),
+            url: APIConfig.api_download(APIConfig.DLPath.school),
             parameters: [
                 "schoolID": schoolID
             ]
@@ -73,7 +73,7 @@ final class RemoteDataService {
     
     func fetchCampuses(schoolID: Int) async throws -> [Campus] {
         let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.Path.campuses),
+            url: APIConfig.api_download(APIConfig.DLPath.campuses),
             parameters: [
                 "schoolID": schoolID
             ]
@@ -88,7 +88,7 @@ final class RemoteDataService {
     
     func fetchSchoolCalendarICS(schoolID: Int) async throws -> String {
         let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.Path.schoolCalendar),
+            url: APIConfig.api_download(APIConfig.DLPath.schoolCalendar),
             parameters: [
                 "schoolID": schoolID
             ]
@@ -116,7 +116,7 @@ final class RemoteDataService {
         classID: Int
     ) async throws -> CourseTable {
         let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.Path.courseTable),
+            url: APIConfig.api_download(APIConfig.DLPath.courseTable),
             parameters: [
                 "schoolID": schoolID,
                 "compoundID": compoundID,
@@ -148,7 +148,7 @@ final class RemoteDataService {
     
     func fetchMainShops(schoolID: Int) async throws -> [MainShop] {
         let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.Path.shops),
+            url: APIConfig.api_download(APIConfig.DLPath.shops),
             parameters: [
                 "schoolID": schoolID
             ]
@@ -163,7 +163,7 @@ final class RemoteDataService {
     
     func fetchSubShops(mainShopID: Int) async throws -> [SubShop] {
         let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.Path.subShops),
+            url: APIConfig.api_download(APIConfig.DLPath.subShops),
             parameters: [
                 "mainShopID": mainShopID
             ]
@@ -178,7 +178,7 @@ final class RemoteDataService {
     
     func fetchProductCategories() async throws -> [ProductCategory] {
         let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.Path.productCategories)
+            url: APIConfig.api_download(APIConfig.DLPath.productCategories)
         )
         
         return JSONMapper.makeProductCategories(from: json["data"])
@@ -186,7 +186,7 @@ final class RemoteDataService {
     
     func fetchProductCategory(categoryID: Int) async throws -> ProductCategory {
         let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.Path.productCategories),
+            url: APIConfig.api_download(APIConfig.DLPath.productCategories),
             parameters: [
                 "categoryID": categoryID
             ]
@@ -199,7 +199,7 @@ final class RemoteDataService {
     
     func fetchProduct(productID: Int) async throws -> Product {
         let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.Path.products),
+            url: APIConfig.api_download(APIConfig.DLPath.products),
             parameters: [
                 "productID": productID
             ]
@@ -229,7 +229,7 @@ final class RemoteDataService {
         }
         
         let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.Path.products),
+            url: APIConfig.api_download(APIConfig.DLPath.products),
             parameters: parameters
         )
         
@@ -252,7 +252,7 @@ final class RemoteDataService {
         }
         
         let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.Path.products),
+            url: APIConfig.api_download(APIConfig.DLPath.products),
             parameters: parameters
         )
         
@@ -274,7 +274,7 @@ final class RemoteDataService {
         }
         
         let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.Path.products),
+            url: APIConfig.api_download(APIConfig.DLPath.products),
             parameters: parameters
         )
         
@@ -285,7 +285,7 @@ final class RemoteDataService {
     
     func fetchProducts(categoryID: Int) async throws -> [Product] {
         let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.Path.products),
+            url: APIConfig.api_download(APIConfig.DLPath.products),
             parameters: [
                 "categoryID": categoryID
             ]
@@ -311,7 +311,7 @@ final class RemoteDataService {
         }
         
         let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.Path.promotions),
+            url: APIConfig.api_download(APIConfig.DLPath.promotions),
             parameters: parameters
         )
         
@@ -342,7 +342,7 @@ final class RemoteDataService {
         }
         
         let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.Path.advertisements),
+            url: APIConfig.api_download(APIConfig.DLPath.advertisements),
             parameters: parameters
         )
         
@@ -399,7 +399,7 @@ final class RemoteDataService {
         }
         
         let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.Path.search),
+            url: APIConfig.api_download(APIConfig.DLPath.search),
             parameters: parameters
         )
         
@@ -479,7 +479,7 @@ final class RemoteDataService {
         }
         
         let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.Path.announcements),
+            url: APIConfig.api_download(APIConfig.DLPath.announcements),
             parameters: parameters
         )
         
