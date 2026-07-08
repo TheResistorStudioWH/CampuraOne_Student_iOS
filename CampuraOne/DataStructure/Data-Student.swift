@@ -15,7 +15,7 @@ final class AppUser {
     
     var userName: String // 用户名称
     var userImg: String? // 用户头像，可为空
-    
+    var token: String? // JWT登录token（本地缓存用）
     
     var shopIDs: [Int] // 管理的商户ID列表，可为空
     var studentID: Int? // 绑定的学生ID，可为空
@@ -26,6 +26,7 @@ final class AppUser {
         userID: Int,
         userName: String,
         userImg: String? = nil,
+        token: String? = nil,
         shopIDs: [Int] = [],
         studentID: Int? = nil,
         createdAt: Date? = nil,
@@ -34,6 +35,7 @@ final class AppUser {
         self.userID = userID
         self.userName = userName
         self.userImg = userImg
+        self.token = token
         self.shopIDs = shopIDs
         self.studentID = studentID
         self.createdAt = createdAt

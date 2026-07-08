@@ -14,8 +14,13 @@ import SwiftyJSON
 final class APIClient {
     
     static let shared = APIClient()
+    private var authToken: String?
     
     private init() { }
+    
+    func setToken(_ token: String) {
+        self.authToken = token
+    }
     
     /// 通用 GET 请求
     func get(
@@ -24,11 +29,16 @@ final class APIClient {
     ) async throws -> JSON {
         
         return try await withCheckedThrowingContinuation { continuation in
+            var headers: HTTPHeaders = []
+            if let token = authToken {
+                headers.add(name: "Authorization", value: "Bearer \(token)")
+            }
             AF.request(
                 url,
                 method: .get,
                 parameters: parameters,
-                encoding: URLEncoding.default
+                encoding: URLEncoding.default,
+                headers: headers
             )
             .validate()
             .responseData { response in
@@ -51,11 +61,16 @@ final class APIClient {
     ) async throws -> JSON {
         
         return try await withCheckedThrowingContinuation { continuation in
+            var headers: HTTPHeaders = []
+            if let token = authToken {
+                headers.add(name: "Authorization", value: "Bearer \(token)")
+            }
             AF.request(
                 url,
                 method: .post,
                 parameters: parameters,
-                encoding: JSONEncoding.default
+                encoding: JSONEncoding.default,
+                headers: headers
             )
             .validate()
             .responseData { response in

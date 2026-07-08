@@ -10,6 +10,413 @@ import SwiftUI
 import Combine
 import UIKit
 
+// MARK: - 弹窗
+#Preview("ToastAlertView", body: {
+    ToastAlertView(symbol: "⚠️", bgColor: .red, message: "警告警告", isAnimating: true)
+})
+
+struct ToastAlertView: View {
+    var symbol: String
+    var bgColor: Color
+    let message: String
+    @State var isAnimating: Bool
+    
+    var body: some View {
+        Text("\(symbol)" + (message))
+            .font(.system(.body, design: .rounded, weight: .semibold))
+            .foregroundStyle(.white)
+            .scaleEffect(isAnimating ? 1 : 0.001)
+            .padding(16)
+            .padding(.horizontal)
+            .background {
+                ZStack {
+                    
+                    RoundedRectangle(cornerRadius: .infinity, style: .continuous)
+                        .fill(Material.bar)
+                        .shadow(color: .black.opacity(0.33), radius: 8, x: 1, y: 1)
+                    RoundedRectangle(cornerRadius: .infinity, style: .continuous)
+                        .fill(bgColor.opacity(0.2))
+                        .shadow(color: bgColor.opacity(0.1), radius: 8, x: 1, y: 1)
+                }
+            }
+            .padding(.bottom)
+    }
+}
+
+
+// MARK: - 🎉buttonStyle
+
+public extension Color {
+    static func random(randomOpacity: Bool = false) -> Color {
+        Color(
+            red: .random(in: 0...1),
+            green: .random(in: 0...1),
+            blue: .random(in: 0...1),
+            opacity: randomOpacity ? .random(in: 0...1) : 1
+        )
+    }
+}
+
+class ConfettiCenterVM: ObservableObject {
+    /// - Parameters:
+    ///  - counter: on any change of this variable the animation is run
+    ///  - num: amount of confettis
+    ///  - colors: list of colors that is applied to the default shapes
+    ///  - confettiSize: size that confettis and emojis are scaled to
+    ///  - dropHeight: vertical distance that confettis pass
+    ///  - fadesOut: reduce opacity towards the end of the animation
+    ///  - fireworkEffect: every item will explosive in same circle line
+    ///  - opacity: maximum opacity that is reached during the animation
+    ///  - openingAngle: boundary that defines the opening angle in degrees
+    ///  - closingAngle: boundary that defines the closing angle in degrees
+    ///  - radius: explosion radius
+    ///  - repetitions: number of repetitions of the explosion
+    ///  - repetitionInterval: duration between the repetitions
+    @Published var confettiNumber: Int
+    @Published var confettiTypes: [ConfettiType]
+    @Published var colors: [Color]
+    @Published var confettiSize: CGFloat
+    @Published var dropHeight: CGFloat
+    @Published var fadesOut: Bool
+    @Published var fireworkEffect: Bool
+    @Published var opacity: Double
+    @Published var openingAngle: Angle
+    @Published var closingAngle: Angle
+    @Published var radius: CGFloat
+    @Published var repetitions: Int
+    @Published var repetitionInterval: Double
+    @Published var explosionAnimationDuration: Double
+    @Published var dropAnimationDuration: Double
+
+    init(confettiNumber: Int = 200,
+         confettiTypes: [ConfettiType] = ConfettiType.allCases,
+         colors: [Color] = [Color.red, Color.accent, Color.pink, Color.green, Color.yellow, Color.indigo, Color.cyan, Color.white, Color.gray, Color.mint, Color.orange, Color.teal, Color.purple, Color.lightningHeart, Color.black],
+         confettiSize: CGFloat = 12,
+         dropHeight: CGFloat = screen.height*1.7,
+         fadesOut: Bool = true,
+         fireworkEffect: Bool = false,
+         opacity: Double = 1.0,
+         openingAngle: Angle = .degrees(60),
+         closingAngle: Angle = .degrees(120),
+         radius: CGFloat = screen.width*1.8,
+         repetitions: Int = 0,
+         repetitionInterval: Double = 1.0,
+         explosionAnimDuration: Double = 0.4,
+         dropAnimationDuration: Double = 4.3
+    ) {
+        self.confettiNumber = confettiNumber
+        self.confettiTypes = confettiTypes
+        self.colors = colors
+        self.confettiSize = confettiSize
+        self.dropHeight = dropHeight
+        self.fadesOut = fadesOut
+        self.fireworkEffect = fireworkEffect
+        self.opacity = opacity
+        self.openingAngle = openingAngle
+        self.closingAngle = closingAngle
+        self.radius = radius
+        self.repetitions = repetitions
+        self.repetitionInterval = repetitionInterval
+        self.explosionAnimationDuration = explosionAnimDuration
+        self.dropAnimationDuration = dropAnimationDuration
+    }
+    func getShapes() -> [AnyView] {
+        var shapes = [AnyView]()
+        for confetti in confettiTypes {
+            for color in colors {
+                switch confetti {
+                case .shape(_):
+                    shapes.append(AnyView(confetti.view.foregroundColor(color).frame(width: confettiSize, height: confettiSize, alignment: .center)))
+                default:
+                    shapes.append(AnyView(confetti.view.foregroundColor(color).font(.system(size: confettiSize))))
+                }
+            }
+        }
+        return shapes
+    }
+    func getAnimDuration() -> CGFloat {
+        return explosionAnimationDuration + dropAnimationDuration
+    }
+}
+
+public enum ConfettiType: CaseIterable, Hashable {
+    public enum Shape {
+        case circle
+        case triangle
+        case square
+        case slimRectangle
+        case roundedCross
+    }
+    
+    case shape(Shape)
+    case text(String)
+    case sfSymbol(symbolName: String)
+    
+    public var view:AnyView {
+        switch self {
+        case .shape(.square):
+            return AnyView(Rectangle())
+        case .shape(.triangle):
+            return AnyView(Triangle())
+        case .shape(.slimRectangle):
+            return AnyView(SlimRectangle())
+        case .shape(.roundedCross):
+            return AnyView(RoundedCross())
+        case let .text(text):
+            return AnyView(Text(text))
+        case .sfSymbol(let symbolName):
+            return AnyView(Image(systemName: symbolName))
+        default:
+            return AnyView(Circle())
+        }
+    }
+    public static var allCases: [ConfettiType] {
+        return [.shape(.circle), .shape(.triangle), .shape(.square), .shape(.slimRectangle), .shape(.roundedCross)]
+    }
+}
+
+public struct Triangle: Shape {
+    public func path(in rect: CGRect) -> Path {
+        
+        var path = Path()
+        path.move(to: CGPoint(x: rect.midX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.midX, y: rect.minY))
+        return path
+    }
+}
+
+public struct RoundedCross: Shape {
+    public func path(in rect: CGRect) -> Path {
+        
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX, y: rect.maxY/3))
+        path.addQuadCurve(to: CGPoint(x: rect.maxX/3, y: rect.minY), control: CGPoint(x: rect.maxX/3, y: rect.maxY/3))
+        path.addLine(to: CGPoint(x: 2*rect.maxX/3, y: rect.minY))
+        
+        path.addQuadCurve(to: CGPoint(x: rect.maxX, y: rect.maxY/3), control: CGPoint(x: 2*rect.maxX/3, y: rect.maxY/3))
+        path.addLine(to: CGPoint(x: rect.maxX, y: 2*rect.maxY/3))
+
+        path.addQuadCurve(to: CGPoint(x: 2*rect.maxX/3, y: rect.maxY), control: CGPoint(x: 2*rect.maxX/3, y: 2*rect.maxY/3))
+        path.addLine(to: CGPoint(x: rect.maxX/3, y: rect.maxY))
+
+        path.addQuadCurve(to: CGPoint(x: 2*rect.minX/3, y: 2*rect.maxY/3), control: CGPoint(x: rect.maxX/3, y: 2*rect.maxY/3))
+        return path
+    }
+}
+
+public struct SlimRectangle: Shape {
+    public func path(in rect: CGRect) -> Path {
+        
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX, y: 4*rect.maxY/5))
+        path.addLine(to: CGPoint(x: rect.maxX, y: 4*rect.maxY/5))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+        return path
+    }
+}
+
+struct ConfettiView: View {
+    
+    @Binding var counter: Int
+    @StateObject var confettiVM = ConfettiCenterVM()
+    @State var animate = 0
+    @State var finishedAnimationCounter = 0
+    @State var firstAppear = false
+    
+    var body: some View {
+        ZStack {
+            ForEach(finishedAnimationCounter..<animate, id:\.self){ i in
+                ConfettiContainer(
+                    confettiVM: confettiVM, finishedAnimationCounter: $finishedAnimationCounter
+                )
+            }
+        }
+        .onAppear(){
+            firstAppear = true
+        }
+        .onChange(of: counter) { value in
+            if firstAppear {
+                for i in 0...confettiVM.repetitions {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + confettiVM.repetitionInterval * Double(i)) {
+                        animate += 1
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct ConfettiContainer: View {
+    
+    @StateObject var confettiVM: ConfettiCenterVM
+    @Binding var finishedAnimationCounter:Int
+    @State var firstAppear = true
+
+    var body: some View {
+        ZStack {
+            ForEach(0..<confettiVM.confettiNumber, id:\.self) { _ in
+                ConfettiFrame(confettiVM: confettiVM)
+            }
+        }
+        .onAppear {
+            if firstAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + confettiVM.getAnimDuration()) {
+                    self.finishedAnimationCounter += 1
+                }
+                firstAppear = false
+            }
+        }
+    }
+}
+
+struct ConfettiFrame: View {
+    //For Animation.timingCurve
+    //https://matthewlein.com/tools/ceaser
+    @StateObject var confettiVM: ConfettiCenterVM
+    @State var location: CGPoint = CGPoint(x: 0, y: 0)
+    @State var opacity: Double = 0.0
+
+    var body: some View {
+        ConfettiItem(shape: getShape(), color: getColor())
+            .offset(x: location.x, y: location.y)
+            .opacity(opacity)
+            .onAppear {
+                withAnimation(Animation.timingCurve(0.6, 1, 1, 1, duration: getAnimationDuration())) {
+                
+                    opacity = confettiVM.opacity
+                    
+                    let randomAngle:CGFloat
+                    if confettiVM.openingAngle.degrees <= confettiVM.closingAngle.degrees {
+                        randomAngle = CGFloat.random(in: CGFloat(confettiVM.openingAngle.degrees)...CGFloat(confettiVM.closingAngle.degrees))
+                    } else {
+                        randomAngle = CGFloat.random(in: CGFloat(confettiVM.openingAngle.degrees)...CGFloat(confettiVM.closingAngle.degrees + 360)).truncatingRemainder(dividingBy: 360)
+                    }
+                    
+                    let distance = getDistance()
+                    
+                    location.x = distance * cos(deg2rad(randomAngle))
+                    location.y = -distance * sin(deg2rad(randomAngle))
+                }
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + getDelayBeforeDropAnimation()) {
+                    withAnimation(Animation.timingCurve(0.12, 0, 0.39, 0, duration: confettiVM.dropAnimationDuration)) {
+                        location.y += confettiVM.dropHeight
+                        opacity = confettiVM.fadesOut ? 0 : confettiVM.opacity
+                    }
+                }
+            }
+    }
+    func getShape() -> AnyView {
+        return confettiVM.getShapes().randomElement()!
+    }
+    func getColor() -> Color {
+        return confettiVM.colors.randomElement()!
+    }
+    func getRandomExplosionTimeVariation() -> CGFloat {
+        return CGFloat((0...999).randomElement()!) / 2100
+    }
+    func getAnimationDuration() -> CGFloat {
+        return 0.2 + confettiVM.explosionAnimationDuration + getRandomExplosionTimeVariation()
+    }
+    func getDistance() -> CGFloat {
+        if !confettiVM.fireworkEffect{
+            return pow(CGFloat.random(in: 0.01...1), 2.0/7.0) * confettiVM.radius
+        }
+        return confettiVM.radius
+    }
+    func getDelayBeforeDropAnimation() -> TimeInterval {
+        confettiVM.explosionAnimationDuration * 0.1
+    }
+    func deg2rad(_ number: CGFloat) -> CGFloat {
+        return number * CGFloat.pi / 180
+    }
+}
+
+struct ConfettiItem: View {
+    
+    @State var shape: AnyView
+    @State var color: Color
+    
+    @State var move = false
+    @State var anchor = CGFloat(Int.random(in: 0...1))
+    @State var spinDirX = [-1.0, 1.0].randomElement()!
+    @State var spinDirZ = [-1.0, 1.0].randomElement()!
+    @State var xSpeed = Double.random(in: 0.501...2.201)
+    @State var zSpeed = Double.random(in: 0.501...2.201)
+    
+    var body: some View {
+        shape
+            .foregroundColor(color)
+            .rotation3DEffect(.degrees(move ? 360 : 0), axis: (x: spinDirX, y: 0, z: 0))
+            .animation(Animation.linear(duration: xSpeed).repeatForever(), value: move)
+            .rotation3DEffect(.degrees(move ? 360 : 0), axis: (x: 0, y: 0, z: spinDirZ), anchor: UnitPoint(x: anchor, y: anchor))
+            .animation(Animation.linear(duration: zSpeed).repeatForever(), value: move)
+            .onAppear {
+                move = true
+            }
+    }
+}
+
+struct theCongratulateButton: ButtonStyle {
+    @State var tapX: CGFloat = 0
+    @State var tapY: CGFloat = 0
+    @State var tapCount = 0
+    func makeBody(configuration: Configuration) -> some View {
+        ZStack {
+            configuration.label
+                .padding()
+                .background {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: .infinity, style: .continuous)
+                            .foregroundStyle(.red)
+                            .opacity(0.26)
+                        RoundedRectangle(cornerRadius: .infinity, style: .continuous)
+                            .fill(Material.regular)
+                        
+                    }
+                }
+                
+            ConfettiView(counter: $tapCount)
+                    .opacity(tapCount == 0 ? 0 : 1)
+                    .position(x: tapX, y: tapY)
+                    .onReceive(tapPipe, perform: { i in
+                        tapX = i.tapX
+                        tapY = i.tapY
+                        tapCount += 1
+                    })
+        }
+            
+    }
+}
+
+#Preview("🎉") {
+    Button(action: { print("Pressed") }) {
+        Label("Press Me", systemImage: "star")
+    }
+    .buttonStyle(theCongratulateButton())
+}
+
+extension ConfirmInfo {
+    
+    func tapPosition() -> some Gesture {
+        DragGesture(minimumDistance: 0)
+            .onEnded { dragGesture in
+                let tapX = dragGesture.location.x
+                let tapY = dragGesture.location.y
+//                tapCount += 1
+                tapPipe.send(tapStruct(tapX: tapX, tapY: tapY))
+                printLog("X:\(tapX)")
+                printLog("Y:\(tapY)")
+                DispatchAfter(after: 3.5) {
+                    dismissSheetPipe.send(true)
+                    printLog("dismiss")
+                }
+            }
+    }
+}
 
 // MARK: - 深浅色模式DIY
 

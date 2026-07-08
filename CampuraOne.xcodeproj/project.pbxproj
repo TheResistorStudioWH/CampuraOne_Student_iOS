@@ -122,6 +122,11 @@
 			path = "Map Layer";
 			sourceTree = "<group>";
 		};
+		0B9F190F2FFBBBF300C84458 /* AuthAccount */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AuthAccount;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -329,6 +334,7 @@
 		0B8303202FDF0D7300B5269A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0B9F190F2FFBBBF300C84458 /* AuthAccount */,
 				0B8303082FDF0D7300B5269A /* AccountManager */,
 				0B8303092FDF0D7300B5269A /* Alerts */,
 				0B8303172FDF0D7300B5269A /* Magnetic Stickers */,
@@ -374,6 +380,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				0B4CA4F92FE01365008B3B2D /* Map Layer */,
+				0B9F190F2FFBBBF300C84458 /* AuthAccount */,
 			);
 			name = CampuraOne;
 			packageProductDependencies = (
