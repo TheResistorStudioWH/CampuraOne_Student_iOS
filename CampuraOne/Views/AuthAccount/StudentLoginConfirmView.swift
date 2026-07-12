@@ -15,7 +15,7 @@ struct StudentLoginConfirmView: View {
             HStack(spacing: 10) {
                 Image(systemName: "person.text.rectangle.fill")
                     .font(.title2)
-                    .foregroundStyle(.accent)
+                    .foregroundStyle(.blue)
                 Text("请确认信息")
                     .font(.title2.bold())
             }
@@ -41,17 +41,18 @@ struct StudentLoginConfirmView: View {
             Text("账号由校方统一下发，无渠道擅自注册。若信息有误，请联系校方处理。")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
-
-            Button {
-                onContinue?()
-            } label: {
-                Text("我已确认无误，继续进入 Campura One")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
-            }
-            .buttonStyle(.borderedProminent)
-            .tint(.accentColor)
+            
+            Text("我已确认无误，继续进入 Campura One")
+                .font(.headline)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 14)
+                .beButton {
+                    
+                }
+                .buttonStyle(CelebrationConfettiButtonStyle())
+                .gesture(celebrateTapPosition(dismissAfter: 0.9) {
+                    onContinue?()
+                })
         }
         .padding(20)
     }

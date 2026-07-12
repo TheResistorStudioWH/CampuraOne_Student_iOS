@@ -90,7 +90,7 @@ class ConfettiCenterVM: ObservableObject {
 
     init(confettiNumber: Int = 200,
          confettiTypes: [ConfettiType] = ConfettiType.allCases,
-         colors: [Color] = [Color.red, Color.accent, Color.pink, Color.green, Color.yellow, Color.indigo, Color.cyan, Color.white, Color.gray, Color.mint, Color.orange, Color.teal, Color.purple, Color.lightningHeart, Color.black],
+         colors: [Color] = [Color.red, Color.blue, Color.pink, Color.green, Color.yellow, Color.indigo, Color.cyan, Color.white, Color.gray, Color.mint, Color.orange, Color.teal, Color.purple, Color.orange, Color.black],
          confettiSize: CGFloat = 12,
          dropHeight: CGFloat = screen.height*1.7,
          fadesOut: Bool = true,
@@ -360,7 +360,14 @@ struct ConfettiItem: View {
     }
 }
 
-struct theCongratulateButton: ButtonStyle {
+struct ConfettiTapPayload {
+    let tapX: CGFloat
+    let tapY: CGFloat
+}
+
+let confettiTapPipe = PassthroughSubject<ConfettiTapPayload, Never>()
+
+struct CelebrationConfettiButtonStyle: ButtonStyle {
     @State var tapX: CGFloat = 0
     @State var tapY: CGFloat = 0
     @State var tapCount = 0
@@ -382,9 +389,9 @@ struct theCongratulateButton: ButtonStyle {
             ConfettiView(counter: $tapCount)
                     .opacity(tapCount == 0 ? 0 : 1)
                     .position(x: tapX, y: tapY)
-                    .onReceive(tapPipe, perform: { i in
-                        tapX = i.tapX
-                        tapY = i.tapY
+                    .onReceive(confettiTapPipe, perform: { payload in
+                        tapX = payload.tapX
+                        tapY = payload.tapY
                         tapCount += 1
                     })
         }
@@ -392,27 +399,27 @@ struct theCongratulateButton: ButtonStyle {
     }
 }
 
+typealias theCongratulateButton = CelebrationConfettiButtonStyle
+
 #Preview("🎉") {
     Button(action: { print("Pressed") }) {
         Label("Press Me", systemImage: "star")
     }
-    .buttonStyle(theCongratulateButton())
+    .buttonStyle(CelebrationConfettiButtonStyle())
 }
 
-extension ConfirmInfo {
-    
-    func tapPosition() -> some Gesture {
+extension View {
+    func celebrateTapPosition(
+        dismissAfter: Double = 3.5,
+        onComplete: @escaping () -> Void = {}
+    ) -> some Gesture {
         DragGesture(minimumDistance: 0)
             .onEnded { dragGesture in
                 let tapX = dragGesture.location.x
                 let tapY = dragGesture.location.y
-//                tapCount += 1
-                tapPipe.send(tapStruct(tapX: tapX, tapY: tapY))
-                printLog("X:\(tapX)")
-                printLog("Y:\(tapY)")
-                DispatchAfter(after: 3.5) {
-                    dismissSheetPipe.send(true)
-                    printLog("dismiss")
+                confettiTapPipe.send(ConfettiTapPayload(tapX: tapX, tapY: tapY))
+                DispatchAfter(after: dismissAfter) {
+                    onComplete()
                 }
             }
     }

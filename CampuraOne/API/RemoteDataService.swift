@@ -68,7 +68,7 @@ final class RemoteDataService {
         
         return JSONMapper.makeSchool(from: json["data"])
     }
-
+    
     // MARK: - 请求校区列表
     
     func fetchCampuses(schoolID: Int) async throws -> [Campus] {
@@ -280,7 +280,7 @@ final class RemoteDataService {
         
         return JSONMapper.makeProducts(from: json["data"])
     }
-
+    
     // MARK: - 按分类请求全部商品
     
     func fetchProducts(categoryID: Int) async throws -> [Product] {
@@ -445,7 +445,7 @@ final class RemoteDataService {
     }
     
     // MARK: - 请求学校通知列表
-
+    
     func fetchAnnouncements(
         schoolID: Int,
         type: AnnouncementType? = nil,
@@ -487,8 +487,8 @@ final class RemoteDataService {
             JSONMapper.makeAnnouncementItem(from: $0)
         }
     }
-
-
+    
+    
     // MARK: - 请求当前学生可见通知
     
     func fetchVisibleAnnouncements(
@@ -552,5 +552,53 @@ final class RemoteDataService {
         }
         
         return false
+    }
+    
+    
+    
+    // MARK: - Auth Token 管理
+    
+    func setAuthToken(_ token: String?) {
+        guard let token, !token.isEmpty else { return }
+        APIClient.shared.setToken(token)
+    }
+    
+    func bindUser(_ user: AppUser) {
+        if let token = user.token, !token.isEmpty {
+            APIClient.shared.setToken(token)
+        }
+    }
+    
+    // MARK: - 学生登录
+    
+    func loginStudent(userName: String, password: String) async throws -> (token: String, user: AppUser) {
+        let json = try await APIClient.shared.post(
+            url: APIConfig.api_auth(APIConfig.AuthPath.login),
+            parameters: [
+                "userName": userName,
+                "password": password
+            ]
+        )
+        
+        let data = json["data"]
+        let token = data["token"].stringValue
+        var user = JSONMapper.makeAppUser(from: data["user"])
+        user.token = token
+        
+        if !token.isEmpty {
+            APIClient.shared.setToken(token)
+        }
+        
+        return (token: token, user: user)
+    }
+    
+    // MARK: - 当前登录学生信息
+    
+    func fetchMyStudentProfile() async throws -> Student {
+        let json = try await APIClient.shared.get(
+            url: APIConfig.api_download(APIConfig.DLPath.studentProfile)
+        )
+        
+        return JSONMapper.makeStudent(from: json["data"])
     }
 }

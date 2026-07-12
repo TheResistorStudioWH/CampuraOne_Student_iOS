@@ -21,7 +21,7 @@ enum APIConfig {
     }
     
     static func api_auth(_ path: String) -> String {
-        baseURL + "/api/auth" + path
+        baseURL + "/api/auth/user/student" + path
     }
     
     enum DLPath {
