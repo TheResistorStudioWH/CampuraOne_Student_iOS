@@ -16,15 +16,7 @@ import SwiftData
 
 struct ICSCalendar_TimeLineStyle: View {
     @StateObject private var viewModel = LoadableListViewModel<ICSEventItem>(loader: {
-        let user = try await RemoteDataService.shared.fetchUserProfile(userID: 1)
-        
-        guard let studentID = user.studentID else {
-            return []
-        }
-        
-        let student = try await RemoteDataService.shared.fetchStudentProfile(
-            studentID: studentID
-        )
+        let student = try await RemoteDataService.shared.fetchMyStudentProfile()
         
         let icsText = try await RemoteDataService.shared.fetchCourseTableICS(
             schoolID: student.schoolID,

@@ -10,6 +10,66 @@ import SwiftUI
 import Combine
 import UIKit
 
+// MARK: - ProgressView
+struct LoadingProgressView_Seal<LoadingView: View>: View {
+    @State var isRoll = false
+    @State var imgOpacityControl = true
+    var loadingView: () -> LoadingView
+    var body: some View {
+        VStack {
+            Image(systemName: "seal")
+                .font(.largeTitle)
+                .opacity(imgOpacityControl ? 1 : 0.4)
+                .rotationEffect(.degrees(isRoll ? 720 : 0), anchor: .center)
+            loadingView()
+        }
+            .padding()
+            .background(alignment: .center) {
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .fill(Material.bar)
+            }
+            .task {
+                startSymbolRoll()
+                startSymbolFlash()
+            }
+            
+    }
+    private func startSymbolRoll() {
+        Task {
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .seconds(1.3))
+                await MainActor.run {
+                    withAnimation(.smooth) {
+//                        symbolStep = (symbolStep + 1) % 4
+                        isRoll.toggle()
+                        
+                    }
+                }
+            }
+        }
+    }
+    private func startSymbolFlash() {
+        Task {
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .seconds(0.44))
+                await MainActor.run {
+                    withAnimation(.smooth) {
+//                        symbolStep = (symbolStep + 1) % 4
+                        imgOpacityControl.toggle()
+                        
+                    }
+                }
+            }
+        }
+    }
+}
+
+#Preview("LoadingProgressView_Seal") {
+    LoadingProgressView_Seal {
+        Text("Loading…")
+    }
+}
+
 // MARK: - 弹窗
 #Preview("ToastAlertView", body: {
     ToastAlertView(symbol: "⚠️", bgColor: .red, message: "警告警告", isAnimating: true)
@@ -399,8 +459,6 @@ struct CelebrationConfettiButtonStyle: ButtonStyle {
     }
 }
 
-typealias theCongratulateButton = CelebrationConfettiButtonStyle
-
 #Preview("🎉") {
     Button(action: { print("Pressed") }) {
         Label("Press Me", systemImage: "star")
@@ -422,6 +480,103 @@ extension View {
                     onComplete()
                 }
             }
+    }
+}
+
+// MARK: - 自定义密码输入框
+
+struct PasswordVisibilityTextField: UIViewRepresentable {
+    let placeholder: String
+    @Binding var text: String
+    @Binding var isSecure: Bool
+    var onReturn: (() -> Void)? = nil
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(text: $text, isSecure: $isSecure, onReturn: onReturn)
+    }
+    
+    func makeUIView(context: Context) -> UITextField {
+        let textField = UITextField(frame: .zero)
+        textField.delegate = context.coordinator
+        textField.placeholder = placeholder
+        textField.text = text
+        textField.isSecureTextEntry = isSecure
+        textField.autocorrectionType = .no
+        textField.autocapitalizationType = .none
+        textField.spellCheckingType = .no
+        textField.smartDashesType = .no
+        textField.smartInsertDeleteType = .no
+        textField.smartQuotesType = .no
+        textField.keyboardType = .asciiCapable
+        textField.returnKeyType = .done
+        textField.textContentType = .password
+        textField.clearButtonMode = .never
+        textField.borderStyle = .none
+        textField.font = UIFont.monospacedSystemFont(ofSize: UIFont.preferredFont(forTextStyle: .body).pointSize, weight: .regular)
+        textField.addTarget(context.coordinator, action: #selector(Coordinator.textDidChange(_:)), for: .editingChanged)
+        return textField
+    }
+    
+    func updateUIView(_ uiView: UITextField, context: Context) {
+        if uiView.text != text {
+            uiView.text = text
+        }
+
+        if uiView.isSecureTextEntry != isSecure {
+            let wasFirstResponder = uiView.isFirstResponder
+            let currentText = uiView.text
+            let selectedRange = uiView.selectedTextRange
+
+            uiView.isSecureTextEntry = isSecure
+            uiView.text = currentText
+
+            if let selectedRange {
+                uiView.selectedTextRange = selectedRange
+            }
+
+            if wasFirstResponder {
+                uiView.becomeFirstResponder()
+            }
+        }
+
+        let targetFont = UIFont.monospacedSystemFont(ofSize: UIFont.preferredFont(forTextStyle: .body).pointSize, weight: .regular)
+        if uiView.font != targetFont {
+            uiView.font = targetFont
+        }
+
+        if uiView.placeholder != placeholder {
+            uiView.placeholder = placeholder
+        }
+    }
+    
+    final class Coordinator: NSObject, UITextFieldDelegate {
+        @Binding var text: String
+        @Binding var isSecure: Bool
+        let onReturn: (() -> Void)?
+        
+        init(text: Binding<String>, isSecure: Binding<Bool>, onReturn: (() -> Void)?) {
+            _text = text
+            _isSecure = isSecure
+            self.onReturn = onReturn
+        }
+        
+        @objc func textDidChange(_ textField: UITextField) {
+            let newValue = textField.text ?? ""
+            let filtered = newValue.filter { $0.isASCII }
+            
+            if filtered != newValue {
+                textField.text = filtered
+            }
+            
+            if text != filtered {
+                text = filtered
+            }
+        }
+        
+        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            onReturn?()
+            return true
+        }
     }
 }
 

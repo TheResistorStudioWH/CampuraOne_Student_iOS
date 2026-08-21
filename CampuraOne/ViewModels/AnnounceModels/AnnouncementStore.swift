@@ -42,9 +42,7 @@ final class AnnouncementStore: ObservableObject {
 
         do {
             let student = try await RemoteDataService.shared
-                .fetchStudentProfile(
-                    studentID: studentID
-                )
+                .fetchMyStudentProfile()
 
             let visibleAnnounces = try await RemoteDataService.shared
                 .fetchVisibleAnnouncements(

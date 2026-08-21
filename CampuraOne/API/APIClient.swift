@@ -20,8 +20,9 @@ final class APIClient {
     
     func setToken(_ token: String) {
         self.authToken = token
+        print("🔐 Token Updated")
+        print(token)
     }
-    
     /// 通用 GET 请求
     func get(
         url: String,
@@ -33,6 +34,18 @@ final class APIClient {
             if let token = authToken {
                 headers.add(name: "Authorization", value: "Bearer \(token)")
             }
+            print("➡️ GET \(url)")
+
+            if let parameters {
+                print("   Parameters:", parameters)
+            }
+
+            if let token = authToken {
+                print("   Authorization: Bearer \(token.prefix(20))...")
+            } else {
+                print("   Authorization: <none>")
+            }
+            
             AF.request(
                 url,
                 method: .get,
@@ -42,13 +55,22 @@ final class APIClient {
             )
             .validate()
             .responseData { response in
+
+                print("⬅️ Status:", response.response?.statusCode ?? -1)
+                
+                if let data = response.data,
+                   let body = String(data: data, encoding: .utf8) {
+                    print("⬅️ Body:")
+                    print(body)
+                }
+                
                 switch response.result {
-                case .success(let data):
-                    let json = JSON(data)
-                    continuation.resume(returning: json)
-                    
-                case .failure(let error):
-                    continuation.resume(throwing: error)
+                    case .success(let data):
+                        let json = JSON(data)
+                        continuation.resume(returning: json)
+                        
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
                 }
             }
         }
@@ -65,6 +87,18 @@ final class APIClient {
             if let token = authToken {
                 headers.add(name: "Authorization", value: "Bearer \(token)")
             }
+            print("➡️ POST \(url)")
+
+            if let parameters {
+                print("   Parameters:", parameters)
+            }
+
+            if let token = authToken {
+                print("   Authorization: Bearer \(token.prefix(20))...")
+            } else {
+                print("   Authorization: <none>")
+            }
+            
             AF.request(
                 url,
                 method: .post,
@@ -74,13 +108,20 @@ final class APIClient {
             )
             .validate()
             .responseData { response in
+                print("⬅️ Status:", response.response?.statusCode ?? -1)
+                
+                if let data = response.data,
+                   let body = String(data: data, encoding: .utf8) {
+                    print("⬅️ Body:")
+                    print(body)
+                }
                 switch response.result {
-                case .success(let data):
-                    let json = JSON(data)
-                    continuation.resume(returning: json)
-                    
-                case .failure(let error):
-                    continuation.resume(throwing: error)
+                    case .success(let data):
+                        let json = JSON(data)
+                        continuation.resume(returning: json)
+                        
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
                 }
             }
         }

@@ -111,12 +111,13 @@ struct LoginView: View {
         HStack {
             Spacer()
             Image(systemName: "person.crop.circle.badge.checkmark")
-            Text("使用学生账号登录到 Campura One / 域校屿")
+            Text("使用学生账号开始吧！")
                 .font(.headline)
             Spacer()
         }
+        .padding(5)
         .jumpView(to:
-            StudentLoginSheet {
+            StudentLoginView {
                 dismiss()
             }
         )
@@ -149,11 +150,11 @@ struct LoginView: View {
 
 // MARK: - 学生登录弹窗
 
-#Preview("StudentLoginSheet") {
-    StudentLoginSheet {}
+#Preview("StudentLoginView") {
+    StudentLoginView {}
 }
 
-private struct StudentLoginSheet: View {
+private struct StudentLoginView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \AppUser.updatedAt, order: .reverse) private var savedUsers: [AppUser]
@@ -166,6 +167,8 @@ private struct StudentLoginSheet: View {
     @State private var confirmedUser: AppUser?
     @State private var confirmedStudent: Student?
     
+    @State var showConfirmSheet = false
+    
     @Namespace var selectorBg
     
     @State var showIn = false
@@ -177,39 +180,42 @@ private struct StudentLoginSheet: View {
     var body: some View {
         ZStack {
             ScrollView(.vertical, showsIndicators: false) {
-                VStack {
-                    topIconSection
-                    
-                    methodSelector
-                    
-                    switch loginMethod {
-                        case .accountPassword:
-                            accountPasswordSection
-                        case .qrCode:
-                            QRLoginPlaceholderView()
+                Rectangle()
+                    .foregroundStyle(.clear)
+                    .frame(width: 0, height: 10)
+                ZStack {
+                    VStack {
+                        topIconSection
+                        Spacer()
                     }
-                    
-                    noticeSection
-                    
-                    if let user = confirmedUser {
-                        StudentLoginConfirmView(user: user, student: confirmedStudent) {
-                            dismiss()
-                            onFinish()
+                    VStack {
+                        Rectangle()
+                            .fill(.clear)
+                            .frame(height: screen.height/5)
+                        
+                        
+                        methodSelector
+                        
+                        switch loginMethod {
+                            case .accountPassword:
+                                accountPasswordSection
+                            case .qrCode:
+                                QRLoginPlaceholderView()
                         }
+                        
+                        noticeSection
+                        
+                       
                     }
+                    .padding(.horizontal)
                 }
-                .padding(20)
+               
             }
             
             if isLoading {
-                ZStack {
-                    Color.black.opacity(0.12).ignoresSafeArea()
-                    ProgressView("正在登录…")
-                        .padding(20)
-                        .background(
-                            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                                .fill(.regularMaterial)
-                        )
+                LoadingProgressView_Seal {
+                    Text("登录ing…")
+                        .padding(.top, 3)
                 }
             }
         }
@@ -218,7 +224,19 @@ private struct StudentLoginSheet: View {
         }, message: {
             Text(errorMessage ?? "")
         })
-        
+        .onChange(of: confirmedUser) {
+            if confirmedUser != nil {
+                showConfirmSheet = true
+            }
+        }
+        .sheet(isPresented: $showConfirmSheet) {
+            if let user = confirmedUser {
+                StudentLoginConfirmView(user: user, student: confirmedStudent) {
+                    dismiss()
+                    onFinish()
+                }
+            }
+        }
     }
     
     private var topIconSection: some View {
@@ -239,19 +257,16 @@ private struct StudentLoginSheet: View {
                     .cornerRadius(.infinity)
                     .frame(width: screen.width/4.7)
             }
-            .padding(.bottom, screen.height/22)
             
-            Text("欢迎来到 Campura One")
-                .font(.largeTitle)
-                .bold()
         }
         
     }
 
     private var methodSelector: some View {
-        VStack(alignment: .leading) {
-            Text("请选择你的登录方式")
-                .font(.title3)
+        VStack(alignment: .leading, spacing: 7) {
+            Text("欢迎来到 Campura One")
+                .font(.largeTitle)
+                .bold()
             HStack {
                 Image(systemName: "info.circle")
                 Text("请以校方下发的登录方式为准")
@@ -262,9 +277,10 @@ private struct StudentLoginSheet: View {
                 ForEach(LoginMethod.allCases, id: \.self) { item in
                     HStack(spacing: 8) {
                         Image(systemName: item.icon)
+                            .font(.headline)
                         Text(item.title)
+                            .font(.subheadline.bold())
                     }
-                    .font(.headline)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical)
                     .background {
@@ -299,53 +315,65 @@ private struct StudentLoginSheet: View {
     
     @FocusState var isFocusedOn_Account
     @FocusState var isFocusedOn_Password
+    @State var isPwdSecure = true
     private var accountPasswordSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("使用账号密码登录")
                 .font(.headline)
-
+                .padding(.top, 2)
             VStack(spacing: 12) {
                 TextField("账号", text: $account)
                     .focused($isFocusedOn_Account)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
-                    
+                    .keyboardType(.asciiCapable)
+                    .onChange(of: account) { _, newValue in
+                        let filtered = newValue.filter { $0.isASCII && ($0.isLetter || $0.isNumber) }
+                        if filtered != newValue {
+                            account = filtered
+                        }
+                    }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 14)
                     .background {
                         inputBackground(isFocused: isFocusedOn_Account)
                     }
 
-                SecureField("密码", text: $password)
-                    .focused($isFocusedOn_Password)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 14)
-                    .background {
-                        inputBackground(isFocused: isFocusedOn_Password)
-                    }
+                PasswordVisibilityTextField(
+                    placeholder: "密码",
+                    text: $password,
+                    isSecure: $isPwdSecure
+                )
+                .focused($isFocusedOn_Password)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .keyboardType(.asciiCapable)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 14)
+                .background {
+                    inputBackground(isFocused: isFocusedOn_Password, toggleEye: $isPwdSecure)
+                }
             }
             .font(.system(.body, design: .monospaced))
+            .padding(.bottom, 4)
             HStack {
                 Spacer()
                 Image(systemName: "key.fill")
-                Text("登录")
+                Text("登录到Campura One / 域校屿")
                 Spacer()
             }
+            .padding(5)
             .beButton {
                 Task {
                     await login()
                 }
             }
             .buttonStyle(.borderedProminent)
-            .padding(.vertical, 15)
             .disabled(account.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || password.isEmpty || isLoading)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(20)
+        .padding()
         .background(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
+            RoundedRectangle(cornerRadius: 35, style: .continuous)
                 .fill(.ultraThinMaterial)
         )
         .animation(.smooth, value: isFocusedOn_Account)
@@ -359,21 +387,57 @@ private struct StudentLoginSheet: View {
             Text("学生账号由校方统一下发，无渠道供学生擅自注册，若有疑问请联系校方。")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
+            
+            helperButton(title: "忘记账号或密码？") {
+                Text("忘记账号或密码？")
+            }
+            helperButton(title: "密钥二维码丢失？") {
+                Text("密钥二维码丢失？")
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(18)
-        .background(
+        .background {
             RoundedRectangle(cornerRadius: 20, style: .continuous)
                 .fill(.ultraThinMaterial)
-        )
+        }
     }
 
+    @State var showHelperSheet = false
+    @ViewBuilder func helperButton<Content: View>(title: String, to view: @escaping () -> Content) -> some View {
+        Text(title)
+            .beButton {
+                showHelperSheet = true
+            }
+            .sheet(isPresented: $showHelperSheet) {
+                view()
+            }
+    }
     
-    @ViewBuilder func inputBackground(isFocused: Bool) -> some View {
-        RoundedRectangle(cornerRadius: 18, style: .continuous)
-            .fill(isFocused ? .blue.opacity(0.2) : .gray.opacity(0.33))
-            .stroke(isFocused ? .blue.opacity(0.6) : .clear, style: .init(lineWidth: 4))
-            .shadow(color: .black.opacity(0.08), radius: 8, x: 1, y: 2)
+    @ViewBuilder func inputBackground(isFocused: Bool, toggleEye: Binding<Bool>? = nil) -> some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .fill(isFocused ? .blue.opacity(0.2) : .gray.opacity(0.33))
+                .stroke(isFocused ? .blue.opacity(0.5) : .clear, style: .init(lineWidth: 4))
+                .shadow(color: .black.opacity(0.08), radius: 8, x: 1, y: 2)
+            if isFocused, let toggleEye {
+                HStack {
+                    Spacer()
+                    Image(systemName: toggleEye.wrappedValue ? "eyes.inverse" : "eyes")
+                        .font(.title3)
+                        .rotationEffect(.degrees(toggleEye.wrappedValue ? 180 : 0), anchor: .center)
+                        .frame(width: screen.width/8, height: screen.width/10)
+                        .beButton {
+                            withAnimation {
+                                toggleEye.wrappedValue.toggle()
+                            }
+                            
+                            print(toggleEye)
+                        }
+                }
+            }
+            
+        }
     }
 
     @MainActor
@@ -384,12 +448,17 @@ private struct StudentLoginSheet: View {
             return
         }
 
-        isLoading = true
+        withAnimation(.smooth) {
+            isLoading = true
+        }
+        
         
         defer {
-            isLoading = false
+            withAnimation(.smooth) {
+                isLoading = false
+            }
         }
-
+        
         do {
             let result = try await RemoteDataService.shared.loginStudent(userName: trimmedAccount, password: password)
             let user = result.user
@@ -422,7 +491,7 @@ private struct StudentLoginSheet: View {
     }
 }
 
-extension StudentLoginSheet {
+extension StudentLoginView {
     
     @ViewBuilder
     func iconBackground() -> some View {
@@ -475,7 +544,7 @@ extension StudentLoginSheet {
             }
              
            Rectangle()
-                .fill(.clear)
+                .fill(.red)
                 .frame(width: screen.width/4.7, height: 0)
                 .padding(.horizontal)
             

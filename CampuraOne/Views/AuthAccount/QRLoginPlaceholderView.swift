@@ -29,7 +29,7 @@ struct QRLoginPlaceholderView: View {
         .frame(maxWidth: .infinity)
         .padding(24)
         .background(
-            RoundedRectangle(cornerRadius: 28, style: .continuous)
+            RoundedRectangle(cornerRadius: 35, style: .continuous)
                 .fill(.ultraThinMaterial)
         )
     }

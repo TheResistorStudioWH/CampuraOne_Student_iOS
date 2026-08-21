@@ -59,6 +59,8 @@
 		0B8303572FDF0D7300B5269A /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B83031D2FDF0D7300B5269A /* MapView.swift */; };
 		0B8303582FDF0D7300B5269A /* Data-Announce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8302EE2FDF0D7300B5269A /* Data-Announce.swift */; };
 		0BC584C72FCFC34C0005B84E /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 0BC584C62FCFC34C0005B84E /* MarkdownUI */; };
+		0BD38C3630133A4A005DB96D /* StartupPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD38C3530133A41005DB96D /* StartupPage.swift */; };
+		0BD38C3930133A6B005DB96D /* SetupPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD38C3830133A63005DB96D /* SetupPage.swift */; };
 		0BE0CEB32FD9573B009CB551 /* PagingView in Frameworks */ = {isa = PBXBuildFile; productRef = 0BE0CEB22FD9573B009CB551 /* PagingView */; };
 /* End PBXBuildFile section */
 
@@ -114,6 +116,8 @@
 		0B8303222FDF0D7300B5269A /* CampuraOneApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampuraOneApp.swift; sourceTree = "<group>"; };
 		0B8303232FDF0D7300B5269A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0B8303242FDF0D7300B5269A /* PreviewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContainer.swift; sourceTree = "<group>"; };
+		0BD38C3530133A41005DB96D /* StartupPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartupPage.swift; sourceTree = "<group>"; };
+		0BD38C3830133A63005DB96D /* SetupPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -334,6 +338,7 @@
 		0B8303202FDF0D7300B5269A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0BD38C3430133A18005DB96D /* Startup */,
 				0B9F190F2FFBBBF300C84458 /* AuthAccount */,
 				0B8303082FDF0D7300B5269A /* AccountManager */,
 				0B8303092FDF0D7300B5269A /* Alerts */,
@@ -361,6 +366,23 @@
 				0B8303242FDF0D7300B5269A /* PreviewContainer.swift */,
 			);
 			path = CampuraOne;
+			sourceTree = "<group>";
+		};
+		0BD38C3430133A18005DB96D /* Startup */ = {
+			isa = PBXGroup;
+			children = (
+				0BD38C3730133A51005DB96D /* Setup */,
+				0BD38C3530133A41005DB96D /* StartupPage.swift */,
+			);
+			path = Startup;
+			sourceTree = "<group>";
+		};
+		0BD38C3730133A51005DB96D /* Setup */ = {
+			isa = PBXGroup;
+			children = (
+				0BD38C3830133A63005DB96D /* SetupPage.swift */,
+			);
+			path = Setup;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -484,11 +506,13 @@
 				0B12AC872FDFC72500ECFC94 /* SalesLineDetail.swift in Sources */,
 				0B83034B2FDF0D7300B5269A /* DetailContainer.swift in Sources */,
 				0B83034C2FDF0D7300B5269A /* MainShopListViewModel.swift in Sources */,
+				0BD38C3930133A6B005DB96D /* SetupPage.swift in Sources */,
 				0B83034D2FDF0D7300B5269A /* AccountMiniCard.swift in Sources */,
 				0B83034E2FDF0D7300B5269A /* ICSCalendarMiniCard.swift in Sources */,
 				0B83034F2FDF0D7300B5269A /* ICSSchoolCalendar.swift in Sources */,
 				0B8303502FDF0D7300B5269A /* Data-School.swift in Sources */,
 				0B8303512FDF0D7300B5269A /* SchoolCalendar.swift in Sources */,
+				0BD38C3630133A4A005DB96D /* StartupPage.swift in Sources */,
 				0B8303522FDF0D7300B5269A /* SimpleICSParser.swift in Sources */,
 				0B8303532FDF0D7300B5269A /* Announce_Banner.swift in Sources */,
 				0B8303542FDF0D7300B5269A /* CampuraOneApp.swift in Sources */,
