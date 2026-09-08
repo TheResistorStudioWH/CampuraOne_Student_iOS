@@ -79,15 +79,13 @@ struct SelectedDashboardDetail {
 
 struct ContentView: View {
     @Environment(\.colorScheme) var colorScheme
-    
-    @StateObject private var userProfileViewModel = LoadableListViewModel<AppUser>(loader: {
-        [try await RemoteDataService.shared.fetchUserProfile(userID: 5)]
-    })
-    
+
+    let userProfile: AppUser?
+
     @StateObject private var announcementStore = AnnouncementStore()
-    
-    private var userProfile: AppUser? {
-        userProfileViewModel.items.first
+
+    init(userProfile: AppUser? = nil) {
+        self.userProfile = userProfile
     }
     
     let tabBarList: [AppTab] = [
@@ -195,9 +193,6 @@ struct ContentView: View {
         .environment(\.announcementGeometryNamespace, bgTransitionContainer)
         .environment(\.announcementToolbarVisible, showTopToolbar)
         .ignoresSafeArea()
-        .task {
-            await userProfileViewModel.load()
-        }
         .task(id: userProfile?.studentID) {
             await announcementStore.load(for: userProfile)
         }

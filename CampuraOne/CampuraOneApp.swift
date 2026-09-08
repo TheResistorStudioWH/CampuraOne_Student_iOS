@@ -10,9 +10,12 @@ import SwiftData
 
 @main
 struct CampuraOneApp: App {
+    @StateObject private var authSession = AuthSession()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AppRootView()
+                .environmentObject(authSession)
                 .modelContainer(for: [
                             School.self,
                             Campus.self,

@@ -11,6 +11,34 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
+extension Notification.Name {
+    static let authenticationRequired = Notification.Name("authenticationRequired")
+}
+
+enum APIClientError: LocalizedError {
+    case invalidResponse
+    case invalidPayload(String)
+    case server(statusCode: Int, code: Int, message: String)
+
+    var isUnauthorized: Bool {
+        if case .server(let statusCode, _, _) = self {
+            return statusCode == 401
+        }
+        return false
+    }
+
+    var errorDescription: String? {
+        switch self {
+        case .invalidResponse:
+            return "服务器返回了无法识别的响应"
+        case .invalidPayload(let message):
+            return message
+        case .server(_, _, let message):
+            return message
+        }
+    }
+}
+
 final class APIClient {
     
     static let shared = APIClient()
@@ -18,10 +46,13 @@ final class APIClient {
     
     private init() { }
     
-    func setToken(_ token: String) {
-        self.authToken = token
-        print("🔐 Token Updated")
-        print(token)
+    func setToken(_ token: String?) {
+        let normalizedToken = token?.trimmingCharacters(in: .whitespacesAndNewlines)
+        self.authToken = normalizedToken?.isEmpty == false ? normalizedToken : nil
+    }
+
+    func clearToken() {
+        authToken = nil
     }
     /// 通用 GET 请求
     func get(
@@ -34,17 +65,9 @@ final class APIClient {
             if let token = authToken {
                 headers.add(name: "Authorization", value: "Bearer \(token)")
             }
+#if DEBUG
             print("➡️ GET \(url)")
-
-            if let parameters {
-                print("   Parameters:", parameters)
-            }
-
-            if let token = authToken {
-                print("   Authorization: Bearer \(token.prefix(20))...")
-            } else {
-                print("   Authorization: <none>")
-            }
+#endif
             
             AF.request(
                 url,
@@ -53,20 +76,30 @@ final class APIClient {
                 encoding: URLEncoding.default,
                 headers: headers
             )
-            .validate()
             .responseData { response in
-
+#if DEBUG
                 print("⬅️ Status:", response.response?.statusCode ?? -1)
-                
-                if let data = response.data,
-                   let body = String(data: data, encoding: .utf8) {
-                    print("⬅️ Body:")
-                    print(body)
-                }
-                
+#endif
                 switch response.result {
                     case .success(let data):
                         let json = JSON(data)
+                        guard let statusCode = response.response?.statusCode else {
+                            continuation.resume(throwing: APIClientError.invalidResponse)
+                            return
+                        }
+
+                        guard (200..<300).contains(statusCode) else {
+                            if statusCode == 401 {
+                                NotificationCenter.default.post(name: .authenticationRequired, object: nil)
+                            }
+                            continuation.resume(throwing: APIClientError.server(
+                                statusCode: statusCode,
+                                code: json["code"].int ?? statusCode,
+                                message: json["message"].string ?? "请求失败（HTTP \(statusCode)）"
+                            ))
+                            return
+                        }
+
                         continuation.resume(returning: json)
                         
                     case .failure(let error):
@@ -87,17 +120,9 @@ final class APIClient {
             if let token = authToken {
                 headers.add(name: "Authorization", value: "Bearer \(token)")
             }
+#if DEBUG
             print("➡️ POST \(url)")
-
-            if let parameters {
-                print("   Parameters:", parameters)
-            }
-
-            if let token = authToken {
-                print("   Authorization: Bearer \(token.prefix(20))...")
-            } else {
-                print("   Authorization: <none>")
-            }
+#endif
             
             AF.request(
                 url,
@@ -106,18 +131,30 @@ final class APIClient {
                 encoding: JSONEncoding.default,
                 headers: headers
             )
-            .validate()
             .responseData { response in
+#if DEBUG
                 print("⬅️ Status:", response.response?.statusCode ?? -1)
-                
-                if let data = response.data,
-                   let body = String(data: data, encoding: .utf8) {
-                    print("⬅️ Body:")
-                    print(body)
-                }
+#endif
                 switch response.result {
                     case .success(let data):
                         let json = JSON(data)
+                        guard let statusCode = response.response?.statusCode else {
+                            continuation.resume(throwing: APIClientError.invalidResponse)
+                            return
+                        }
+
+                        guard (200..<300).contains(statusCode) else {
+                            if statusCode == 401 {
+                                NotificationCenter.default.post(name: .authenticationRequired, object: nil)
+                            }
+                            continuation.resume(throwing: APIClientError.server(
+                                statusCode: statusCode,
+                                code: json["code"].int ?? statusCode,
+                                message: json["message"].string ?? "请求失败（HTTP \(statusCode)）"
+                            ))
+                            return
+                        }
+
                         continuation.resume(returning: json)
                         
                     case .failure(let error):

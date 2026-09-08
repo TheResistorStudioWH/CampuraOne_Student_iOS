@@ -19,40 +19,27 @@ final class RemoteDataService {
     
     func fetchCurrentUser() async throws -> AppUser {
         let json = try await APIClient.shared.get(url: APIConfig.api_download(APIConfig.DLPath.currentUser))
-        
-        // 假设后端返回：
-        // {
-        //   "data": {
-        //      "userID": 1,
-        //      "userName": "琳曦",
-        //      ...
-        //   }
-        // }
-        return JSONMapper.makeAppUser(from: json["data"])
-    }
-    // MARK: - 请求用户信息
-    
-    func fetchUserProfile(userID: Int) async throws -> AppUser {
-        let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.DLPath.currentUser),
-            parameters: [
-                "userID": userID
-            ]
-        )
-        
+
+        guard json["code"].intValue == 200,
+              json["data"]["userID"].intValue > 0 else {
+            throw APIClientError.invalidPayload("服务器没有返回有效的当前用户")
+        }
+
         return JSONMapper.makeAppUser(from: json["data"])
     }
     
     // MARK: - 请求学生信息
     
-    func fetchStudentProfile(studentID: Int) async throws -> Student {
+    func fetchMyStudentProfile() async throws -> Student {
         let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.DLPath.studentProfile),
-            parameters: [
-                "studentID": studentID
-            ]
+            url: APIConfig.api_download(APIConfig.DLPath.studentProfile)
         )
-        
+
+        guard json["code"].intValue == 200,
+              json["data"]["studentID"].intValue > 0 else {
+            throw APIClientError.invalidPayload("服务器没有返回有效的学生信息")
+        }
+
         return JSONMapper.makeStudent(from: json["data"])
     }
     
@@ -559,7 +546,6 @@ final class RemoteDataService {
     // MARK: - Auth Token 管理
     
     func setAuthToken(_ token: String?) {
-        guard let token, !token.isEmpty else { return }
         APIClient.shared.setToken(token)
     }
     
@@ -581,24 +567,18 @@ final class RemoteDataService {
         )
         
         let data = json["data"]
-        let token = data["token"].stringValue
-        var user = JSONMapper.makeAppUser(from: data["user"])
-        user.token = token
-        
-        if !token.isEmpty {
-            APIClient.shared.setToken(token)
+        guard json["code"].intValue == 200,
+              let token = data["token"].string,
+              token.split(separator: ".").count == 3,
+              data["user"]["userID"].intValue > 0 else {
+            throw APIClientError.invalidPayload("登录响应缺少有效的用户信息或 JWT")
         }
+
+        let user = JSONMapper.makeAppUser(from: data["user"])
+        user.token = token
+
+        APIClient.shared.setToken(token)
         
         return (token: token, user: user)
-    }
-    
-    // MARK: - 当前登录学生信息
-    
-    func fetchMyStudentProfile() async throws -> Student {
-        let json = try await APIClient.shared.get(
-            url: APIConfig.api_download(APIConfig.DLPath.studentProfile)
-        )
-        
-        return JSONMapper.makeStudent(from: json["data"])
     }
 }

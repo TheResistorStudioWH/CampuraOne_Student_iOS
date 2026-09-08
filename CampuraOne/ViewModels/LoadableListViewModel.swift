@@ -22,12 +22,13 @@ final class LoadableListViewModel<Item>: ObservableObject {
     }
     
     func load() async {
+        
         withAnimation {
             isLoading = true
             errorMessage = nil
         }
+        
         do {
-            
             items = try await loader()
         } catch {
             withAnimation {

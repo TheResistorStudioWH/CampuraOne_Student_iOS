@@ -59,9 +59,7 @@ struct StatusBarPurchase: Identifiable {
 // MARK: - 横向状态栏
 
 struct StatusBar: View {
-    /// 使用项目现有的通用列表 ViewModel 加载服务器课程表。
-    /// 与首页课表和课程表详情页统一使用 userID = 5，
-    /// 再根据该用户的 studentID 获取所属班级对应的课程表。
+    /// 使用 JWT 所代表的当前学生加载服务器课程表。
     @StateObject private var courseTableViewModel: LoadableListViewModel<CourseTable>
     
     /// 没有购买记录时传 nil。
@@ -103,17 +101,7 @@ struct StatusBar: View {
     ) {
         _courseTableViewModel = StateObject(
             wrappedValue: LoadableListViewModel<CourseTable>(loader: {
-                let user = try await RemoteDataService.shared.fetchUserProfile(
-                    userID: 5
-                )
-
-                guard let studentID = user.studentID else {
-                    return []
-                }
-
-                let student = try await RemoteDataService.shared.fetchStudentProfile(
-                    studentID: studentID
-                )
+                let student = try await RemoteDataService.shared.fetchMyStudentProfile()
 
                 let courseTable = try await RemoteDataService.shared.fetchCourseTable(
                     schoolID: student.schoolID,

@@ -295,16 +295,14 @@ struct HomePageView: View {
         }
         .padding(.bottom, screen.height/20)
         .task(id: userProfile?.studentID) {
-            guard let studentID = userProfile?.studentID else {
+            guard userProfile?.studentID != nil else {
                 studentViewModel = nil
                 return
             }
             
             let viewModel = LoadableListViewModel<Student>(loader: {
                 [
-                    try await RemoteDataService.shared.fetchStudentProfile(
-                        studentID: studentID
-                    )
+                    try await RemoteDataService.shared.fetchMyStudentProfile()
                 ]
             })
             
@@ -718,5 +716,4 @@ private struct UIKitOffsetScrollView<Content: View>: UIViewControllerRepresentab
         }
     }
 }
-
 

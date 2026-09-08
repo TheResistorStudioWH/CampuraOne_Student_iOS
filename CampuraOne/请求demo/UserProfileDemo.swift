@@ -21,7 +21,7 @@ struct UserProfileDemo: View {
                             await loadUserProfile()
                         }
                     } label: {
-                        Label("加载 userID = 1 的用户信息", systemImage: "person.crop.circle.badge.checkmark")
+                        Label("加载当前登录用户信息", systemImage: "person.crop.circle.badge.checkmark")
                     }
                     .disabled(isLoading)
                     
@@ -50,7 +50,7 @@ struct UserProfileDemo: View {
                         ContentUnavailableView(
                             "暂无用户信息",
                             systemImage: "person.crop.circle",
-                            description: Text("点击上方按钮，从服务器加载 userID = 1 的用户信息。")
+                            description: Text("点击上方按钮，从服务器加载 JWT 对应的当前用户信息。")
                         )
                     }
                 }
@@ -73,7 +73,7 @@ struct UserProfileDemo: View {
         errorMessage = nil
         
         do {
-            user = try await RemoteDataService.shared.fetchUserProfile(userID: 1)
+            user = try await RemoteDataService.shared.fetchCurrentUser()
         } catch {
             errorMessage = error.localizedDescription
         }

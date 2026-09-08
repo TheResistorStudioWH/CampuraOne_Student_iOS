@@ -36,14 +36,9 @@ struct Announce_BannerRemoteModule: View {
                
             } else if announcementStore.isLoading && announcementStore.announces.isEmpty {
                 ProgressView()
-                    .frame(maxWidth: .infinity, minHeight: 72)
             } else if let errorMessage = announcementStore.errorMessage,
                       announcementStore.announces.isEmpty {
-//                ContentUnavailableView(
-//                    "通知加载失败",
-//                    systemImage: "exclamationmark.triangle",
-//                    description: Text(errorMessage)
-//                )
+                Text(errorMessage)
             } else {
                 Announce_BannerModule(
                     announces: announcementStore.announces

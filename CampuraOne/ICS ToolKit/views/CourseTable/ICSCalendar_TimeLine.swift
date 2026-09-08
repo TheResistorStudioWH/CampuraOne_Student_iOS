@@ -15,7 +15,7 @@ import SwiftData
 
 struct ICSCalendar_TimeLine: View {
     @StateObject private var viewModel = LoadableListViewModel<ICSEventItem>(loader: {
-        try await CourseTableRemoteService.shared.fetchCourseTableEvents(userID: 5)
+        try await CourseTableRemoteService.shared.fetchCourseTableEvents()
     })
     var minimumTimelineHeight: CGFloat = 0
     var displayDate: Date? = nil
@@ -68,14 +68,8 @@ private final class CourseTableRemoteService {
     
     private init() {}
     
-    func fetchCourseTableEvents(userID: Int) async throws -> [ICSEventItem] {
-        let user = try await RemoteDataService.shared.fetchUserProfile(userID: userID)
-        
-        guard let studentID = user.studentID else {
-            return []
-        }
-        
-        let student = try await RemoteDataService.shared.fetchStudentProfile(studentID: studentID)
+    func fetchCourseTableEvents() async throws -> [ICSEventItem] {
+        let student = try await RemoteDataService.shared.fetchMyStudentProfile()
         
         let icsText = try await RemoteDataService.shared.fetchCourseTableICS(
             schoolID: student.schoolID,

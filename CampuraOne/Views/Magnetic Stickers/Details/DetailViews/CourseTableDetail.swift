@@ -9,18 +9,9 @@ import SwiftUI
 import SwiftData
 
 struct CourseTableDetail: View {
-    /// 与首页课表卡片使用完全相同的用户和课程表请求链路。
-    /// 与首页时间线使用同一个展示用户：userID = 5。
+    /// 与首页课表卡片使用同一个 JWT 登录学生的课程表请求链路。
     @StateObject private var viewModel = LoadableListViewModel<ICSEventItem>(loader: {
-        let user = try await RemoteDataService.shared.fetchUserProfile(userID: 5)
-
-        guard let studentID = user.studentID else {
-            return []
-        }
-
-        let student = try await RemoteDataService.shared.fetchStudentProfile(
-            studentID: studentID
-        )
+        let student = try await RemoteDataService.shared.fetchMyStudentProfile()
 
         let icsText = try await RemoteDataService.shared.fetchCourseTableICS(
             schoolID: student.schoolID,
