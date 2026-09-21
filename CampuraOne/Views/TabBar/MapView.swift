@@ -170,7 +170,13 @@ struct MapView: View {
                     MapPitchToggle()
                 }
                 VStack {
-                    StatusBar(schoolID: 1, compoundID: 1, departmentID: 1, classID: 301)
+                    StatusBar(
+                        schoolID: 1,
+                        compoundID: 1,
+                        departmentID: 1,
+                        classID: 301,
+                        currentLocation: locationManager.location
+                    )
                     
                     HStack(alignment: isToolDrawExpand ? .bottom : .center) {
                         ToolDrawer(isExpand: $isToolDrawExpand)
@@ -309,6 +315,5 @@ struct MapView: View {
         return "定位精度约 ±\(Int(accuracy.rounded())) 米"
     }
 }
-
 
 

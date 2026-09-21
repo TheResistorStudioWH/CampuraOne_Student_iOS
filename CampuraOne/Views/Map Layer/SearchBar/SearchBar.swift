@@ -73,6 +73,7 @@ enum SearchPickerItem: CaseIterable, Identifiable, Hashable {
 }
 
 struct SearchBar: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Namespace var bgTransitionContainer
     @Namespace var SearchBarTransitionContainer
     
@@ -93,6 +94,9 @@ struct SearchBar: View {
 
     /// 用户停止输入后，真正交给建议列表请求的关键词。
     @State private var inputSuggestionQuery = ""
+
+    /// 历史记录只保存搜索词，不保存服务器返回的用户或商户数据。
+    @AppStorage("campura.search.history") private var encodedSearchHistory = "[]"
     
     @State var PickerSelection: SearchPickerItem = .smart
 
@@ -104,7 +108,22 @@ struct SearchBar: View {
         !inputSuggestionQuery.isEmpty
         && normalizedSearchText != submittedSearchText
         && !showPickerBar
+    }
+
+    private var searchHistory: [String] {
+        guard let data = encodedSearchHistory.data(using: .utf8),
+              let values = try? JSONDecoder().decode([String].self, from: data) else {
+            return []
+        }
+        return values
+    }
+
+    private var shouldShowHistory: Bool {
+        showLargeBar
+        && normalizedSearchText.isEmpty
+        && !showPickerBar
         && !showResultList
+        && !searchHistory.isEmpty
     }
     
     var body: some View {
@@ -124,6 +143,7 @@ struct SearchBar: View {
                         PickerBar()
                     }
                 }
+                .zIndex(showPickerBar ? 30 : 0)
                 
                 VStack(alignment: .trailing) {
                     HStack(spacing: 7) {
@@ -144,14 +164,25 @@ struct SearchBar: View {
                         }
                     }
 
+                    if shouldShowHistory {
+                        SearchHistoryList(
+                            items: searchHistory,
+                            onSelect: selectHistory,
+                            onDelete: deleteHistory,
+                            onDeleteAll: clearHistory
+                        )
+                    }
+
                     if showResultList {
                         SearchResultList(
-                            query: searchText,
+                            query: submittedSearchText,
                             mode: PickerSelection
                         )
                         .id(searchRefreshID)
+                        .transition(.scale(scale: 0.82, anchor: .topTrailing).combined(with: .opacity))
                     }
                 }
+                .zIndex(10)
                 
                 VStack(alignment: .leading) {
                     HStack(spacing: 7) {
@@ -163,7 +194,8 @@ struct SearchBar: View {
                             SearchBarTransitionContainer: SearchBarTransitionContainer,
                             showLargeBar: $showLargeBar,
                             text: $searchText,
-                            onSearch: performSearch
+                            onSearch: performSearch,
+                            onClear: clearSearchText
                         )
                     }
                     
@@ -174,6 +206,7 @@ struct SearchBar: View {
                         }
                     }
                 }
+                .zIndex(40)
             } else {
                 HStack {
                     SearchButton(
@@ -189,7 +222,8 @@ struct SearchBar: View {
         .shadow(color: .black.opacity(0.3), radius: 6, x: 1, y: 1)
         
         .animation(.smooth, value: showPickerBar)
-        .task(id: normalizedSearchText) {
+        .animation(reduceMotion ? .linear(duration: 0.15) : .spring(response: 0.48, dampingFraction: 0.78), value: inputSuggestionQuery)
+        .task(id: "\(normalizedSearchText)|\(PickerSelection)|\(showLargeBar)") {
             await listenForSearchInput()
         }
         
@@ -200,10 +234,13 @@ struct SearchBar: View {
     @MainActor
     private func listenForSearchInput() async {
         inputSuggestionQuery = ""
+        if normalizedSearchText != submittedSearchText {
+            showResultList = false
+        }
 
         let trimmedText = normalizedSearchText
 
-        guard !trimmedText.isEmpty,
+        guard showLargeBar, !trimmedText.isEmpty,
               trimmedText != submittedSearchText else {
             return
         }
@@ -228,7 +265,7 @@ struct SearchBar: View {
             return
         }
 
-        withAnimation(.smooth) {
+        withAnimation(reduceMotion ? .linear(duration: 0.15) : .spring(response: 0.5, dampingFraction: 0.78)) {
             searchText = trimmedText
             submittedSearchText = trimmedText
             inputSuggestionQuery = ""
@@ -238,6 +275,8 @@ struct SearchBar: View {
             showPickerBar = false
         }
 
+        saveToHistory(trimmedText)
+
         TapSoft()
     }
 
@@ -245,6 +284,43 @@ struct SearchBar: View {
     private func selectInputSuggestion(_ suggestion: SearchResultItem) {
         searchText = suggestion.title
         performSearch()
+    }
+
+    private func selectHistory(_ query: String) {
+        searchText = query
+        performSearch()
+    }
+
+    private func clearSearchText() {
+        withAnimation(.smooth) {
+            searchText = ""
+            submittedSearchText = ""
+            inputSuggestionQuery = ""
+            showResultList = false
+        }
+        TapSoft()
+    }
+
+    private func saveToHistory(_ query: String) {
+        var values = searchHistory.filter {
+            $0.localizedCaseInsensitiveCompare(query) != .orderedSame
+        }
+        values.insert(query, at: 0)
+        persistHistory(Array(values.prefix(8)))
+    }
+
+    private func deleteHistory(_ query: String) {
+        persistHistory(searchHistory.filter { $0 != query })
+    }
+
+    private func clearHistory() {
+        persistHistory([])
+    }
+
+    private func persistHistory(_ values: [String]) {
+        guard let data = try? JSONEncoder().encode(values),
+              let text = String(data: data, encoding: .utf8) else { return }
+        encodedSearchHistory = text
     }
     
     /// 收起搜索栏，并关闭当前展开的附属内容。
@@ -317,6 +393,7 @@ struct SearchBar: View {
                 showResultList = false
                 submittedSearchText = ""
                 inputSuggestionQuery = ""
+                showPickerBar = false
             }
             TapSoft()
         }
@@ -332,6 +409,65 @@ struct SearchBar: View {
    
 }
 
+/// 搜索框展开且输入为空时显示。
+private struct SearchHistoryList: View {
+    let items: [String]
+    let onSelect: (String) -> Void
+    let onDelete: (String) -> Void
+    let onDeleteAll: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                Label("历史搜索", systemImage: "clock.arrow.circlepath")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Button("全部清除", action: onDeleteAll)
+                    .font(.caption)
+                    .buttonStyle(.plain)
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 10)
+
+            ForEach(items, id: \.self) { item in
+                HStack(spacing: 10) {
+                    Button {
+                        onSelect(item)
+                    } label: {
+                        HStack {
+                            Image(systemName: "magnifyingglass")
+                                .foregroundStyle(.secondary)
+                            Text(item)
+                                .foregroundStyle(.primary)
+                                .lineLimit(1)
+                            Spacer()
+                        }
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+
+                    Button {
+                        onDelete(item)
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundStyle(.tertiary)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("删除历史搜索 \(item)")
+                }
+                .padding(.horizontal, 14)
+                .padding(.vertical, 10)
+            }
+        }
+        .background {
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .fill(.ultraThinMaterial)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
 
 
 /// 输入过程中显示的实时搜索建议。
@@ -343,14 +479,16 @@ private struct SearchInputSuggestionList: View {
 
     @State private var suggestions: [SearchResultItem] = []
     @State private var isLoading = false
+    @State private var errorMessage: String?
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var requestID: String {
         "\(mode)-\(query)"
     }
 
     var body: some View {
-        Group {
-            if isLoading || !suggestions.isEmpty {
+        // Keep a concrete task host even before the first response arrives.
+        // A conditional empty Group has no rendered child to start its task on.
                 VStack(alignment: .leading, spacing: 0) {
                     if isLoading {
                         HStack(spacing: 8) {
@@ -363,6 +501,10 @@ private struct SearchInputSuggestionList: View {
                         }
                         .padding(.horizontal, 14)
                         .padding(.vertical, 10)
+                    }
+
+                    if let errorMessage {
+                        Text(errorMessage).font(.caption).foregroundStyle(.secondary).padding(14)
                     }
 
                     ForEach(suggestions) { suggestion in
@@ -406,16 +548,17 @@ private struct SearchInputSuggestionList: View {
                         .fill(.ultraThinMaterial)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-            }
-        }
+                .transition(.scale(scale: 0.9, anchor: .topTrailing).combined(with: .opacity))
         .task(id: requestID) {
             await loadSuggestions()
         }
+        .animation(reduceMotion ? .linear(duration: 0.12) : .spring(response: 0.42, dampingFraction: 0.86), value: suggestions.map(\.id))
     }
 
     @MainActor
     private func loadSuggestions() async {
         suggestions = []
+        errorMessage = nil
 
         let trimmedQuery = query.trimmingCharacters(
             in: .whitespacesAndNewlines
@@ -453,16 +596,19 @@ private struct SearchInputSuggestionList: View {
             let candidateItems: [SearchResultItem]
 
             if requestMode == .smart {
-                candidateItems = response.suggestions.map(\.info)
+                candidateItems = response.suggestions.isEmpty ? response.results : response.suggestions.map(\.info)
             } else {
                 candidateItems = response.results
             }
 
             suggestions = Array(candidateItems.prefix(8))
+            if suggestions.isEmpty { errorMessage = "没有匹配的候选词，可以继续输入或点击搜索。" }
             isLoading = false
         } catch is CancellationError {
             isLoading = false
         } catch {
+            guard !Task.isCancelled else { return }
+            errorMessage = "暂时无法获取候选词，请点击搜索重试。"
             suggestions = []
             isLoading = false
         }
@@ -588,11 +734,22 @@ struct SearchField: View {
     @Binding var showLargeBar: Bool
     @Binding var text: String
     let onSearch: () -> Void
+    let onClear: () -> Void
     
     var body: some View {
         HStack {
             inputField()
                 .padding(.leading)
+
+            if !text.isEmpty {
+                Button(action: onClear) {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("清除搜索内容")
+            }
             
             SearchButton(
                 showLargeBar: $showLargeBar,

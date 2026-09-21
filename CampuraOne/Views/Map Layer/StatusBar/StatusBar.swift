@@ -7,6 +7,8 @@
 
 import SwiftUI
 import SwiftData
+import MapKit
+import CoreLocation
 
 #Preview("app - 已登录") {
     ContentView()
@@ -59,8 +61,39 @@ struct StatusBarPurchase: Identifiable {
 // MARK: - 横向状态栏
 
 struct StatusBar: View {
-    /// 使用 JWT 所代表的当前学生加载服务器课程表。
-    @StateObject private var courseTableViewModel: LoadableListViewModel<CourseTable>
+    private struct RouteAssessment {
+        enum Urgency {
+            case comfortable
+            case leaveSoon
+            case late
+
+            var color: Color {
+                switch self {
+                case .comfortable: return .green
+                case .leaveSoon: return .orange
+                case .late: return .red
+                }
+            }
+
+            var icon: String {
+                switch self {
+                case .comfortable: return "checkmark.circle.fill"
+                case .leaveSoon: return "figure.walk.motion"
+                case .late: return "exclamationmark.triangle.fill"
+                }
+            }
+        }
+
+        let walkingTime: TimeInterval
+        let suggestedDeparture: Date
+        let urgency: Urgency
+    }
+
+    /// 与首页和详情页共用同一份课表，不再独立请求。
+    @ObservedObject private var courseStore = CourseScheduleStore.shared
+
+    /// 地图页的实时位置，用于估算走到下一节课的时间。
+    let currentLocation: CLLocation?
     
     /// 没有购买记录时传 nil。
     let lastPurchase: StatusBarPurchase?
@@ -87,33 +120,40 @@ struct StatusBar: View {
     
     /// 区分“服务器没有数据”和“ICS 没解析出来”。
     @State private var courseParseMessage: String?
+
+    /// 基于 MapKit 步行路线的出发建议，这一步不需要 AI。
+    @State private var routeAssessment: RouteAssessment?
+    @State private var isCalculatingRoute = false
+
+    private var routeRequestID: String {
+        guard let course = nextCourse,
+              let currentLocation,
+              !course.location.isEmpty else {
+            return "no-route"
+        }
+
+        return String(
+            format: "%@-%.4f-%.4f-%@",
+            course.id,
+            currentLocation.coordinate.latitude,
+            currentLocation.coordinate.longitude,
+            course.location
+        )
+    }
     
     init(
         schoolID _: Int,
         compoundID _: Int,
         departmentID _: Int,
         classID _: Int,
+        currentLocation: CLLocation? = nil,
         lastPurchase: StatusBarPurchase? = nil,
         recentlyViewed: RecentlyViewedItem? = nil,
         onSmartMealPlan: @escaping (StatusBarCourse) -> Void = { _ in },
         onOpenLastPurchase: @escaping (StatusBarPurchase) -> Void = { _ in },
         onOpenRecentlyViewed: @escaping (RecentlyViewedItem) -> Void = { _ in }
     ) {
-        _courseTableViewModel = StateObject(
-            wrappedValue: LoadableListViewModel<CourseTable>(loader: {
-                let student = try await RemoteDataService.shared.fetchMyStudentProfile()
-
-                let courseTable = try await RemoteDataService.shared.fetchCourseTable(
-                    schoolID: student.schoolID,
-                    compoundID: student.compoundID,
-                    departmentID: student.departmentID,
-                    classID: student.classID
-                )
-
-                return [courseTable]
-            })
-        )
-        
+        self.currentLocation = currentLocation
         self.lastPurchase = lastPurchase
         self.recentlyViewed = recentlyViewed
         self.onSmartMealPlan = onSmartMealPlan
@@ -126,6 +166,14 @@ struct StatusBar: View {
             ScrollView(.horizontal) {
                 HStack(spacing: 8) {
                     if let nextCourse {
+                        if let routeAssessment {
+                            routeAssessmentCapsule(routeAssessment)
+                        } else if isCalculatingRoute {
+                            Label("正在计算去教室的时间", systemImage: "figure.walk")
+                                .fixedSize(horizontal: true, vertical: false)
+                                .statusBarCapsuleStyle()
+                        }
+
                         nextCourseCapsule(
                             nextCourse,
                             now: context.date
@@ -139,11 +187,11 @@ struct StatusBar: View {
                         ) {
                             smartMealCapsule(nextCourse)
                         }
-                    } else if courseTableViewModel.isLoading {
+                    } else if courseStore.isLoading {
                         Label("正在读取下一节课", systemImage: "clock")
                             .fixedSize(horizontal: true, vertical: false)
                             .statusBarCapsuleStyle()
-                    } else if let errorMessage = courseTableViewModel.errorMessage {
+                    } else if let errorMessage = courseStore.errorMessage {
                         Label(
                             "课程信息加载失败：\(errorMessage)",
                             systemImage: "exclamationmark.triangle"
@@ -183,20 +231,26 @@ struct StatusBar: View {
             }
         }
         .task {
-            guard courseTableViewModel.items.isEmpty,
-                  !courseTableViewModel.isLoading else {
+            guard courseStore.events.isEmpty,
+                  !courseStore.isLoading else {
                 resolveNextCourse(after: Date())
                 return
             }
             
             await loadCourseTable()
         }
+        .task(id: routeRequestID) {
+            await updateRouteAssessment()
+        }
+        .onChange(of: courseStore.events) { _, _ in
+            resolveNextCourse(after: Date())
+        }
     }
     // MARK: 加载与解析
     
     @MainActor
     private func loadCourseTable() async {
-        await courseTableViewModel.load()
+        await courseStore.load(forceRefresh: courseStore.errorMessage != nil)
         resolveNextCourse(after: Date())
     }
     
@@ -204,32 +258,28 @@ struct StatusBar: View {
     private func resolveNextCourse(
         after now: Date
     ) {
-        guard !courseTableViewModel.items.isEmpty else {
+        guard !courseStore.events.isEmpty else {
             nextCourse = nil
             
-            if !courseTableViewModel.isLoading,
-               courseTableViewModel.errorMessage == nil {
+            if !courseStore.isLoading,
+               courseStore.errorMessage == nil {
                 courseParseMessage = "服务器没有返回课程表"
             }
             return
         }
         
-        let parsedEventCount = courseTableViewModel.items.reduce(0) { count, table in
-            count + SimpleICSParser.parseEvents(from: table.content).count
+        nextCourse = CourseScheduleResolver.nextEvent(
+            after: now,
+            from: courseStore.events
+        ).flatMap { event in
+            guard let startTime = event.startDate else { return nil }
+            return StatusBarCourse(
+                id: event.id,
+                courseName: event.title,
+                startTime: startTime,
+                location: event.location ?? ""
+            )
         }
-        
-        guard parsedEventCount > 0 else {
-            nextCourse = nil
-            courseParseMessage = "课程表已加载，但没有解析到 VEVENT"
-            print("StatusBar：ICS 未解析到事件")
-            print(courseTableViewModel.items.first?.content ?? "课程表 content 为空")
-            return
-        }
-        
-        nextCourse = findNextCourse(
-            from: courseTableViewModel.items,
-            after: now
-        )
         
         if nextCourse == nil {
             courseParseMessage = "课程表已加载，但当前没有后续课程"
@@ -237,153 +287,104 @@ struct StatusBar: View {
             courseParseMessage = nil
         }
         
-        print("StatusBar：课程表数量 = \(courseTableViewModel.items.count)")
-        print("StatusBar：解析事件数量 = \(parsedEventCount)")
-        print("StatusBar：下一节课 = \(nextCourse?.courseName ?? "无")")
     }
-    
-    // MARK: 从 ICS 课程表中寻找下一节课
-    
-    /// 使用你项目里现成的 SimpleICSParser，
-    /// 把服务器返回的 CourseTable.content 转成 [ICSEventItem]。
-    private func findNextCourse(
-        from courseTables: [CourseTable],
-        after now: Date
-    ) -> StatusBarCourse? {
-        let parsedEvents = courseTables.flatMap { courseTable in
-            SimpleICSParser.parseEvents(from: courseTable.content)
+
+    // MARK: 路线与出发建议
+
+    /// 先用课程表的地点文本在当前位置附近查找，再计算步行路线。
+    /// 这是确定性的地图功能，不需要调用大模型。
+    @MainActor
+    private func updateRouteAssessment() async {
+        routeAssessment = nil
+
+        guard let course = nextCourse,
+              let currentLocation,
+              !course.location.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            isCalculatingRoute = false
+            return
         }
-        
-        let nextEvent = parsedEvents
-            .compactMap { nextOccurrence(of: $0, after: now) }
-            .sorted { first, second in
-                first.startTime < second.startTime
-            }
-            .first
-        
-        guard let nextEvent else {
-            return nil
-        }
-        
-        return StatusBarCourse(
-            id: nextEvent.id,
-            courseName: nextEvent.title,
-            startTime: nextEvent.startTime,
-            location: nextEvent.location
-        )
-    }
-    
-    /// SimpleICSParser 已经解析出了 DTSTART 和 RRULE，
-    /// 这里负责把 DAILY 重复课程换算成“下一次上课时间”。
-    private func nextOccurrence(
-        of event: ICSEventItem,
-        after now: Date
-    ) -> (
-        id: String,
-        title: String,
-        startTime: Date,
-        location: String
-    )? {
-        guard let originalStartTime = event.startDate else {
-            return nil
-        }
-        
-        let location = event.location ?? ""
-        
-        guard let recurrenceRule = event.recurrenceRule,
-              recurrenceRule.uppercased().contains("FREQ=DAILY") else {
-            guard originalStartTime > now else {
-                return nil
-            }
-            
-            return (
-                id: event.id,
-                title: event.title,
-                startTime: originalStartTime,
-                location: location
+
+        isCalculatingRoute = true
+        defer { isCalculatingRoute = false }
+
+        do {
+            let searchRequest = MKLocalSearch.Request()
+            searchRequest.naturalLanguageQuery = course.location
+            searchRequest.region = MKCoordinateRegion(
+                center: currentLocation.coordinate,
+                latitudinalMeters: 8_000,
+                longitudinalMeters: 8_000
             )
-        }
-        
-        let calendar = Calendar.current
-        let originalDay = calendar.startOfDay(for: originalStartTime)
-        let currentDay = calendar.startOfDay(for: now)
-        let passedDays = max(
-            calendar.dateComponents(
-                [.day],
-                from: originalDay,
-                to: currentDay
-            ).day ?? 0,
-            0
-        )
-        
-        guard var candidate = calendar.date(
-            byAdding: .day,
-            value: passedDays,
-            to: originalStartTime
-        ) else {
-            return nil
-        }
-        
-        if candidate <= now {
-            guard let nextDay = calendar.date(
-                byAdding: .day,
-                value: 1,
-                to: candidate
-            ) else {
-                return nil
+
+            let searchResponse = try await MKLocalSearch(request: searchRequest).start()
+            try Task.checkCancellation()
+
+            guard let destination = searchResponse.mapItems.first else { return }
+
+            let directionsRequest = MKDirections.Request()
+            directionsRequest.source = MKMapItem(
+                placemark: MKPlacemark(coordinate: currentLocation.coordinate)
+            )
+            directionsRequest.destination = destination
+            directionsRequest.transportType = .walking
+
+            let directionsResponse = try await MKDirections(request: directionsRequest).calculate()
+            try Task.checkCancellation()
+
+            guard let route = directionsResponse.routes.first else { return }
+
+            let safetyBuffer: TimeInterval = 5 * 60
+            let suggestedDeparture = course.startTime
+                .addingTimeInterval(-(route.expectedTravelTime + safetyBuffer))
+            let margin = suggestedDeparture.timeIntervalSinceNow
+            let urgency: RouteAssessment.Urgency
+
+            if margin < 0 {
+                urgency = .late
+            } else if margin <= 10 * 60 {
+                urgency = .leaveSoon
+            } else {
+                urgency = .comfortable
             }
-            
-            candidate = nextDay
+
+            routeAssessment = RouteAssessment(
+                walkingTime: route.expectedTravelTime,
+                suggestedDeparture: suggestedDeparture,
+                urgency: urgency
+            )
+        } catch is CancellationError {
+            // 位置或下一节课变化时，忽略旧路线计算。
+        } catch {
+            // 地点无法识别时仍保留课程和地点标签，不把它误报为课表故障。
         }
-        
-        if let untilDate = recurrenceEndDate(from: recurrenceRule),
-           candidate > untilDate {
-            return nil
-        }
-        
-        return (
-            id: "\(event.id)-\(candidate.timeIntervalSince1970)",
-            title: event.title,
-            startTime: candidate,
-            location: location
-        )
     }
-    
-    /// 从 `FREQ=DAILY;UNTIL=20260716T235959` 中解析 UNTIL。
-    private func recurrenceEndDate(
-        from recurrenceRule: String
-    ) -> Date? {
-        guard let untilPart = recurrenceRule
-            .components(separatedBy: ";")
-            .first(where: { $0.uppercased().hasPrefix("UNTIL=") }) else {
-            return nil
+
+    private func routeAssessmentCapsule(
+        _ assessment: RouteAssessment
+    ) -> some View {
+        let walkingMinutes = max(Int(ceil(assessment.walkingTime / 60)), 1)
+        let text: String
+
+        switch assessment.urgency {
+        case .comfortable:
+            text = "\(departureTimeText(assessment.suggestedDeparture)) 出发·步行约 \(walkingMinutes) 分钟"
+        case .leaveSoon:
+            text = "建议尽快出发·步行约 \(walkingMinutes) 分钟"
+        case .late:
+            text = "可能迟到·步行约 \(walkingMinutes) 分钟"
         }
-        
-        let value = String(
-            untilPart.dropFirst("UNTIL=".count)
-        )
-        
-        let formats = [
-            "yyyyMMdd'T'HHmmss'Z'",
-            "yyyyMMdd'T'HHmmss",
-            "yyyyMMdd"
-        ]
-        
-        for format in formats {
-            let formatter = DateFormatter()
-            formatter.calendar = Calendar(identifier: .gregorian)
-            formatter.locale = Locale(identifier: "en_US_POSIX")
-            formatter.timeZone = format.contains("'Z'")
-                ? TimeZone(secondsFromGMT: 0)
-                : .current
-            formatter.dateFormat = format
-            
-            if let date = formatter.date(from: value) {
-                return date
-            }
-        }
-        
-        return nil
+
+        return Label(text, systemImage: assessment.urgency.icon)
+            .fixedSize(horizontal: true, vertical: false)
+            .font(.system(size: 12))
+            .statusBarCapsuleStyle(tint: assessment.urgency.color)
+    }
+
+    private func departureTimeText(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "zh_CN")
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: date)
     }
     
     
@@ -544,11 +545,12 @@ private extension View {
     /// 所有状态栏项目都使用同一套外观。
     /// 以后想统一改高度、间距或材质，只需要改这里。
     func statusBarCapsuleStyle(
-        isHighlighted: Bool = false
+        isHighlighted: Bool = false,
+        tint: Color? = nil
     ) -> some View {
         self
             .font(.subheadline.weight(.semibold))
-            .foregroundStyle(isHighlighted ? Color.accentColor : Color.primary)
+            .foregroundStyle(tint ?? (isHighlighted ? Color.accentColor : Color.primary))
             .padding(.horizontal, 13)
             .padding(.vertical, 9)
             .background {

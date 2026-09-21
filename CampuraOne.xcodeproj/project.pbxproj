@@ -121,6 +121,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		CA0922000000000000000001 /* Components */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Components;
+			sourceTree = "<group>";
+		};
 		0B4CA4F92FE01365008B3B2D /* Map Layer */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "Map Layer";
@@ -338,6 +343,7 @@
 		0B8303202FDF0D7300B5269A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				CA0922000000000000000001 /* Components */,
 				0BD38C3430133A18005DB96D /* Startup */,
 				0B9F190F2FFBBBF300C84458 /* AuthAccount */,
 				0B8303082FDF0D7300B5269A /* AccountManager */,
@@ -401,6 +407,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				CA0922000000000000000001 /* Components */,
 				0B4CA4F92FE01365008B3B2D /* Map Layer */,
 				0B9F190F2FFBBBF300C84458 /* AuthAccount */,
 			);

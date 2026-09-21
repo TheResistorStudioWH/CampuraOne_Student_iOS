@@ -15,32 +15,18 @@ import SwiftData
 
 
 struct ICSCalendar_TimeLineStyle: View {
-    @StateObject private var viewModel = LoadableListViewModel<ICSEventItem>(loader: {
-        let student = try await RemoteDataService.shared.fetchMyStudentProfile()
-        
-        let icsText = try await RemoteDataService.shared.fetchCourseTableICS(
-            schoolID: student.schoolID,
-            compoundID: student.compoundID,
-            departmentID: student.departmentID,
-            classID: student.classID
-        )
-        
-        return SimpleICSParser.parseEvents(from: icsText)
-            .sorted { lhs, rhs in
-                (lhs.startDate ?? .distantFuture) < (rhs.startDate ?? .distantFuture)
-            }
-    })
+    @ObservedObject private var courseStore = CourseScheduleStore.shared
     
     private var events: [ICSEventItem] {
-        viewModel.items
+        CourseScheduleResolver.events(on: Date(), from: courseStore.events)
     }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            if viewModel.isLoading {
+            if courseStore.isLoading {
                 ProgressView()
                     .frame(maxWidth: .infinity, minHeight: 180)
-            } else if let errorMessage = viewModel.errorMessage {
+            } else if let errorMessage = courseStore.errorMessage {
                 VStack(alignment: .leading, spacing: 4) {
                     Label("课表加载失败", systemImage: "exclamationmark.triangle.fill")
                         .font(.caption)
@@ -64,7 +50,7 @@ struct ICSCalendar_TimeLineStyle: View {
             }
         }
         .task {
-            await viewModel.load()
+            await courseStore.load()
         }
     }
 }

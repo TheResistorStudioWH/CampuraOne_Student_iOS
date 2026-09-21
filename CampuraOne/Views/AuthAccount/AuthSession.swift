@@ -84,6 +84,7 @@ final class AuthSession: ObservableObject {
             throw error
         }
         APIClient.shared.setToken(result.token)
+        CourseScheduleStore.shared.reset()
         state = .signedIn(activeUser)
     }
 
@@ -93,6 +94,7 @@ final class AuthSession: ObservableObject {
         }
         try? modelContext.save()
         APIClient.shared.clearToken()
+        CourseScheduleStore.shared.reset()
         state = .signedOut
     }
 

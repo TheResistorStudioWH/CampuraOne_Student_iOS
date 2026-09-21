@@ -265,8 +265,9 @@ struct SearchResultList: View {
                     smartSummaryRow
                 }
 
-                ForEach(displayedResults) { item in
+                ForEach(Array(displayedResults.enumerated()), id: \.element.id) { index, item in
                     resultRow(item)
+                        .modifier(SearchResultArrival(index: index))
                 }
             }
             .padding(.vertical, 4)
@@ -532,5 +533,26 @@ struct SearchResultList: View {
         case "gray", "grey": return .gray
         default: return .accentColor
         }
+    }
+}
+
+/// A small staggered zoom from the search button, with blur resolving as rows settle.
+/// Applied after data arrives, not only when the loading container is inserted.
+private struct SearchResultArrival: ViewModifier {
+    let index: Int
+    @State private var arrived = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    func body(content: Content) -> some View {
+        content
+            .scaleEffect(arrived || reduceMotion ? 1 : 0.72, anchor: .topTrailing)
+            .offset(y: arrived || reduceMotion ? 0 : -18)
+            .blur(radius: arrived || reduceMotion ? 0 : 5)
+            .opacity(arrived ? 1 : 0)
+            .onAppear {
+                withAnimation(reduceMotion ? .linear(duration: 0.12) : .spring(response: 0.52, dampingFraction: 0.8).delay(Double(min(index, 7)) * 0.035)) {
+                    arrived = true
+                }
+            }
     }
 }
