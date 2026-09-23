@@ -14,7 +14,6 @@ struct CourseTableDetail: View {
 
     @State private var selectedDate = Date()
     @State private var showNotificationAlert = false
-    @State private var lastWeekJump = Date.distantPast
     @StateObject private var calendarPresenter = CalendarEventEditPresenter()
 
     private let calendar = Calendar.current
@@ -114,63 +113,10 @@ struct CourseTableDetail: View {
         }
     }
 
-    /// 长按后沿日期轨道拖动；越过两端可继续翻周，轻点也可操作。
     private var dayRail: some View {
-        VStack(spacing: 0) {
-            Button { shiftWeek(-1) } label: { Image(systemName: "chevron.up") }
-                .frame(height: 44).accessibilityLabel("上一周")
-            VStack(spacing: 0) {
-                ForEach(selectedWeekDates, id: \.self) { date in
-                    Button {
-                        selectedDate = date
-                    } label: {
-                        VStack(spacing: 3) {
-                            Text(date.formatted(.dateTime.weekday(.narrow)))
-                                .font(.caption2)
-                            Text(date.formatted(.dateTime.day())).font(.callout.bold())
-                        }
-                        .foregroundStyle(calendar.isDateInToday(date) ? Color.accentColor : Color.primary)
-                        .frame(width: 42, height: 52)
-                        .background {
-                            if calendar.isDate(date, inSameDayAs: selectedDate) {
-                                Capsule().fill(Color.accentColor.opacity(0.16))
-                            }
-                        }
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(date.formatted(date: .complete, time: .omitted))
-                    .accessibilityAddTraits(calendar.isDate(date, inSameDayAs: selectedDate) ? .isSelected : [])
-                }
-            }
-            .gesture(LongPressGesture(minimumDuration: 0.25)
-                .sequenced(before: DragGesture(minimumDistance: 0))
-                .onChanged { value in
-                    guard case .second(true, let drag?) = value else { return }
-                    let y = drag.location.y
-                    if y < 0 || y >= 364 {
-                        if Date().timeIntervalSince(lastWeekJump) > 0.65 {
-                            shiftWeek(y < 0 ? -1 : 1)
-                            lastWeekJump = Date()
-                        }
-                    } else {
-                        let date = selectedWeekDates[min(6, max(0, Int(y / 52)))]
-                        if !calendar.isDate(date, inSameDayAs: selectedDate) {
-                            selectedDate = date
-                            TapSoft()
-                        }
-                    }
-                })
-            Button { shiftWeek(1) } label: { Image(systemName: "chevron.down") }
-                .frame(height: 44).accessibilityLabel("下一周")
-        }
-        .padding(.leading, 8).padding(.top, 16)
-    }
-
-    private func shiftWeek(_ direction: Int) {
-        if let date = calendar.date(byAdding: .weekOfYear, value: direction, to: selectedDate) {
-            selectedDate = date
-            TapSoft()
-        }
+        CourseDateRail(selectedDate: $selectedDate)
+            .padding(.leading, 4)
+            .padding(.top, 16)
     }
 
     private var dateControlCard: some View {
@@ -180,7 +126,7 @@ struct CourseTableDetail: View {
                     Text("查看课程")
                         .font(.headline)
 
-                    Text("长按左侧日期滑动 · 当天共 \(selectedDayEvents.count) 节课")
+                    Text("按住左侧刻度滑动 · 当天共 \(selectedDayEvents.count) 节课")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

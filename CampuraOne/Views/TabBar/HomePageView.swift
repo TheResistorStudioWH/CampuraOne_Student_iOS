@@ -272,7 +272,7 @@ struct HomePageView: View {
                             Spacer()
                         }
                         .padding(.bottom, screen.height/15)
-                        AD_LargeBanner(advertisements: [Advertisement(adID: 1, saleID: 1, startTime: .now, endTime: .now, type: "L", img: "http://129.211.189.35/uploads/ads/imgs/ad_L_1_20260611_013346_fa6e0218.png")])
+                        AD_LargeBannerRemoteModule()
                         dashboardTiles(layout: layout)
                     }
                     .padding(.bottom)
@@ -716,4 +716,3 @@ private struct UIKitOffsetScrollView<Content: View>: UIViewControllerRepresentab
         }
     }
 }
-

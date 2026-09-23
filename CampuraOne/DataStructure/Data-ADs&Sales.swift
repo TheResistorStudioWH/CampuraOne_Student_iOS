@@ -97,19 +97,19 @@ struct Advertisement: Codable, Identifiable, Hashable {
 }
 
 extension Array where Element == Advertisement {
-    /// 筛选出当前可展示的广告，并按开始时间从新到旧排序。
+    /// 筛选出当前可展示的广告，并按开始时间从新到旧排序
     func activeAdvertisements(at date: Date = Date()) -> [Advertisement] {
         filter { $0.isActive(at: date) }
             .sorted { $0.startTime > $1.startTime }
     }
     
-    /// 筛选出当前可展示的小广告。
+    /// 筛选出当前可展示的小广告
     func activeSmallAdvertisements(at date: Date = Date()) -> [Advertisement] {
         activeAdvertisements(at: date)
             .filter { $0.isSmallAd }
     }
     
-    /// 筛选出当前可展示的大广告。
+    /// 筛选出当前可展示的大广告
     func activeLargeAdvertisements(at date: Date = Date()) -> [Advertisement] {
         activeAdvertisements(at: date)
             .filter { $0.isLargeAd }

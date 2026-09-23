@@ -171,6 +171,7 @@ struct SearchBar: View {
                             onDelete: deleteHistory,
                             onDeleteAll: clearHistory
                         )
+                        .transition(reduceMotion ? .opacity : .scale(scale: 0.95, anchor: .top).combined(with: .opacity))
                     }
 
                     if showResultList {
@@ -222,6 +223,7 @@ struct SearchBar: View {
         .shadow(color: .black.opacity(0.3), radius: 6, x: 1, y: 1)
         
         .animation(.smooth, value: showPickerBar)
+        .animation(reduceMotion ? .easeOut(duration: 0.15) : .spring(response: 0.35, dampingFraction: 0.88), value: encodedSearchHistory)
         .animation(reduceMotion ? .linear(duration: 0.15) : .spring(response: 0.48, dampingFraction: 0.78), value: inputSuggestionQuery)
         .task(id: "\(normalizedSearchText)|\(PickerSelection)|\(showLargeBar)") {
             await listenForSearchInput()
@@ -310,11 +312,15 @@ struct SearchBar: View {
     }
 
     private func deleteHistory(_ query: String) {
-        persistHistory(searchHistory.filter { $0 != query })
+        withAnimation(reduceMotion ? .easeOut(duration: 0.15) : .spring(response: 0.35, dampingFraction: 0.88)) {
+            persistHistory(searchHistory.filter { $0 != query })
+        }
     }
 
     private func clearHistory() {
-        persistHistory([])
+        withAnimation(reduceMotion ? .easeOut(duration: 0.15) : .spring(response: 0.35, dampingFraction: 0.88)) {
+            persistHistory([])
+        }
     }
 
     private func persistHistory(_ values: [String]) {
@@ -411,6 +417,7 @@ struct SearchBar: View {
 
 /// 搜索框展开且输入为空时显示。
 private struct SearchHistoryList: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let items: [String]
     let onSelect: (String) -> Void
     let onDelete: (String) -> Void
@@ -458,6 +465,7 @@ private struct SearchHistoryList: View {
                 }
                 .padding(.horizontal, 14)
                 .padding(.vertical, 10)
+                .transition(reduceMotion ? .opacity : .move(edge: .trailing).combined(with: .opacity))
             }
         }
         .background {
