@@ -41,7 +41,8 @@ struct Announce_BannerRemoteModule: View {
                 Text(errorMessage)
             } else {
                 Announce_BannerModule(
-                    announces: announcementStore.announces
+                    announces: announcementStore.announces,
+                    summaryOverride: announcementStore.aiSummary
                 )
             }
         }
@@ -79,7 +80,7 @@ struct Announce_BannerModule: View {
         self.announces = announces
     }
     
-    init(announces: [AnnouncementItem]) {
+    init(announces: [AnnouncementItem], summaryOverride: String? = nil) {
         let supportedAnnounces = announces.filter {
             $0.type.isShortAnnouncement || $0.type.isMarkdown
         }
@@ -102,6 +103,7 @@ struct Announce_BannerModule: View {
             : "共 \(sortedShortAnnounces.count) 条短通知，暂无紧急通知"
         self.dateText = firstShortAnnounce?.displayDateText ?? ""
         self.announces = supportedAnnounces
+        if let summaryOverride { self.summary = summaryOverride }
     }
     
     var body: some View {
@@ -720,4 +722,3 @@ private extension Date {
         return formatter.string(from: self)
     }
 }
-

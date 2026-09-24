@@ -141,6 +141,7 @@ struct SearchBar: View {
                     
                     if showPickerBar {
                         PickerBar()
+                            .transition(reduceMotion ? .opacity : .scale(scale: 0.72, anchor: .topLeading).combined(with: .opacity))
                     }
                 }
                 .zIndex(showPickerBar ? 30 : 0)
@@ -346,8 +347,9 @@ struct SearchBar: View {
     @ViewBuilder
     func PickerBar() -> some View {
         VStack(alignment: .leading) {
-            ForEach(SearchPickerItem.allCases) { item in
+            ForEach(Array(SearchPickerItem.allCases.enumerated()), id: \.element) { index, item in
                 PickerBarItem(item)
+                    .modifier(SearchModeArrival(index: index))
             }
         }
         .padding(5)
@@ -413,6 +415,25 @@ struct SearchBar: View {
     
     
    
+}
+
+/// Brief, staggered zoom from the mode button; the existing layout stays unchanged.
+private struct SearchModeArrival: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var visible = false
+    let index: Int
+
+    func body(content: Content) -> some View {
+        content
+            .scaleEffect(reduceMotion || visible ? 1 : 0.58, anchor: .topLeading)
+            .opacity(visible ? 1 : 0)
+            .offset(y: reduceMotion || visible ? 0 : -CGFloat(index + 1) * 5)
+            .onAppear {
+                withAnimation(reduceMotion ? .linear(duration: 0.1) : .spring(response: 0.22, dampingFraction: 0.82).delay(Double(index) * 0.022)) {
+                    visible = true
+                }
+            }
+    }
 }
 
 /// 搜索框展开且输入为空时显示。

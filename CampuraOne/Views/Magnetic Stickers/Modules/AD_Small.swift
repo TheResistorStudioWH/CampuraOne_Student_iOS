@@ -134,6 +134,7 @@ private struct ADSmallWidgetStack: View {
                         )
                         .scaleEffect(scale(for: index, cardHeight: cardHeight))
                         .offset(y: offset(for: index, cardHeight: cardHeight))
+                        .offset(x: horizontalOffset(for: index, width: proxy.size.width))
                         .opacity(opacity(for: index, cardHeight: cardHeight))
                         .zIndex(zIndex(for: index))
                         .allowsHitTesting(index == selectedIndex)
@@ -141,8 +142,8 @@ private struct ADSmallWidgetStack: View {
                 }
                 .frame(height: cardHeight)
                 .contentShape(Rectangle())
-                .highPriorityGesture(
-                    stackDragGesture(cardHeight: cardHeight)
+                .simultaneousGesture(
+                    stackDragGesture(cardHeight: proxy.size.width)
                 )
             }
             .frame(
@@ -275,15 +276,16 @@ private struct ADSmallWidgetStack: View {
     private func stackDragGesture(
         cardHeight: CGFloat
     ) -> some Gesture {
-        DragGesture(minimumDistance: 8)
+        DragGesture(minimumDistance: 24)
             .onChanged { value in
-                guard advertisements.count > 1 else {
+                guard advertisements.count > 1,
+                      abs(value.translation.width) > abs(value.translation.height) * 1.2 else {
                     return
                 }
                 
                 isDragging = true
                 
-                let translation = value.translation.height
+                let translation = value.translation.width
                 let isPastFirst = selectedIndex == 0 && translation > 0
                 let isPastLast = selectedIndex == advertisements.count - 1 && translation < 0
                 
@@ -292,13 +294,14 @@ private struct ADSmallWidgetStack: View {
                     : translation
             }
             .onEnded { value in
-                guard advertisements.count > 1 else {
+                guard advertisements.count > 1, isDragging,
+                      abs(value.translation.width) > abs(value.translation.height) * 1.2 else {
                     resetDragState()
                     return
                 }
                 
                 let threshold = cardHeight * 0.2
-                let predictedTranslation = value.predictedEndTranslation.height
+                let predictedTranslation = value.predictedEndTranslation.width
                 
                 withAnimation(
                     .spring(
@@ -364,15 +367,23 @@ private struct ADSmallWidgetStack: View {
         
         switch relative {
         case -1:
-            return -cardHeight + max(dragTranslation, 0)
+            return 0
         case 0:
-            return dragTranslation
+            return 0
         case 1:
             return 13 * (1 - upwardProgress)
         case 2:
             return 25 - upwardProgress * 12
         default:
             return 34
+        }
+    }
+
+    private func horizontalOffset(for index: Int, width: CGFloat) -> CGFloat {
+        switch relativeIndex(for: index) {
+        case -1: return -width + max(dragTranslation, 0)
+        case 0: return dragTranslation
+        default: return 0
         }
     }
     
