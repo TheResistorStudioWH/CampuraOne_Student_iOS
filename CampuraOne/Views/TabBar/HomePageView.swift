@@ -23,6 +23,7 @@ import UIKit
 struct HomePageView: View {
     
     let userProfile: AppUser?
+    var weatherSnapshot: HomeWeatherSnapshot = .demo
     
     @State var nowTime = ClassNowTime().timeString
     
@@ -276,14 +277,16 @@ struct HomePageView: View {
                         dashboardTiles(layout: layout)
                     }
                     .padding(.bottom)
-                    
+
                     VStack(spacing: layout.outerSpacing) {
                         HStack {
-                            greet()
+                            greet(isPlaceholder: true)
                             Spacer()
                         }
                         .opacity(0)
-                        
+                        .allowsHitTesting(false)
+                        .accessibilityHidden(true)
+
                         Announce_BannerRemoteModule(
                             userProfile: userProfile
                         )
@@ -311,7 +314,7 @@ struct HomePageView: View {
         }
     }
     
-    @ViewBuilder func greet() -> some View {
+    @ViewBuilder func greet(isPlaceholder: Bool = false) -> some View {
         VStack(alignment: .leading, spacing: 3) {
             VStack {
                 switch nowTime.prefix(2) {
@@ -369,18 +372,26 @@ struct HomePageView: View {
             }
             .font(.system(size: 39))
             .bold()
-            if let studentViewModel {
-                StudentGreetingLine(
-                    viewModel: studentViewModel,
-                    fallbackName: userProfile?.userName ?? "同学"
-                )
-            } else if userProfile == nil {
-                Text("正在获取用户信息…")
-                    .font(.system(size: 25))
-                    .foregroundStyle(.secondary)
-            } else {
-                Text("\(userProfile?.userName ?? "同学")同学")
-                    .font(.system(size: 25))
+            HStack(alignment: .center, spacing: 8) {
+                Group {
+                    if let studentViewModel {
+                        StudentGreetingLine(
+                            viewModel: studentViewModel,
+                            fallbackName: userProfile?.userName ?? "同学"
+                        )
+                    } else if userProfile == nil {
+                        Text("正在获取用户信息…")
+                            .font(.system(size: 25))
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text("\(userProfile?.userName ?? "同学")同学")
+                            .font(.system(size: 25))
+                    }
+                }
+                .lineLimit(1)
+                Spacer(minLength: 0)
+                HomeWeatherBadge(snapshot: weatherSnapshot, isPresentationActive: !isPlaceholder)
+                    .fixedSize()
             }
         }
         .padding()

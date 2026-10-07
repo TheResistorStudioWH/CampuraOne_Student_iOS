@@ -92,18 +92,16 @@ struct Announce_BannerModule: View {
             }
         
         let firstShortAnnounce = sortedShortAnnounces.first
-        let emergencyCount = sortedShortAnnounces.filter {
-            $0.type == .emergencyShort
-        }.count
         
         self.title = firstShortAnnounce?.typeTitle ?? "校园通知"
         self.message = firstShortAnnounce?.content ?? "暂无新的短通知"
-        self.summary = emergencyCount > 0
-            ? "共 \(sortedShortAnnounces.count) 条短通知，其中 \(emergencyCount) 条为紧急通知"
-            : "共 \(sortedShortAnnounces.count) 条短通知，暂无紧急通知"
+        self.summary = "摘要不可用"
         self.dateText = firstShortAnnounce?.displayDateText ?? ""
         self.announces = supportedAnnounces
-        if let summaryOverride { self.summary = summaryOverride }
+        if let summaryOverride,
+           !summaryOverride.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            self.summary = summaryOverride
+        }
     }
     
     var body: some View {
@@ -240,9 +238,11 @@ struct Announce_BannerModule: View {
                                 .frame(width: 14, height: 14)
                         }
                         
-                        Text(message)
+                        Text(summary)
                             .font(.subheadline)
-                            .lineLimit(isExpand ? .max : 1)
+                            .lineLimit(isExpand ? 3 : 1)
+                            .truncationMode(.tail)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                     .foregroundStyle(.secondary)
                 }
@@ -280,10 +280,6 @@ struct Announce_BannerModule: View {
                                 }
                             }
                         
-                        Label(summary, systemImage: "sparkles")
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(2)
                     }
                     
                     if showMore {

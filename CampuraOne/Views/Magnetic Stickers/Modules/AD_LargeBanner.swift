@@ -50,35 +50,7 @@ struct AD_LargeBanner: View {
                     set: { selection = $0 }
                 )) {
                     ForEach(ads) { advertisement in
-                        AsyncImage(url: advertisement.imageURL, scale: 1, transaction: .init(animation: .spring), content: { phase in
-                            switch phase {
-                            case .empty:
-                                    placeholder
-                                
-                            case .success(let image):
-                                image
-                                    .resizable()
-                                    .scaledToFit()
-                                
-                            case .failure:
-                                Rectangle()
-                                    .fill(.quaternary)
-                                    .overlay {
-                                        VStack(spacing: 8) {
-                                            Image(systemName: "photo.badge.exclamationmark")
-                                                .font(.title2)
-                                            
-                                            Text("广告图片加载失败")
-                                                .font(.caption)
-                                        }
-                                        .foregroundStyle(.secondary)
-                                    }
-                                
-                            @unknown default:
-                                Rectangle()
-                                    .fill(.quaternary)
-                            }
-                        })
+                        AdvertisementImage(advertisement: advertisement, contentMode: .fit)
                         .frame(width: proxy.size.width, height: proxy.size.height)
                         .clipped()
                         .tag(Optional(advertisement.adID))
@@ -129,14 +101,13 @@ struct AD_LargeBanner: View {
 
 /// Use the same shared list loader as the small-ad module.
 struct AD_LargeBannerRemoteModule: View {
-    @StateObject private var viewModel = LoadableListViewModel<Advertisement>(loader: {
-        try await RemoteDataService.shared.fetchLargeAdvertisements(onlyActive: true)
-    })
+    @ObservedObject private var viewModel = AdvertisementStore.shared
+    private var advertisements: [Advertisement] { viewModel.items.activeLargeAdvertisements() }
 
     var body: some View {
         Group {
-            if !viewModel.items.isEmpty {
-                AD_LargeBanner(advertisements: viewModel.items)
+            if !advertisements.isEmpty {
+                AD_LargeBanner(advertisements: advertisements)
             } else {
                 RoundedRectangle(cornerRadius: 22, style: .continuous)
                     .fill(.quaternary)
@@ -147,7 +118,7 @@ struct AD_LargeBannerRemoteModule: View {
                         } else if viewModel.errorMessage != nil {
                             VStack(spacing: 6) {
                                 Text("广告加载失败").font(.caption)
-                                Button("重试") { Task { await viewModel.load() } }
+                                Button("重试") { Task { await viewModel.refresh() } }
                             }
                         } else {
                             Label("暂无广告", systemImage: "photo")
@@ -158,9 +129,6 @@ struct AD_LargeBannerRemoteModule: View {
                     .padding(.horizontal)
             }
         }
-        .task {
-            guard viewModel.items.isEmpty, !viewModel.isLoading else { return }
-            await viewModel.load()
-        }
+
     }
 }

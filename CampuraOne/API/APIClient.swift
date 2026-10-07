@@ -57,7 +57,8 @@ final class APIClient {
     /// 通用 GET 请求
     func get(
         url: String,
-        parameters: Parameters? = nil
+        parameters: Parameters? = nil,
+        cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
     ) async throws -> JSON {
         
         return try await withCheckedThrowingContinuation { continuation in
@@ -74,7 +75,8 @@ final class APIClient {
                 method: .get,
                 parameters: parameters,
                 encoding: URLEncoding.default,
-                headers: headers
+                headers: headers,
+                requestModifier: { $0.cachePolicy = cachePolicy }
             )
             .responseData { response in
 #if DEBUG

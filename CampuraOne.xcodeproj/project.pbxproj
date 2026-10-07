@@ -121,6 +121,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		CA1006000000000000000001 /* Advertisements */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Advertisements;
+			sourceTree = "<group>";
+		};
 		CA0922000000000000000001 /* Components */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Components;
@@ -359,6 +364,7 @@
 		0B8303252FDF0D7300B5269A /* CampuraOne */ = {
 			isa = PBXGroup;
 			children = (
+				CA1006000000000000000001 /* Advertisements */,
 				0B8302E22FDF0D7300B5269A /* 请求demo */,
 				0B8302E82FDF0D7300B5269A /* API */,
 				0B8302EC2FDF0D7300B5269A /* CacheImgLoader */,
@@ -407,6 +413,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				CA1006000000000000000001 /* Advertisements */,
 				CA0922000000000000000001 /* Components */,
 				0B4CA4F92FE01365008B3B2D /* Map Layer */,
 				0B9F190F2FFBBBF300C84458 /* AuthAccount */,

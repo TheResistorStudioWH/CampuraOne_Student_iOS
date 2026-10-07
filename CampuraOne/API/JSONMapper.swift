@@ -174,10 +174,11 @@ enum JSONMapper {
         Advertisement(
             adID: json["adID"].intValue,
             saleID: json["saleID"].intValue,
-            startTime: json["startTime"].stringValue.toDate() ?? Date(),
-            endTime: json["endTime"].string?.toDate(),
+            startTime: AdvertisementDate.parse(json["startTime"].string) ?? .distantFuture,
+            endTime: AdvertisementDate.parse(json["endTime"].string),
             type: json["type"].stringValue,
-            img: json["img"].stringValue
+            img: json["img"].stringValue,
+            imageRevision: json["updatedAt"].string
         )
     }
     // MARK: - 促销事件

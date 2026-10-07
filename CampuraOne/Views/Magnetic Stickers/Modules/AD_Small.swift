@@ -13,30 +13,17 @@ import SwiftData
         .modelContainer(PreviewContainer.app)
 }
 
-// MARK: - ViewModel
-
-typealias ADSmallViewModel = LoadableListViewModel<Advertisement>
-
-// MARK: - 小广告位
+// MARK: - 小广告位（大小广告共享验证清单）
 
 struct AD_SmallModule: View {
-    @StateObject private var viewModel: ADSmallViewModel
-    
-    init() {
-        _viewModel = StateObject(
-            wrappedValue: ADSmallViewModel(loader: {
-                try await RemoteDataService.shared.fetchSmallAdvertisements(
-                    onlyActive: true
-                )
-            })
-        )
-    }
-    
+    @ObservedObject private var viewModel = AdvertisementStore.shared
+    private var advertisements: [Advertisement] { viewModel.items.activeSmallAdvertisements() }
+
     var body: some View {
         Group {
-            if !viewModel.items.isEmpty {
+            if !advertisements.isEmpty {
                 ADSmallWidgetStack(
-                    advertisements: viewModel.items
+                    advertisements: advertisements
                 )
                 .id("ads-loaded")
             } else if viewModel.isLoading {
@@ -62,7 +49,7 @@ struct AD_SmallModule: View {
                         Text("重新加载")
                             .beButton {
                                 Task {
-                                    await viewModel.load()
+                                    await viewModel.refresh()
                                 }
                             }
                     }
@@ -79,14 +66,7 @@ struct AD_SmallModule: View {
                 .id("ads-empty")
             }
         }
-        .task {
-            guard viewModel.items.isEmpty,
-                  !viewModel.isLoading else {
-                return
-            }
-            
-            await viewModel.load()
-        }
+
     }
     
     private func placeholderCard<Content: View>(
@@ -172,9 +152,10 @@ private struct ADSmallWidgetStack: View {
             return []
         }
         
-        let lowerBound = max(selectedIndex - 1, 0)
+        let safeIndex = min(selectedIndex, advertisements.count - 1)
+        let lowerBound = max(safeIndex - 1, 0)
         let upperBound = min(
-            selectedIndex + visibleStackDepth - 1,
+            safeIndex + visibleStackDepth - 1,
             advertisements.count - 1
         )
         
@@ -213,39 +194,7 @@ private struct ADSmallWidgetStack: View {
     private func advertisementCard(
         _ advertisement: Advertisement
     ) -> some View {
-        AsyncImage(url: URL(string: advertisement.img)) { phase in
-            switch phase {
-            case .empty:
-                Rectangle()
-                    .fill(.quaternary)
-                    .overlay {
-                        ProgressView()
-                    }
-                
-            case .success(let image):
-                image
-                    .resizable()
-                    .scaledToFill()
-                
-            case .failure:
-                Rectangle()
-                    .fill(.quaternary)
-                    .overlay {
-                        VStack(spacing: 8) {
-                            Image(systemName: "photo.badge.exclamationmark")
-                                .font(.title2)
-                            
-                            Text("广告图片加载失败")
-                                .font(.caption)
-                        }
-                        .foregroundStyle(.secondary)
-                    }
-                
-            @unknown default:
-                Rectangle()
-                    .fill(.quaternary)
-            }
-        }
+        AdvertisementImage(advertisement: advertisement, contentMode: .fill)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .clipped()
         .background(.quaternary)
@@ -328,7 +277,7 @@ private struct ADSmallWidgetStack: View {
     }
     
     private func relativeIndex(for index: Int) -> Int {
-        index - selectedIndex
+        index - min(selectedIndex, max(advertisements.count - 1, 0))
     }
     
     private func scale(

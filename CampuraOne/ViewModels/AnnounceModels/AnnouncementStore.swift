@@ -85,11 +85,18 @@ final class AnnouncementStore: ObservableObject {
                     let text = result["data"]["summary"].stringValue
                     let sourceIDs = result["data"]["sourceIDs"].arrayValue.compactMap(\.int)
                     let visibleIDs = Set(announces.map(\.announceID))
-                    guard Set(sourceIDs).isSubset(of: visibleIDs), !text.isEmpty else { return }
-                    aiSummary = result["data"]["isAI"].boolValue
-                        ? "AI 摘要（以原文为准）：\(text)" : text
+                    guard result["data"]["isAI"].boolValue,
+                          !sourceIDs.isEmpty,
+                          Set(sourceIDs).isSubset(of: visibleIDs),
+                          !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+                    // Source IDs remain in the response for validation, not in the compact banner.
+                    aiSummary = text
+                        .replacingOccurrences(of: #"\[\d+\]"#, with: "", options: .regularExpression)
+                        .replacingOccurrences(of: #"\s+"#, with: " ", options: .regularExpression)
+                        .trimmingCharacters(in: .whitespacesAndNewlines)
                 } catch {
-                    // Keep the original notice count; never replace real notices with an AI error.
+                    // The banner shows “摘要不可用”; original notices remain accessible.
+                    if generation == request { aiSummary = nil }
                 }
             }
         } catch {

@@ -6,6 +6,7 @@
 //
 
 import Swift
+import Foundation
 import Combine
 import SwiftyJSON
 
@@ -330,10 +331,16 @@ final class RemoteDataService {
         
         let json = try await APIClient.shared.get(
             url: APIConfig.api_download(APIConfig.DLPath.advertisements),
-            parameters: parameters
+            parameters: parameters,
+            cachePolicy: .reloadIgnoringLocalCacheData
         )
-        
-        return json["data"].arrayValue.map {
+        guard json["code"].int == 200, let rows = json["data"].array,
+              rows.allSatisfy({ $0["adID"].int != nil && $0["img"].string != nil
+                  && AdvertisementDate.parse($0["startTime"].string) != nil
+                  && ($0["endTime"].null != nil || AdvertisementDate.parse($0["endTime"].string) != nil) }) else {
+            throw APIClientError.invalidPayload("广告清单格式异常")
+        }
+        return rows.map {
             JSONMapper.makeAdvertisement(from: $0)
         }
     }

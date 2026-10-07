@@ -56,6 +56,7 @@ struct Advertisement: Codable, Identifiable, Hashable {
     let endTime: Date? // 结束时间，可为空
     let type: String // 广告类型（"S"或"L"）
     let img: String // 广告图片链接
+    var imageRevision: String? = nil // Server updatedAt: same URL can hold a revised image.
     
     var id: Int { adID }
     

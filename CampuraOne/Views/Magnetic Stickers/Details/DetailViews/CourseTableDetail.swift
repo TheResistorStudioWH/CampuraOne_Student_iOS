@@ -74,6 +74,9 @@ struct CourseTableDetail: View {
         }
         .navigationTitle("课程表")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            selectedDate = calendar.startOfDay(for: Date())
+        }
         .task {
             await courseStore.load()
 
@@ -115,8 +118,7 @@ struct CourseTableDetail: View {
 
     private var dayRail: some View {
         CourseDateRail(selectedDate: $selectedDate)
-            .padding(.leading, 4)
-            .padding(.top, 16)
+            .padding(.top, min(110, screen.height * 0.13))
     }
 
     private var dateControlCard: some View {

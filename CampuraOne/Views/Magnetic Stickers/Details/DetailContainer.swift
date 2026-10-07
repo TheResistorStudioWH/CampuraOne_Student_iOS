@@ -25,7 +25,9 @@ struct DetailContainer: View {
             .matchedGeometryEffect(id: "\(selectedDetail.id)-bg", in: namespace, properties: .frame)
             .overlay {
                 DetailContent()
-                .padding()
+                .padding(.vertical, 16)
+                .padding(.trailing, 16)
+                .padding(.leading, selectedDetail.id == "courseTable" ? 0 : 16)
                 .padding(.vertical, screen.height/16)
             }
             .ignoresSafeArea()
@@ -69,10 +71,10 @@ struct DetailContainer: View {
                         }
                         .buttonStyle(.borderless)
                 }
+                .padding(.leading, selectedDetail.id == "courseTable" ? 16 : 0)
                 selectedDetail.view
             }
         }
     }
     
 }
-

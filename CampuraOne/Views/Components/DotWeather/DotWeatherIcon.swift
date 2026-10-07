@@ -47,9 +47,12 @@ struct DotWeatherIcon: View {
                 let origin = CGPoint(x: (canvas.width - 32 * step) / 2, y: (canvas.height - 32 * step) / 2)
                 for y in 0..<32 {
                     for x in 0..<32 where lit(x: x, y: y, tick: tick) {
-                        let rect = CGRect(x: origin.x + (CGFloat(x) + 0.14) * step,
-                                          y: origin.y + (CGFloat(y) + 0.14) * step,
-                                          width: step * 0.72, height: step * 0.72)
+                        // Smaller circular dots leave a clear gap even at header size.
+                        let diameter = step * 0.64
+                        let inset = (step - diameter) / 2
+                        let rect = CGRect(x: origin.x + CGFloat(x) * step + inset,
+                                          y: origin.y + CGFloat(y) * step + inset,
+                                          width: diameter, height: diameter)
                         context.fill(Path(ellipseIn: rect), with: .color(tint))
                     }
                 }

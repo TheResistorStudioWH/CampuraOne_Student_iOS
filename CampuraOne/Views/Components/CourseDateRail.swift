@@ -7,29 +7,27 @@ struct CourseDateRail: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @GestureState private var touch: CGPoint?
     @State private var lastWeekJump = Date.distantPast
+    @State private var centerDate = Calendar.current.startOfDay(for: Date())
     private let calendar = Calendar.current
     private let inset: CGFloat = 24
 
     private var dates: [Date] {
-        let start = calendar.dateInterval(of: .weekOfYear, for: selectedDate)?.start
-            ?? calendar.startOfDay(for: selectedDate)
-        return (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: start) }
+        // Keep a stable window during a drag: today starts at the middle tick,
+        // regardless of which weekday it is. Selecting a tick must not move it.
+        return (-3...3).compactMap { calendar.date(byAdding: .day, value: $0, to: centerDate) }
     }
 
     var body: some View {
         VStack(spacing: 0) {
             Button { moveWeek(-1) } label: { Image(systemName: "chevron.up") }
-                .frame(width: 60, height: 44).accessibilityLabel("上一周")
+                .frame(width: 60, height: 44, alignment: .leading).accessibilityLabel("上一周")
             GeometryReader { geometry in
                 let span = max(1, geometry.size.height - inset * 2)
                 ZStack(alignment: .topLeading) {
-                    Capsule().fill(.secondary.opacity(0.07))
-                    Capsule().fill(.secondary.opacity(0.14))
-                        .frame(width: 2, height: span)
-                        .position(x: 30, y: geometry.size.height / 2)
                     ForEach(0..<25, id: \.self) { tick in
                         let y = inset + span * CGFloat(tick) / 24
                         tickMark(tick, y: y)
+                            .frame(width: 60, height: 30, alignment: .leading)
                             .position(x: 30, y: y)
                     }
                 }
@@ -51,7 +49,7 @@ struct CourseDateRail: View {
                     .onEnded { _ in lastWeekJump = .distantPast })
                 .animation(reduceMotion ? nil : .spring(response: 0.25, dampingFraction: 0.85), value: touch != nil)
             }
-            .frame(maxHeight: 380)
+            .frame(height: 330)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("课表日期时间轴")
             .accessibilityValue(selectedDate.formatted(date: .complete, time: .omitted))
@@ -61,10 +59,19 @@ struct CourseDateRail: View {
                 if let date = calendar.date(byAdding: .day, value: offset, to: selectedDate) { select(date) }
             }
             Button { moveWeek(1) } label: { Image(systemName: "chevron.down") }
-                .frame(width: 60, height: 44).accessibilityLabel("下一周")
+                .frame(width: 60, height: 44, alignment: .leading).accessibilityLabel("下一周")
         }
         .frame(width: 60)
         .frame(maxHeight: 468)
+        .onAppear {
+            centerDate = calendar.startOfDay(for: Date())
+            selectedDate = centerDate
+        }
+        .onChange(of: selectedDate) { _, date in
+            if (touch == nil && calendar.isDateInToday(date)) || !dates.contains(where: { calendar.isDate($0, inSameDayAs: date) }) {
+                centerDate = calendar.startOfDay(for: date)
+            }
+        }
     }
 
     @ViewBuilder private func tickMark(_ tick: Int, y: CGFloat) -> some View {
@@ -75,15 +82,15 @@ struct CourseDateRail: View {
         let isSelected = isDay && calendar.isDate(date, inSameDayAs: selectedDate)
         let isKey = isDay && (tick == 0 || tick == 24 || isToday || isSelected)
         if isKey {
-            VStack(spacing: 1) {
+            VStack(alignment: .leading, spacing: 1) {
                 Text(isToday ? "今天" : date.formatted(.dateTime.weekday(.narrow)))
                     .font(.system(size: 9, weight: .medium))
                 Text(date.formatted(.dateTime.day())).font(.system(size: 12, weight: .semibold))
             }
             .foregroundStyle(isToday ? Color.accentColor : Color.primary)
-            .frame(width: 32, height: 30)
-            .background(isSelected ? Color.accentColor.opacity(0.16) : Color.clear, in: Capsule())
-            .scaleEffect(reduceMotion ? 1 : 1 + influence * 0.35)
+            .frame(width: 32, height: 30, alignment: .leading)
+            .fontWeight(isSelected ? .bold : .regular)
+            .scaleEffect(reduceMotion ? 1 : 1 + influence * 0.35, anchor: .leading)
             .zIndex(1)
         } else {
             Capsule()
@@ -99,7 +106,11 @@ struct CourseDateRail: View {
     }
 
     private func moveWeek(_ offset: Int) {
-        if let date = calendar.date(byAdding: .weekOfYear, value: offset, to: selectedDate) { select(date) }
+        if let date = calendar.date(byAdding: .weekOfYear, value: offset, to: selectedDate),
+           let center = calendar.date(byAdding: .weekOfYear, value: offset, to: centerDate) {
+            centerDate = center
+            select(date)
+        }
     }
 }
 
