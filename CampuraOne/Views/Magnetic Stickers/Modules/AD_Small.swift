@@ -89,6 +89,7 @@ private struct ADSmallWidgetStack: View {
     @State private var selectedIndex = 0
     @State private var dragTranslation: CGFloat = 0
     @State private var isDragging = false
+    @State private var horizontalDrag: Bool?
     
     private let cardAspectRatio: CGFloat = 1.65
     private let visibleStackDepth = 3
@@ -227,8 +228,11 @@ private struct ADSmallWidgetStack: View {
     ) -> some Gesture {
         DragGesture(minimumDistance: 24)
             .onChanged { value in
+                if horizontalDrag == nil {
+                    horizontalDrag = abs(value.translation.width) > abs(value.translation.height) * 1.2
+                }
                 guard advertisements.count > 1,
-                      abs(value.translation.width) > abs(value.translation.height) * 1.2 else {
+                      horizontalDrag == true else {
                     return
                 }
                 
@@ -244,7 +248,7 @@ private struct ADSmallWidgetStack: View {
             }
             .onEnded { value in
                 guard advertisements.count > 1, isDragging,
-                      abs(value.translation.width) > abs(value.translation.height) * 1.2 else {
+                      horizontalDrag == true else {
                     resetDragState()
                     return
                 }
@@ -272,6 +276,7 @@ private struct ADSmallWidgetStack: View {
     }
     
     private func resetDragState() {
+        horizontalDrag = nil
         dragTranslation = 0
         isDragging = false
     }

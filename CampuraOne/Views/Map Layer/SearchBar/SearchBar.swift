@@ -128,6 +128,15 @@ struct SearchBar: View {
     
     var body: some View {
         ZStack(alignment: .top) {
+            if showPickerBar {
+                Color.clear
+                    .contentShape(Rectangle())
+                    .ignoresSafeArea()
+                    .onTapGesture { dismissPicker() }
+                    .zIndex(20)
+                    .accessibilityLabel("关闭搜索类型选择")
+                    .accessibilityAddTraits(.isButton)
+            }
             if showLargeBar {
                 
                 VStack(alignment: .leading) {
@@ -199,6 +208,7 @@ struct SearchBar: View {
                             onSearch: performSearch,
                             onClear: clearSearchText
                         )
+                        .simultaneousGesture(TapGesture().onEnded { dismissPicker() })
                     }
                     
                     HStack {
@@ -331,6 +341,10 @@ struct SearchBar: View {
     }
     
     /// 收起搜索栏，并关闭当前展开的附属内容。
+    private func dismissPicker() {
+        withAnimation(.easeOut(duration: 0.18)) { showPickerBar = false }
+    }
+
     private func collapseSearchBar() {
         withAnimation(.smooth) {
             showLargeBar = false
@@ -401,7 +415,6 @@ struct SearchBar: View {
                 showResultList = false
                 submittedSearchText = ""
                 inputSuggestionQuery = ""
-                showPickerBar = false
             }
             TapSoft()
         }

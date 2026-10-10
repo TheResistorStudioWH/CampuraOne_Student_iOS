@@ -223,9 +223,10 @@ struct HomePageView: View {
             dashboardTile(.toolbox) {
                 ToolBoxModule()
             } toolBar: {
-                Image(systemName: "chevron.right")
+                EmptyView()
             }
             .frame(height: layout.smallTileHeight)
+            .allowsHitTesting(false) // Prototype labels only; no detail action yet.
             
             dashboardTile(.schoolCalendar) {
                 SchoolCalendarModule()

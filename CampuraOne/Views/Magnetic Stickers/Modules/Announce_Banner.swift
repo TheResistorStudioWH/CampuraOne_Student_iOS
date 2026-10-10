@@ -240,7 +240,7 @@ struct Announce_BannerModule: View {
                         
                         Text(summary)
                             .font(.subheadline)
-                            .lineLimit(isExpand ? 3 : 1)
+                            .lineLimit(isExpand ? 2 : 1)
                             .truncationMode(.tail)
                             .fixedSize(horizontal: false, vertical: true)
                     }

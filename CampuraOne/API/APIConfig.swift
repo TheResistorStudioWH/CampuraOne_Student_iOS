@@ -23,6 +23,14 @@ enum APIConfig {
     static func api_auth(_ path: String) -> String {
         baseURL + "/api/auth/user/student" + path
     }
+
+    static func api_ai(_ path: String) -> String {
+        baseURL + "/api/OnlyAI" + path
+    }
+
+    enum AIPath {
+        static let announcementSummary = "/announcement_summary.php"
+    }
     
     enum DLPath {
         static let currentUser = "/user_profile.php"

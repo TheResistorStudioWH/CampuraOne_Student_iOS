@@ -79,7 +79,7 @@ final class AnnouncementStore: ObservableObject {
             if !announces.isEmpty {
                 do {
                     let result = try await APIClient.shared.get(
-                        url: APIConfig.api_download("/announcement_summary.php")
+                        url: APIConfig.api_ai(APIConfig.AIPath.announcementSummary)
                     )
                     guard generation == request, !Task.isCancelled else { return }
                     let text = result["data"]["summary"].stringValue

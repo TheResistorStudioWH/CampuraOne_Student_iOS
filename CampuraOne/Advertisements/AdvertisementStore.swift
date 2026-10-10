@@ -152,6 +152,7 @@ final class AdvertisementStore: ObservableObject {
 }
 
 struct AdvertisementImage: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let advertisement: Advertisement
     var contentMode: ContentMode = .fit
     @ObservedObject private var store = AdvertisementStore.shared
@@ -166,6 +167,7 @@ struct AdvertisementImage: View {
             Rectangle().fill(.quaternary)
             if let image, let asset, loadedKey == asset.key {
                 Image(uiImage: image).resizable().aspectRatio(contentMode: contentMode)
+                    .transition(.opacity)
             } else if failed {
                 Button { attempt += 1 } label: {
                     Label("重新加载图片", systemImage: "arrow.clockwise")
@@ -176,6 +178,7 @@ struct AdvertisementImage: View {
             }
         }
         .clipped()
+        .animation(.easeInOut(duration: reduceMotion ? 0.1 : 0.25), value: loadedKey)
         .task(id: "\(asset?.key ?? "none")-\(attempt)") {
             image = nil
             loadedKey = nil
