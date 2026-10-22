@@ -101,15 +101,26 @@ struct UserAvatarView: View {
     }
     
     var body: some View {
-        RemoteImageView(
-            url: displayAvatarURL,
-            cacheKey: cacheKey,
-            contentMode: .fill,
-            cornerRadius: size * 0.25
-        ) {
+//        AsyncImage(
+//            url: displayAvatarURL,
+//            cacheKey: cacheKey,
+//            contentMode: .fill,
+//            cornerRadius: size * 0.25
+//        ) {
+//            placeholder
+//        }
+        AsyncImage(url: displayAvatarURL,
+                   content: { img in
+            img
+                .resizable()
+                .scaledToFill()
+                .frame(width: size, height: size)
+                .cornerRadius(size * 0.25)
+        }, placeholder: {
             placeholder
-        }
-        .frame(width: size, height: size)
+                .frame(width: size, height: size)
+        })
+        
     }
     
     private var placeholder: some View {

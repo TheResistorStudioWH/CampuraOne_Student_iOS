@@ -79,10 +79,15 @@ struct SelectedDashboardDetail {
 
 struct ContentView: View {
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.scenePhase) private var scenePhase
 
     let userProfile: AppUser?
 
     @StateObject private var announcementStore = AnnouncementStore()
+
+    private var announcementLifecycle: String {
+        "\(userProfile?.studentID ?? -1)-\(scenePhase == .active)"
+    }
 
     init(userProfile: AppUser? = nil) {
         self.userProfile = userProfile
@@ -193,8 +198,12 @@ struct ContentView: View {
         .environment(\.announcementGeometryNamespace, bgTransitionContainer)
         .environment(\.announcementToolbarVisible, showTopToolbar)
         .ignoresSafeArea()
-        .task(id: userProfile?.studentID) {
-            await announcementStore.load(for: userProfile)
+        .task(id: announcementLifecycle) {
+            guard scenePhase == .active else {
+                announcementStore.pause()
+                return
+            }
+            await announcementStore.run(for: userProfile?.studentID)
         }
         
         
@@ -417,15 +426,11 @@ struct topToolbar: View {
     }
     
     private var markdownAnnounces: [AnnouncementItem] {
-        announcementStore.announces
-            .filter { $0.type.isMarkdown }
-            .sorted { lhs, rhs in
-                (lhs.endTime ?? .distantFuture) < (rhs.endTime ?? .distantFuture)
-            }
+        announcementStore.announces.activeMarkdown(at: Date())
     }
     
     
-    @State private var selectedMarkdownAnnounce: AnnouncementItem?
+    @State private var showMarkdownAnnouncements = false
     
     var body: some View {
         HStack(spacing: 12) {
@@ -446,8 +451,9 @@ struct topToolbar: View {
             }
             .foregroundStyle(markdownAnnounces.count > 0 ? .red : .secondary)
             .beButton {
-                selectedMarkdownAnnounce = markdownAnnounces.first
+                showMarkdownAnnouncements = true
             }
+            .disabled(markdownAnnounces.isEmpty)
             
             HStack(spacing: 10) {
                 Image(systemName: "megaphone.fill")
@@ -477,8 +483,8 @@ struct topToolbar: View {
         .padding(.leading)
         
         
-        .sheet(item: $selectedMarkdownAnnounce) { announce in
-            MarkdownAnnouncementSheet(announce: announce)
+        .sheet(isPresented: $showMarkdownAnnouncements) {
+            MarkdownAnnouncementsSheet(announces: markdownAnnounces)
         }
     }
     

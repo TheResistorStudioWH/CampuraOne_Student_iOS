@@ -262,6 +262,21 @@ enum JSONMapper {
     }
     
     // MARK: - 通知
+    static func makeAnnouncementSummary(from json: JSON) throws -> AnnouncementSummary {
+        let data = json["data"]
+        guard json["code"].int == 200,
+              let summary = data["summary"].string,
+              let isAI = data["isAI"].bool,
+              let sources = data["sourceIDs"].array else {
+            throw APIClientError.invalidPayload("通知摘要响应格式无效")
+        }
+        let sourceIDs = sources.compactMap(\.int)
+        guard sourceIDs.count == sources.count else {
+            throw APIClientError.invalidPayload("通知摘要来源编号无效")
+        }
+        return AnnouncementSummary(summary: summary, sourceIDs: sourceIDs, isAI: isAI)
+    }
+
     static func makeAnnouncementItem(from json: JSON) -> AnnouncementItem {
         AnnouncementItem(
             announceID: json["announceID"].intValue,
@@ -409,42 +424,7 @@ enum JSONMapper {
 extension String {
     
     func toDate() -> Date? {
-        let trimmed = trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else {
-            return nil
-        }
-        
-        let isoFormatter = ISO8601DateFormatter()
-        isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        if let date = isoFormatter.date(from: trimmed) {
-            return date
-        }
-        
-        isoFormatter.formatOptions = [.withInternetDateTime]
-        if let date = isoFormatter.date(from: trimmed) {
-            return date
-        }
-        
-        let dateFormats = [
-            "yyyy-MM-dd HH:mm:ss",
-            "yyyy-MM-dd'T'HH:mm:ss'Z'",
-            "yyyy-MM-dd",
-            "yyyy/MM/dd HH:mm:ss",
-            "yyyy/MM/dd"
-        ]
-        
-        for dateFormat in dateFormats {
-            let formatter = DateFormatter()
-            formatter.locale = Locale(identifier: "en_US_POSIX")
-            formatter.timeZone = TimeZone(secondsFromGMT: 0)
-            formatter.dateFormat = dateFormat
-            
-            if let date = formatter.date(from: trimmed) {
-                return date
-            }
-        }
-        
-        return nil
+        APIDate.parse(self)
     }
     
 }

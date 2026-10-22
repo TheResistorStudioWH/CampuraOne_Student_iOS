@@ -66,7 +66,7 @@ enum AnnouncementType: Int, Codable, CaseIterable, Identifiable {
 ///   "classIDs": [101],
 ///   "studentIDs": [20001]
 /// }
-struct AnnouncementTarget: Codable {
+struct AnnouncementTarget: Codable, Equatable {
     let allSchool: Bool
     let areaIDs: [Int]
     let departmentIDs: [Int]
@@ -91,11 +91,17 @@ struct AnnouncementSummaryRequest: Codable {
     let dateArray: String
 }
 
+struct AnnouncementSummary {
+    let summary: String
+    let sourceIDs: [Int]
+    let isAI: Bool
+}
+
 // MARK: - 通知条目
 
 /// 学校通知条目。
 /// 这个模型直接对应 `/api/announcements.php` 返回的单条通知。
-struct AnnouncementItem: Codable, Identifiable {
+struct AnnouncementItem: Codable, Identifiable, Equatable {
     let announceID: Int
     let schoolID: Int
     let content: String
@@ -122,5 +128,27 @@ struct AnnouncementItem: Codable, Identifiable {
     var isMarkdown: Bool {
         type.isMarkdown
     }
-    
+
+    /// Matches the API's inclusive start/end bounds; nil means unbounded.
+    func isActive(at date: Date) -> Bool {
+        (startTime.map { $0 <= date } ?? true)
+            && (endTime.map { date <= $0 } ?? true)
+    }
+}
+
+extension Array where Element == AnnouncementItem {
+    func active(at date: Date) -> [AnnouncementItem] {
+        filter { $0.isActive(at: date) }
+    }
+
+    /// Shared by the red badge, the floating toolbar and the full Markdown sheet.
+    func activeMarkdown(at date: Date) -> [AnnouncementItem] {
+        filter { $0.type.isMarkdown && $0.isActive(at: date) }
+            .sorted {
+                if $0.createdAt != $1.createdAt {
+                    return ($0.createdAt ?? .distantPast) > ($1.createdAt ?? .distantPast)
+                }
+                return $0.announceID > $1.announceID
+            }
+    }
 }

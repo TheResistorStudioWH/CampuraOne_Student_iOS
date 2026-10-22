@@ -474,12 +474,24 @@ final class RemoteDataService {
         
         let json = try await APIClient.shared.get(
             url: APIConfig.api_download(APIConfig.DLPath.announcements),
-            parameters: parameters
+            parameters: parameters,
+            cachePolicy: .reloadIgnoringLocalCacheData
         )
-        
-        return json["data"].arrayValue.map {
+
+        guard json["code"].int == 200, let rows = json["data"].array else {
+            throw APIClientError.invalidPayload("服务器没有返回有效的通知列表")
+        }
+        return rows.map {
             JSONMapper.makeAnnouncementItem(from: $0)
         }
+    }
+
+    func fetchAnnouncementSummary() async throws -> AnnouncementSummary {
+        let json = try await APIClient.shared.get(
+            url: APIConfig.api_ai(APIConfig.AIPath.announcementSummary),
+            cachePolicy: .reloadIgnoringLocalCacheData
+        )
+        return try JSONMapper.makeAnnouncementSummary(from: json)
     }
     
     
@@ -503,8 +515,9 @@ final class RemoteDataService {
             studentID: studentID
         )
         
+        let now = Date()
         return announcements.filter { announcement in
-            isAnnouncementVisible(
+            announcement.isActive(at: now) && isAnnouncementVisible(
                 announcement,
                 areaID: areaID,
                 departmentID: departmentID,
@@ -587,5 +600,26 @@ final class RemoteDataService {
         APIClient.shared.setToken(token)
         
         return (token: token, user: user)
+    }
+}
+
+// Keep live API wiring here, while the shared store remains independently testable.
+extension AnnouncementStore {
+    convenience init() {
+        self.init(
+            fetchAnnouncements: { studentID in
+                let student = try await RemoteDataService.shared.fetchMyStudentProfile()
+                guard student.studentID == studentID else {
+                    throw APIClientError.invalidPayload("通知与当前学生身份不一致")
+                }
+                return try await RemoteDataService.shared.fetchVisibleAnnouncements(
+                    schoolID: student.schoolID,
+                    departmentID: student.departmentID,
+                    classID: student.classID,
+                    studentID: student.studentID
+                )
+            },
+            fetchSummary: { try await RemoteDataService.shared.fetchAnnouncementSummary() }
+        )
     }
 }

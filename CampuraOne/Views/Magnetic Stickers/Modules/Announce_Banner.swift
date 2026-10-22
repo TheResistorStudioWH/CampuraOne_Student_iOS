@@ -63,7 +63,7 @@ struct Announce_BannerModule: View {
     
     @State private var isExpand = false
     @State private var showMore = false
-    @State private var selectedMarkdownAnnounce: AnnouncementItem?
+    @State private var showMarkdownAnnouncements = false
     @State private var selectedShortAnnounce: AnnouncementItem?
     
     init(
@@ -81,7 +81,7 @@ struct Announce_BannerModule: View {
     }
     
     init(announces: [AnnouncementItem], summaryOverride: String? = nil) {
-        let supportedAnnounces = announces.filter {
+        let supportedAnnounces = announces.active(at: Date()).filter {
             $0.type.isShortAnnouncement || $0.type.isMarkdown
         }
         
@@ -116,8 +116,8 @@ struct Announce_BannerModule: View {
             }
         }
         .animation(.bouncy, value: isExpand)
-        .sheet(item: $selectedMarkdownAnnounce) { announce in
-            MarkdownAnnouncementSheet(announce: announce)
+        .sheet(isPresented: $showMarkdownAnnouncements) {
+            MarkdownAnnouncementsSheet(announces: markdownAnnounces)
         }
         .sheet(item: $selectedShortAnnounce) { announce in
             ShortAnnouncementsSheet(
@@ -128,11 +128,7 @@ struct Announce_BannerModule: View {
     }
 
     private var markdownAnnounces: [AnnouncementItem] {
-        announces
-            .filter { $0.type == .importantMarkdown }
-            .sorted { lhs, rhs in
-                (lhs.createdAt ?? .distantPast) > (rhs.createdAt ?? .distantPast)
-            }
+        announces.activeMarkdown(at: Date())
     }
     
     private var shortAnnounces: [AnnouncementItem] {
@@ -187,7 +183,7 @@ struct Announce_BannerModule: View {
             bannerBG(color: (markdownCount > 0 ? Color.red : Color.secondary).opacity(0.6))
         }
         .beButton {
-            selectedMarkdownAnnounce = markdownAnnounces.first
+            showMarkdownAnnouncements = true
         }
         .disabled(markdownAnnounces.isEmpty)
     }
@@ -354,34 +350,49 @@ struct ShortAnnounceListCard: View {
     }
 }
 
-struct MarkdownAnnouncementSheet: View {
+struct MarkdownAnnouncementsSheet: View {
     @Environment(\.dismiss) private var dismiss
-    let announce: AnnouncementItem
+    let announces: [AnnouncementItem]
+
+    private var markdownAnnounces: [AnnouncementItem] {
+        announces.activeMarkdown(at: Date())
+    }
     
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 18) {
-                    Label("重要通知", systemImage: "exclamationmark.octagon.fill")
-                        .font(.title2.bold())
-                        .foregroundStyle(.red)
-                    
-                    if !announce.dateRangeText.isEmpty {
-                        Text(announce.dateRangeText)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                LazyVStack(alignment: .leading, spacing: 18) {
+                    if markdownAnnounces.isEmpty {
+                        ContentUnavailableView("暂无重要通知", systemImage: "bell",
+                                               description: Text("目前没有仍在有效期内的重要通知"))
                     }
-                    
-                    Markdown(announce.content)
-                        .markdownTheme(.gitHub)
-                        .tint(.accentColor)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .textSelection(.enabled)
+                    ForEach(markdownAnnounces) { announce in
+                        VStack(alignment: .leading, spacing: 18) {
+                            Label("重要通知", systemImage: "exclamationmark.octagon.fill")
+                                .font(.title2.bold())
+                                .foregroundStyle(.red)
+
+                            if !announce.dateRangeText.isEmpty {
+                                Text(announce.dateRangeText)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+
+                            Markdown(announce.content)
+                                .markdownTheme(.gitHub)
+                                .tint(.accentColor)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .textSelection(.enabled)
+                        }
+                        if announce.id != markdownAnnounces.last?.id {
+                            Divider()
+                        }
+                    }
                 }
                 .padding(20)
             }
             .background(Color(uiColor: .systemGroupedBackground))
-            .navigationTitle(announce.typeTitle)
+            .navigationTitle(AnnouncementType.importantMarkdown.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
