@@ -8,6 +8,51 @@
 import SwiftUI
 import Combine
 
+/// Preserve the server's structured shop address (including legacy arrays).
+indirect enum ShopAddressValue: Codable {
+    case object([String: ShopAddressValue])
+    case array([ShopAddressValue])
+    case string(String)
+    case number(Double)
+    case bool(Bool)
+    case null
+
+    init(from decoder: Decoder) throws {
+        let value = try decoder.singleValueContainer()
+        if value.decodeNil() { self = .null }
+        else if let object = try? value.decode([String: ShopAddressValue].self) { self = .object(object) }
+        else if let array = try? value.decode([ShopAddressValue].self) { self = .array(array) }
+        else if let string = try? value.decode(String.self) { self = .string(string) }
+        else if let bool = try? value.decode(Bool.self) { self = .bool(bool) }
+        else { self = .number(try value.decode(Double.self)) }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var value = encoder.singleValueContainer()
+        switch self {
+        case .object(let object): try value.encode(object)
+        case .array(let array): try value.encode(array)
+        case .string(let string): try value.encode(string)
+        case .number(let number): try value.encode(number)
+        case .bool(let bool): try value.encode(bool)
+        case .null: try value.encodeNil()
+        }
+    }
+
+    var displayText: String {
+        switch self {
+        case .object(let object):
+            return object.keys.sorted().compactMap { object[$0]?.displayText }
+                .filter { !$0.isEmpty }.joined(separator: " ")
+        case .array(let array):
+            return array.map(\.displayText).filter { !$0.isEmpty }.joined(separator: " ")
+        case .string(let string): return string
+        case .number(let number): return number.formatted()
+        case .bool, .null: return ""
+        }
+    }
+}
+
 // 数据模型：主商户
 struct MainShop: Codable, Identifiable {
     
@@ -15,7 +60,7 @@ struct MainShop: Codable, Identifiable {
     
     let shopID: Int // 商户ID
     let shopName: String // 商户名称
-    let shopAddress: [String]? // 商户地址，可为空
+    let shopAddress: ShopAddressValue? // 结构化商户地址，可为空
     let shopSlogan: String? // 商户宣传语，可为空
     let subShopsList: [Int]? // 附属商户ID列表，可为空
     let productsList: [Int]? // 商品ID列表，可为空
@@ -35,7 +80,7 @@ struct SubShop: Codable, Identifiable {
     
     let shopID: Int // 商户ID
     let shopName: String // 商户名称
-    let shopAddress: [String]? // 商户地址，可为空
+    let shopAddress: ShopAddressValue? // 结构化商户地址，可为空
     let productsList: [Int]? // 商品ID列表，可为空
     let shopImg: String? // 商户实拍图链接，可为空
     let mainShopID: Int // 所属主商户ID

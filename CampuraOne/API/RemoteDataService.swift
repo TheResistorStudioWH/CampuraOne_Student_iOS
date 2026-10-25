@@ -325,9 +325,9 @@ final class RemoteDataService {
             parameters["type"] = type
         }
         
-        if onlyActive {
-            parameters["onlyActive"] = 1
-        }
+        // The student ad endpoint itself returns only active, approved ads.
+        // Keep the argument for existing callers without sending an undocumented filter.
+        _ = onlyActive
         
         let json = try await APIClient.shared.get(
             url: APIConfig.api_download(APIConfig.DLPath.advertisements),
@@ -442,11 +442,7 @@ final class RemoteDataService {
     
     func fetchAnnouncements(
         schoolID: Int,
-        type: AnnouncementType? = nil,
-        areaID: Int? = nil,
-        departmentID: Int? = nil,
-        classID: Int? = nil,
-        studentID: Int? = nil
+        type: AnnouncementType? = nil
     ) async throws -> [AnnouncementItem] {
         var parameters: [String: Any] = [
             "schoolID": schoolID
@@ -454,22 +450,6 @@ final class RemoteDataService {
         
         if let type {
             parameters["type"] = type.rawValue
-        }
-        
-        if let areaID {
-            parameters["areaID"] = areaID
-        }
-        
-        if let departmentID {
-            parameters["departmentID"] = departmentID
-        }
-        
-        if let classID {
-            parameters["classID"] = classID
-        }
-        
-        if let studentID {
-            parameters["studentID"] = studentID
         }
         
         let json = try await APIClient.shared.get(
@@ -499,66 +479,19 @@ final class RemoteDataService {
     
     func fetchVisibleAnnouncements(
         schoolID: Int,
-        areaID: Int? = nil,
-        departmentID: Int? = nil,
-        classID: Int? = nil,
-        studentID: Int? = nil,
         type: AnnouncementType? = nil
     ) async throws -> [AnnouncementItem] {
         
         let announcements = try await fetchAnnouncements(
             schoolID: schoolID,
-            type: type,
-            areaID: areaID,
-            departmentID: departmentID,
-            classID: classID,
-            studentID: studentID
+            type: type
         )
         
         let now = Date()
-        return announcements.filter { announcement in
-            announcement.isActive(at: now) && isAnnouncementVisible(
-                announcement,
-                areaID: areaID,
-                departmentID: departmentID,
-                classID: classID,
-                studentID: studentID
-            )
-        }
-    }
-    
-    private func isAnnouncementVisible(
-        _ announcement: AnnouncementItem,
-        areaID: Int?,
-        departmentID: Int?,
-        classID: Int?,
-        studentID: Int?
-    ) -> Bool {
-        guard let target = announcement.target else {
-            return true
-        }
-        
-        if target.allSchool {
-            return true
-        }
-        
-        if let areaID, target.areaIDs.contains(areaID) {
-            return true
-        }
-        
-        if let departmentID, target.departmentIDs.contains(departmentID) {
-            return true
-        }
-        
-        if let classID, target.classIDs.contains(classID) {
-            return true
-        }
-        
-        if let studentID, target.studentIDs.contains(studentID) {
-            return true
-        }
-        
-        return false
+        // The JWT-bound endpoint is authoritative for audience, withdrawal and
+        // school scope. A legacy client-side target check cannot understand
+        // compoundIDs/classScopes and would wrongly hide valid notifications.
+        return announcements.active(at: now)
     }
     
     
@@ -613,10 +546,7 @@ extension AnnouncementStore {
                     throw APIClientError.invalidPayload("通知与当前学生身份不一致")
                 }
                 return try await RemoteDataService.shared.fetchVisibleAnnouncements(
-                    schoolID: student.schoolID,
-                    departmentID: student.departmentID,
-                    classID: student.classID,
-                    studentID: student.studentID
+                    schoolID: student.schoolID
                 )
             },
             fetchSummary: { try await RemoteDataService.shared.fetchAnnouncementSummary() }

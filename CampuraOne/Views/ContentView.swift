@@ -102,8 +102,12 @@ struct ContentView: View {
     @State var currentTab: AppTab = .dashboard
     
     @State var showAvatarName = false
-    @State var showTopBg = false
-    @State var showTopToolbar = false
+    private var showTopBg: Bool {
+        currentTab == .dashboard && scrollOffset >= 0.1
+    }
+    private var showTopToolbar: Bool {
+        currentTab == .dashboard && scrollOffset >= screen.height / 12
+    }
     
     @State var scaleValue = 1.0
     @State var rotationDegrees = 0.0
@@ -208,40 +212,17 @@ struct ContentView: View {
         
         
         .onChange(of: currentTab) {
-            print(currentTab)
-            print(showAvatarName)
             switch currentTab {
                 case .dashboard:
-                    showAvatarName = false
+                    showAvatarName = scrollOffset >= screen.height / 15
                 case .map:
                     showAvatarName = true
-                    showTopToolbar = false
             }
-            print(showAvatarName)
         }
         
         .onChange(of: scrollOffset) {
-            if scrollOffset >= 0.1 {
-                showTopBg = true
-            } else {
-                showTopBg = false
-            }
-            
-            if scrollOffset >= screen.height/15 {
-                showAvatarName = true
-            } else {
-                showAvatarName = false
-            }
-            
-            if scrollOffset >= screen.height/12 {
-//                withAnimation {
-                    showTopToolbar = true
-//                }
-            } else {
-//                withAnimation {
-                    showTopToolbar = false
-//                }
-            }
+            guard currentTab == .dashboard else { return }
+            showAvatarName = scrollOffset >= screen.height / 15
         }
         
         .animation(.spring(response: 0.6, dampingFraction: 0.76, blendDuration: 1), value: hiddenTabBar)
@@ -399,7 +380,7 @@ struct ContentView: View {
                 .opacity(showTopBg ? 1 : 0)
                 .overlay(alignment: .leading) {
                         topToolbar()
-                            .allowsHitTesting(true)
+                            .allowsHitTesting(showTopToolbar)
                             .transition(.identity)
                             .zIndex(1)
                             .opacity(showTopToolbar ? 1 : 0)

@@ -8,6 +8,18 @@
 import Foundation
 import SwiftData
 
+struct StudentShopGrant: Codable, Equatable {
+    let mainShopID: Int
+    let subShopID: Int?
+    let role: String
+}
+
+struct StudentPlatformAccess: Codable, Equatable {
+    let student: Bool
+    let merchantStaff: Bool
+    let shops: [StudentShopGrant]
+}
+
 // 数据模型：用户
 @Model
 final class AppUser {
@@ -18,6 +30,7 @@ final class AppUser {
     var token: String? // JWT登录token（本地缓存用）
     
     var shopIDs: [Int] // 管理的商户ID列表，可为空
+    @Transient var platformAccess: StudentPlatformAccess? = nil // 服务端当前授权快照；登录恢复后重新获取
     var studentID: Int? // 绑定的学生ID，可为空
     var createdAt: Date? // 创建时间
     var updatedAt: Date? // 更新时间
@@ -28,6 +41,7 @@ final class AppUser {
         userImg: String? = nil,
         token: String? = nil,
         shopIDs: [Int] = [],
+        platformAccess: StudentPlatformAccess? = nil,
         studentID: Int? = nil,
         createdAt: Date? = nil,
         updatedAt: Date? = nil
@@ -37,6 +51,7 @@ final class AppUser {
         self.userImg = userImg
         self.token = token
         self.shopIDs = shopIDs
+        self.platformAccess = platformAccess
         self.studentID = studentID
         self.createdAt = createdAt
         self.updatedAt = updatedAt

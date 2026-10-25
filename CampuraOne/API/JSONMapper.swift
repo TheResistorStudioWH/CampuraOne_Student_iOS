@@ -18,6 +18,7 @@ enum JSONMapper {
             userName: json["userName"].stringValue,
             userImg: json["userImg"].string,
             shopIDs: json["shopIDs"].arrayValue.map { $0.intValue },
+            platformAccess: makePlatformAccess(from: json["platformAccess"]),
             studentID: json["studentID"].int,
             createdAt: json["createdAt"].string?.toDate(),
             updatedAt: json["updatedAt"].string?.toDate()
@@ -94,7 +95,7 @@ enum JSONMapper {
         MainShop(
             shopID: json["shopID"].intValue,
             shopName: json["shopName"].stringValue,
-            shopAddress: json["shopAddress"].arrayValue.map { $0.stringValue },
+            shopAddress: makeShopAddress(from: json["shopAddress"]),
             shopSlogan: json["shopSlogan"].string,
             subShopsList: json["subShopsList"].array?.map { $0.intValue },
             productsList: json["productsList"].array?.map { $0.intValue },
@@ -112,7 +113,7 @@ enum JSONMapper {
         SubShop(
             shopID: json["shopID"].intValue,
             shopName: json["shopName"].stringValue,
-            shopAddress: json["shopAddress"].arrayValue.map { $0.stringValue },
+            shopAddress: makeShopAddress(from: json["shopAddress"]),
             productsList: json["productsList"].array?.map { $0.intValue },
             shopImg: json["shopImg"].string,
             mainShopID: json["mainShopID"].intValue,
@@ -298,13 +299,36 @@ enum JSONMapper {
         return AnnouncementTarget(
             allSchool: json["allSchool"].boolValue,
             areaIDs: json["areaIDs"].arrayValue.map { $0.intValue },
+            compoundIDs: json["compoundIDs"].arrayValue.map { $0.intValue },
             departmentIDs: json["departmentIDs"].arrayValue.map { $0.intValue },
             classIDs: json["classIDs"].arrayValue.map { $0.intValue },
+            classScopes: json["classScopes"].arrayValue.compactMap { scope in
+                guard let compoundID = scope["compoundID"].int,
+                      let departmentID = scope["departmentID"].int,
+                      let classID = scope["classID"].int else { return nil }
+                return AnnouncementClassScope(
+                    compoundID: compoundID,
+                    departmentID: departmentID,
+                    classID: classID
+                )
+            },
             studentIDs: json["studentIDs"].arrayValue.map { $0.intValue }
         )
     }
 
     // MARK: - 通用辅助解析
+
+    static func makePlatformAccess(from json: JSON) -> StudentPlatformAccess? {
+        guard json.exists(), json.type != .null,
+              let data = try? json.rawData() else { return nil }
+        return try? JSONDecoder().decode(StudentPlatformAccess.self, from: data)
+    }
+
+    static func makeShopAddress(from json: JSON) -> ShopAddressValue? {
+        guard json.exists(), json.type != .null,
+              let data = try? json.rawData() else { return nil }
+        return try? JSONDecoder().decode(ShopAddressValue.self, from: data)
+    }
     
     static func makeStringArray(from json: JSON) -> [String]? {
         if json.type == .null || !json.exists() {

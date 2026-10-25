@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CA1022000000000000000002 /* APIDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1022000000000000000001 /* APIDate.swift */; };
 		0B12AC872FDFC72500ECFC94 /* SalesLineDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B12AC862FDFC71C00ECFC94 /* SalesLineDetail.swift */; };
 		0B3F59592FC338D800980B94 /* #PetaToolKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3F59582FC338D800980B94 /* #PetaToolKit.swift */; };
 		0B6FF15F2FC45C360002559F /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 0B6FF15E2FC45C360002559F /* SwiftyJSON */; };
@@ -63,10 +62,10 @@
 		0BD38C3630133A4A005DB96D /* StartupPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD38C3530133A41005DB96D /* StartupPage.swift */; };
 		0BD38C3930133A6B005DB96D /* SetupPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD38C3830133A63005DB96D /* SetupPage.swift */; };
 		0BE0CEB32FD9573B009CB551 /* PagingView in Frameworks */ = {isa = PBXBuildFile; productRef = 0BE0CEB22FD9573B009CB551 /* PagingView */; };
+		CA1022000000000000000002 /* APIDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1022000000000000000001 /* APIDate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		CA1022000000000000000001 /* APIDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIDate.swift; sourceTree = "<group>"; };
 		0B12AC862FDFC71C00ECFC94 /* SalesLineDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalesLineDetail.swift; sourceTree = "<group>"; };
 		0B3F59392FC3380E00980B94 /* CampuraOne.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CampuraOne.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0B3F59582FC338D800980B94 /* #PetaToolKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "#PetaToolKit.swift"; sourceTree = "<group>"; };
@@ -120,19 +119,10 @@
 		0B8303242FDF0D7300B5269A /* PreviewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContainer.swift; sourceTree = "<group>"; };
 		0BD38C3530133A41005DB96D /* StartupPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartupPage.swift; sourceTree = "<group>"; };
 		0BD38C3830133A63005DB96D /* SetupPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPage.swift; sourceTree = "<group>"; };
+		CA1022000000000000000001 /* APIDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIDate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		CA1006000000000000000001 /* Advertisements */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Advertisements;
-			sourceTree = "<group>";
-		};
-		CA0922000000000000000001 /* Components */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Components;
-			sourceTree = "<group>";
-		};
 		0B4CA4F92FE01365008B3B2D /* Map Layer */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "Map Layer";
@@ -141,6 +131,16 @@
 		0B9F190F2FFBBBF300C84458 /* AuthAccount */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = AuthAccount;
+			sourceTree = "<group>";
+		};
+		CA0922000000000000000001 /* Components */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Components;
+			sourceTree = "<group>";
+		};
+		CA1006000000000000000001 /* Advertisements */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Advertisements;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -416,10 +416,10 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				CA1006000000000000000001 /* Advertisements */,
-				CA0922000000000000000001 /* Components */,
 				0B4CA4F92FE01365008B3B2D /* Map Layer */,
 				0B9F190F2FFBBBF300C84458 /* AuthAccount */,
+				CA0922000000000000000001 /* Components */,
+				CA1006000000000000000001 /* Advertisements */,
 			);
 			name = CampuraOne;
 			packageProductDependencies = (

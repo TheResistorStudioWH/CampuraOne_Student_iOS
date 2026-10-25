@@ -72,7 +72,7 @@ struct CourseTableDetail: View {
             .padding()
             }
         }
-        .navigationTitle("课程表")
+        .navigationTitle("日程表")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             selectedDate = calendar.startOfDay(for: Date())

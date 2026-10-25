@@ -44,8 +44,8 @@ struct MainShopListView: View {
                             Text(shop.shopName)
                                 .font(.headline)
                             
-                            if let address = shop.shopAddress {
-                                Text(address.joined(separator: " "))
+                            if let address = shop.shopAddress, !address.displayText.isEmpty {
+                                Text(address.displayText)
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }

@@ -57,27 +57,29 @@ enum AnnouncementType: Int, Codable, CaseIterable, Identifiable {
 // MARK: - 通知分发目标
 
 /// 通知分发目标。
-/// 对应数据库 announcement_targets.targetJSON。
-/// 约定 JSON 格式：
-/// {
-///   "allSchool": false,
-///   "areaIDs": [1],
-///   "departmentIDs": [2, 3],
-///   "classIDs": [101],
-///   "studentIDs": [20001]
-/// }
+/// 服务端已按登录学生筛选；这里只保留返回的结构，不做第二次受众判定。
+struct AnnouncementClassScope: Codable, Equatable {
+    let compoundID: Int
+    let departmentID: Int
+    let classID: Int
+}
+
 struct AnnouncementTarget: Codable, Equatable {
     let allSchool: Bool
     let areaIDs: [Int]
+    let compoundIDs: [Int]
     let departmentIDs: [Int]
     let classIDs: [Int]
+    let classScopes: [AnnouncementClassScope]
     let studentIDs: [Int]
     
     static let empty = AnnouncementTarget(
         allSchool: false,
         areaIDs: [],
+        compoundIDs: [],
         departmentIDs: [],
         classIDs: [],
+        classScopes: [],
         studentIDs: []
     )
 }

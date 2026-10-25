@@ -99,7 +99,7 @@ struct HomePageView: View {
         var title: String {
             switch self {
             case .courseTable:
-                return "课程表"
+                return "日程表"
             case .smallAd:
                 return "推荐广告"
             case .salesTimeline:
@@ -570,6 +570,23 @@ private struct DashboardTile<Content: View, ToolBar: View>: View {
     @ViewBuilder let toolBar: ToolBar
     
     var body: some View {
+        if detailID == "smallAd" {
+            // The photo pile owns tap and horizontal swipe; a tile-wide button
+            // would open the old detail page before Messages-style browsing.
+            tileSurface
+        } else {
+            tileSurface
+                .beButton {
+                    withAnimation {
+                        isOpened = true
+                    }
+                    onOpen()
+                }
+                .buttonStyle(.plain)
+        }
+    }
+
+    private var tileSurface: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
                 if !systemImage.isEmpty {
@@ -603,13 +620,6 @@ private struct DashboardTile<Content: View, ToolBar: View>: View {
                 .shadow(color: .black.opacity(0.2), radius: 16, x: 0, y: 10)
         }
         .contentShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-        .beButton {
-            withAnimation {
-                isOpened = true
-            }
-            onOpen()
-        }
-        .buttonStyle(.plain)
     }
 }
 

@@ -26,63 +26,21 @@ import SwiftData
 
 struct AD_LargeBanner: View {
     let advertisements: [Advertisement]
-    @State private var selection: Int?
     
     private var activeLargeAdvertisements: [Advertisement] {
         advertisements.activeLargeAdvertisements()
     }
     
-    init(advertisements: [Advertisement]) {
-        self.advertisements = advertisements
-        _selection = State(initialValue: advertisements.activeLargeAdvertisements().first?.adID)
-    }
-    
     var body: some View {
         let ads = activeLargeAdvertisements
-        let ids = ads.map(\.adID)
-        // Derive height from the available width, not the device's screen width.
-        GeometryReader { proxy in
+        Group {
             if ads.isEmpty {
-                placeholder
+                placeholder.aspectRatio(3, contentMode: .fit)
             } else {
-                TabView(selection: Binding(
-                    get: { selection.flatMap { ids.contains($0) ? $0 : nil } ?? ids.first },
-                    set: { selection = $0 }
-                )) {
-                    ForEach(ads) { advertisement in
-                        AdvertisementImage(advertisement: advertisement, contentMode: .fit)
-                        .frame(width: proxy.size.width, height: proxy.size.height)
-                        .clipped()
-                        .tag(Optional(advertisement.adID))
-                    }
-                }
-                .tabViewStyle(.page(indexDisplayMode: .never))
+                AdvertisementPhotoStack(advertisements: ads, aspectRatio: 3)
             }
         }
-        .aspectRatio(3, contentMode: .fit)
-        .background(.quaternary)
-        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
-        // Keep page indicators outside the artwork so promotional text stays legible.
-        .overlay(alignment: .bottom) {
-            if ads.count > 1 {
-                HStack(spacing: 5) {
-                    ForEach(ids, id: \.self) { id in
-                        Circle()
-                            .fill((selection ?? ids.first) == id ? Color.primary : Color.secondary.opacity(0.35))
-                            .frame(width: 5, height: 5)
-                    }
-                }
-                .accessibilityHidden(true)
-                .offset(y: 12)
-            }
-        }
-        .padding(.bottom, ads.count > 1 ? 16 : 0)
         .padding(.horizontal)
-        .onChange(of: ids, initial: true) { _, newIDs in
-            if selection == nil || !newIDs.contains(selection!) {
-                selection = newIDs.first
-            }
-        }
     }
     
     private var placeholder: some View {

@@ -49,7 +49,7 @@ struct CourseDateRail: View {
                     .onEnded { _ in lastWeekJump = .distantPast })
                 .animation(reduceMotion ? nil : .spring(response: 0.25, dampingFraction: 0.85), value: touch != nil)
             }
-            .frame(height: 330)
+            .frame(height: 390)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("课表日期时间轴")
             .accessibilityValue(selectedDate.formatted(date: .complete, time: .omitted))
@@ -62,7 +62,7 @@ struct CourseDateRail: View {
                 .frame(width: 60, height: 44, alignment: .leading).accessibilityLabel("下一周")
         }
         .frame(width: 60)
-        .frame(maxHeight: 468)
+        .frame(maxHeight: 500)
         .onAppear {
             centerDate = calendar.startOfDay(for: Date())
             selectedDate = centerDate
@@ -91,6 +91,7 @@ struct CourseDateRail: View {
             .frame(width: 32, height: 30, alignment: .leading)
             .fontWeight(isSelected ? .bold : .regular)
             .scaleEffect(reduceMotion ? 1 : 1 + influence * 0.35, anchor: .leading)
+            .offset(x: 8)
             .zIndex(1)
         } else {
             Capsule()

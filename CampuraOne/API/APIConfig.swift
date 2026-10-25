@@ -62,6 +62,5 @@ enum APIConfig {
     
     enum AuthPath {
         static let login = "/login.php"
-        static let signin = "/register.php"
     }
 }

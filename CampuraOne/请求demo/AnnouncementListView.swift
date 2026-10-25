@@ -14,9 +14,7 @@ import MarkdownUI
 }
 
 struct AnnouncementListView: View {
-    
-    /// 示例：当前登录学生的信息。
-    /// 之后接入登录系统后，这些值可以从当前学生资料里读取。
+    // Demo labels only; the server derives real visibility from the student's JWT.
     private let currentSchoolID = 1
     private let currentAreaID = 1
     private let currentDepartmentID = 1
@@ -24,13 +22,7 @@ struct AnnouncementListView: View {
     private let currentStudentID = 1
     
     @StateObject private var vm = LoadableListViewModel<AnnouncementItem> {
-        try await RemoteDataService.shared.fetchVisibleAnnouncements(
-            schoolID: 1,
-            areaID: 1,
-            departmentID: 1,
-            classID: 1,
-            studentID: 2
-        )
+        try await RemoteDataService.shared.fetchVisibleAnnouncements(schoolID: 1)
     }
     
     var body: some View {

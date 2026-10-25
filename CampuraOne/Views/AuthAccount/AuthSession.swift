@@ -107,6 +107,7 @@ final class AuthSession: ObservableObject {
         destination.userImg = source.userImg
         destination.token = source.token
         destination.shopIDs = source.shopIDs
+        destination.platformAccess = source.platformAccess
         destination.studentID = source.studentID
         destination.createdAt = source.createdAt
         destination.updatedAt = source.updatedAt
