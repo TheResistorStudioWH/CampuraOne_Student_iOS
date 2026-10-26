@@ -178,8 +178,11 @@ struct MapView: View {
                         currentLocation: locationManager.location
                     )
                     
-                    HStack(alignment: isToolDrawExpand ? .bottom : .center) {
-                        ToolDrawer(isExpand: $isToolDrawExpand)
+                    HStack(alignment: .center) {
+                        ToolDrawerButton(isExpand: $isToolDrawExpand)
+                            .anchorPreference(key: ToolDrawerAnchorKey.self, value: .bounds) { $0 }
+                            .opacity(isToolDrawExpand ? 0 : 1)
+                            .allowsHitTesting(!isToolDrawExpand)
                         locationStatusCard
                     }
                 }
@@ -188,7 +191,25 @@ struct MapView: View {
                 
                 .padding(.bottom, screen.height/60 + 22)
             }
+            .accessibilityHidden(isToolDrawExpand)
             SearchBar()
+                .accessibilityHidden(isToolDrawExpand)
+        }
+        // Resolve the trigger's bounds here so the drawer floats above all map
+        // controls while the bottom row keeps its original size and position.
+        .overlayPreferenceValue(ToolDrawerAnchorKey.self) { anchor in
+            GeometryReader { geometry in
+                if isToolDrawExpand, let anchor {
+                    ToolDrawer(
+                        isExpand: $isToolDrawExpand,
+                        sourceBounds: geometry[anchor],
+                        containerSize: geometry.size,
+                        topInset: geometry.safeAreaInsets.top
+                    )
+                    .transition(.opacity)
+                }
+            }
+            .allowsHitTesting(isToolDrawExpand)
         }
         
         .onAppear {

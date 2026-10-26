@@ -92,7 +92,12 @@ struct ToolsItem: Identifiable {
 // MARK: - 工具抽屉
 
 struct ToolDrawer: View {
-    @Namespace var drawerSpace
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var colorScheme
+    @State private var contentHeight: CGFloat = 0
+    let sourceBounds: CGRect
+    let containerSize: CGSize
+    let topInset: CGFloat
     /// 最近没有浏览商品或促销时，传 nil 即可。
     /// nil 时，“你刚看过”整张卡片都不会出现。
     let recentlyViewed: RecentlyViewedItem?
@@ -109,6 +114,9 @@ struct ToolDrawer: View {
     
     init(
         isExpand: Binding<Bool>,
+        sourceBounds: CGRect,
+        containerSize: CGSize,
+        topInset: CGFloat = 0,
         recentlyViewed: RecentlyViewedItem? = nil,
         onOpenShoppingBag: @escaping () -> Void = {},
         onOpenLastPurchase: @escaping () -> Void = {},
@@ -117,6 +125,9 @@ struct ToolDrawer: View {
         onOpenSale: @escaping (SaleEvent) -> Void = { _ in }
     ) {
         self._isExpand = isExpand
+        self.sourceBounds = sourceBounds
+        self.containerSize = containerSize
+        self.topInset = topInset
         self.recentlyViewed = recentlyViewed
         self.onOpenShoppingBag = onOpenShoppingBag
         self.onOpenLastPurchase = onOpenLastPurchase
@@ -156,89 +167,81 @@ struct ToolDrawer: View {
     }
     
     var body: some View {
-        if isExpand {
-            VStack(alignment: .leading, spacing: 5) {
-                HStack {
-                    Text("实用工具")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Spacer()
-                    Image(systemName: "chevron.down")
-                        .beButton {
-                            withAnimation(.snappy) {
-                                isExpand = false
-                            }
+        ZStack(alignment: .bottomLeading) {
+            Color.black.opacity(colorScheme == .dark ? 0.20 : 0.09)
+                .ignoresSafeArea()
+                .contentShape(Rectangle())
+                .onTapGesture { dismiss() }
+                .accessibilityHidden(true)
+
+            VStack(alignment: .leading, spacing: 8) {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("实用工具")
+                            .font(.caption.weight(.medium))
+                            .foregroundStyle(.secondary)
+                            .padding(.leading, 12)
+                            .accessibilityAddTraits(.isHeader)
+
+                        if let recentlyViewed {
+                            recentlyViewedCard(recentlyViewed)
+                                .transition(cardTransition(index: persistentItems.count))
                         }
-                }
-                if let recentlyViewed {
-                    recentlyViewedCard(recentlyViewed)
-                }
-                
-                ForEachWithIndex(persistentItems) { index, item in
-                    toolButton(item)
-                    if index != persistentItems.count - 1 {
-                        Divider()
+
+                        ForEach(Array(persistentItems.enumerated()), id: \.element.id) { index, item in
+                            toolButton(item)
+                                .transition(cardTransition(index: persistentItems.count - index - 1))
+                        }
                     }
+                    .padding(.vertical, 4)
+                    .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { contentHeight = $0 }
                 }
+                .scrollIndicators(.hidden)
+                .scrollBounceBehavior(.basedOnSize)
+                .scrollClipDisabled()
+                .frame(height: min(contentHeight, maximumContentHeight))
+
+                ToolDrawerButton(isExpand: $isExpand)
             }
-            .padding(14)
-            .background {
-                RoundedRectangle(cornerRadius: 18,style: .continuous)
-                    .fill(Material.ultraThin)
-                    .matchedGeometryEffect(id: "tool_drawer", in: drawerSpace, properties: .frame, anchor: .bottomLeading)
-            }
-        } else {
-            Image(systemName: "list.bullet")
-                .font(.title2)
-                .bold()
-                .padding()
-                .background {
-                    Circle()
-                        .fill(Material.ultraThin)
-                        .matchedGeometryEffect(id: "tool_drawer", in: drawerSpace, properties: .frame, anchor: .bottomLeading)
-                }
-                .beButton {
-                    withAnimation(.snappy) {
-                        isExpand = true
-                    }
-                }
+            .frame(width: panelWidth, alignment: .leading)
+            .padding(.leading, sourceBounds.minX)
+            .padding(.bottom, max(0, containerSize.height - sourceBounds.maxY))
         }
-        
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+        .accessibilityAction(.escape) { dismiss() }
     }
-   
+
+    private var panelWidth: CGFloat {
+        min(280, max(0, containerSize.width - sourceBounds.minX * 2) * 0.76)
+    }
+
+    private var maximumContentHeight: CGFloat {
+        max(1, sourceBounds.minY - topInset - 16)
+    }
+
+    private func cardTransition(index: Int) -> AnyTransition {
+        guard !reduceMotion else { return .opacity }
+        return .asymmetric(
+            insertion: .scale(scale: 0.9, anchor: .bottomLeading).combined(with: .opacity)
+                .animation(.spring(response: 0.3, dampingFraction: 0.86).delay(Double(index) * 0.025)),
+            removal: .opacity.animation(.easeOut(duration: 0.12))
+        )
+    }
+
+    private func dismiss() {
+        withAnimation(reduceMotion ? .easeOut(duration: 0.15) : .snappy(duration: 0.25)) {
+            isExpand = false
+        }
+    }
     
     // MARK: 你刚看过
     
     private func recentlyViewedCard(_ item: RecentlyViewedItem) -> some View {
-        HStack(alignment: .center) {
-            Image(systemName: item.icon)
-                .font(.system(size: 22, weight: .semibold))
-                .foregroundStyle(.tint)
-                .frame(width: 40, height: 40)
-            
-            VStack(alignment: .leading, spacing: 3) {
-                Text("你刚看过")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                
-                Text(item.title)
-                    .font(.subheadline.bold())
-                    .lineLimit(1)
-                
-                Text(item.description)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
-            }
-            
-            Spacer(minLength: 8)
-            
-            Image(systemName: "chevron.right")
-                .font(.caption.bold())
-                .foregroundStyle(.tertiary)
-        }
-        .beButton {
+        Button {
+            dismiss()
             openRecentlyViewed(item)
+        } label: {
+            ToolDrawerCard(title: item.title, description: "你刚看过 · \(item.description)", icon: item.icon)
         }
         .buttonStyle(.plain)
     }
@@ -258,26 +261,89 @@ struct ToolDrawer: View {
     // MARK: 常驻工具按钮
     
     private func toolButton(_ item: ToolsItem) -> some View {
-        HStack(alignment: .center) {
-            Image(systemName: item.icon)
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(.tint)
-                .frame(width: 30, height: 30)
-            
-            VStack(alignment: .leading, spacing: 2) {
-                Text(item.name)
-                    .font(.callout)
-                    .lineLimit(1)
-                
-                Text(item.description)
-                    .font(.system(size: 11))
-                    .foregroundStyle(.secondary)
-            }
-            
-        }
-        .beButton {
+        Button {
+            dismiss()
             item.action()
+        } label: {
+            ToolDrawerCard(title: item.name, description: item.description, icon: item.icon)
         }
         .buttonStyle(.plain)
+    }
+}
+
+struct ToolDrawerAnchorKey: PreferenceKey {
+    static var defaultValue: Anchor<CGRect>? { nil }
+
+    static func reduce(value: inout Anchor<CGRect>?, nextValue: () -> Anchor<CGRect>?) {
+        value = nextValue() ?? value
+    }
+}
+
+struct ToolDrawerButton: View {
+    @Binding var isExpand: Bool
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @ScaledMetric(relativeTo: .body) private var diameter: CGFloat = 50
+
+    var body: some View {
+        Button {
+            withAnimation(reduceMotion ? .easeInOut(duration: 0.15) : .snappy(duration: 0.3)) {
+                isExpand.toggle()
+            }
+            TapSoft()
+        } label: {
+            Image(systemName: isExpand ? "xmark" : "list.bullet")
+                .font(.title3.weight(.semibold))
+                .foregroundStyle(.primary)
+                .contentTransition(.symbolEffect(.replace))
+                .frame(width: diameter, height: diameter)
+                .background(.regularMaterial, in: Circle())
+                .shadow(color: .black.opacity(0.16), radius: 8, x: 0, y: 4)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(isExpand ? "收起实用工具" : "展开实用工具")
+        .accessibilityValue(isExpand ? "已展开" : "已收起")
+    }
+}
+
+private struct ToolDrawerCard: View {
+    let title: String
+    let description: String
+    let icon: String
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: icon)
+                .font(.system(size: 17, weight: .semibold))
+                .foregroundStyle(Color.accentColor)
+                .frame(width: 32, height: 32)
+                .background(Color.accentColor.opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+                Text(description)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(2)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background {
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .fill(.regularMaterial)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        .strokeBorder(.primary.opacity(0.05), lineWidth: 0.5)
+                }
+                .shadow(color: .black.opacity(0.16), radius: 10, x: 0, y: 4)
+        }
+        .contentShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(title)
+        .accessibilityHint(description)
     }
 }

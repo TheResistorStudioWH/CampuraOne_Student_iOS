@@ -29,6 +29,7 @@ struct AdvertisementPhotoStack: View {
     var body: some View {
         GeometryReader { geometry in
             let size = geometry.size
+            let shadowOutset = min(24, min(size.width, size.height) * 0.22)
             let inset: CGFloat = advertisements.count > 1 ? 9 : 0
             let cardSize = CGSize(width: max(size.width - inset * 2, 0),
                                   height: max(size.height - inset * 2, 0))
@@ -40,14 +41,15 @@ struct AdvertisementPhotoStack: View {
                     photoCard(advertisement, size: cardSize)
                         .scaleEffect(relative == 0 ? 0.94 : 0.94 + CGFloat(max(relative, 0)) * 0.025)
                         .rotationEffect(.degrees(relative == 0 ? 0 : (relative == 1 ? -4.5 : 4.5)))
-                        .offset(x: horizontalOffset(relative: relative, width: size.width),
+                        .offset(x: horizontalOffset(relative: relative, width: size.width, shadowOutset: shadowOutset),
                                 y: CGFloat(max(relative, 0)) * -4)
                         .zIndex(relative == 0 ? 4 : Double(3 - abs(relative)))
                         .allowsHitTesting(false)
                 }
             }
             .frame(width: size.width, height: size.height)
-            .clipped()
+            // Keep offscreen pages hidden, but leave room for every card's shadow.
+            .clipShape(Rectangle().inset(by: -shadowOutset))
             .contentShape(Rectangle())
             .onTapGesture { showingViewer = true }
             .simultaneousGesture(swipeGesture(width: size.width))
@@ -80,12 +82,12 @@ struct AdvertisementPhotoStack: View {
                 RoundedRectangle(cornerRadius: 18, style: .continuous)
                     .strokeBorder(.white.opacity(0.16), lineWidth: 1)
             }
-            .shadow(color: .black.opacity(0.22), radius: 8, x: 0, y: 5)
+            .modifier(AdvertisementPhotoShadow())
     }
 
-    private func horizontalOffset(relative: Int, width: CGFloat) -> CGFloat {
+    private func horizontalOffset(relative: Int, width: CGFloat, shadowOutset: CGFloat) -> CGFloat {
         switch relative {
-        case -1: return dragOffset > 0 ? 0 : -width
+        case -1: return dragOffset > 0 ? 0 : -width - shadowOutset * 2
         case 0: return dragOffset
         default: return CGFloat(relative) * 3
         }
@@ -153,6 +155,7 @@ private struct AdvertisementPhotoViewer: View {
                             AdvertisementImage(advertisement: advertisement, contentMode: .fill)
                                 .aspectRatio(1, contentMode: .fit)
                                 .clipped()
+                                .modifier(AdvertisementPhotoShadow())
                                 .onTapGesture {
                                     selectedID = advertisement.adID
                                     showsGrid = false
@@ -169,6 +172,7 @@ private struct AdvertisementPhotoViewer: View {
                 )) {
                     ForEach(advertisements) { advertisement in
                         AdvertisementImage(advertisement: advertisement, contentMode: .fit)
+                            .modifier(AdvertisementPhotoShadow())
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .tag(Optional(advertisement.adID))
                     }
@@ -210,5 +214,15 @@ private struct AdvertisementPhotoViewer: View {
             if newIDs.isEmpty { dismiss() }
             else if !newIDs.contains(selectedID ?? -1) { selectedID = newIDs.first }
         }
+    }
+}
+
+private struct AdvertisementPhotoShadow: ViewModifier {
+    @Environment(\.colorScheme) private var colorScheme
+
+    func body(content: Content) -> some View {
+        content
+            .shadow(color: .black.opacity(colorScheme == .dark ? 0.48 : 0.24), radius: 10, x: 0, y: 6)
+            .shadow(color: .black.opacity(0.12), radius: 2, x: 0, y: 1)
     }
 }

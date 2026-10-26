@@ -267,36 +267,29 @@ struct HomePageView: View {
         GeometryReader { proxy in
             let layout = DashboardLayout(screenSize: proxy.size)
             UIKitOffsetScrollView(offset: $scrollOffset) {
-                ZStack {
-                    VStack(spacing: layout.outerSpacing) {
-                        HStack {
-                            greet()
-                            Spacer()
-                        }
-                        .padding(.bottom, screen.height/15)
-                        dashboardTiles(layout: layout)
-                    }
-                    .padding(.bottom)
-
-                    VStack(spacing: layout.outerSpacing) {
-                        HStack {
-                            greet(isPlaceholder: true)
-                            Spacer()
-                        }
-                        .opacity(0)
-                        .allowsHitTesting(false)
-                        .accessibilityHidden(true)
-
-                        Announce_BannerRemoteModule(
-                            userProfile: userProfile
-                        )
-                        .offset(y: -screen.height/37)
-                        AD_LargeBannerRemoteModule()
-                            .padding(.top, layout.outerSpacing)
-                            .zIndex(2)
+                VStack(spacing: layout.outerSpacing) {
+                    HStack {
+                        greet()
                         Spacer()
                     }
+
+                    Announce_BannerRemoteModule(userProfile: userProfile)
+                        .zIndex(1)
+
+                    // Reserve the same 3:1 slot in loading, empty and loaded states.
+                    Color.clear
+                        .aspectRatio(3, contentMode: .fit)
+                        .padding(.horizontal)
+                        .allowsHitTesting(false)
+                        .accessibilityHidden(true)
+                        .overlay {
+                            AD_LargeBannerRemoteModule()
+                        }
+                        .zIndex(2)
+
+                    dashboardTiles(layout: layout)
                 }
+                .padding(.bottom)
             }
         }
         .padding(.bottom, screen.height/20)
@@ -592,7 +585,6 @@ private struct DashboardTile<Content: View, ToolBar: View>: View {
         content
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .opacity(isOpened ? 0 : 1)
-            .clipped()
             .contentShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
     }
 
