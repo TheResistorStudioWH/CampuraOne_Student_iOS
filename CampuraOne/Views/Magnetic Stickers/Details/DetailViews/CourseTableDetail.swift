@@ -4,7 +4,6 @@ import SwiftData
 struct CourseTableDetail: View {
     @ObservedObject private var courseStore = CourseScheduleStore.shared
     @State private var selectedDate = Calendar.current.startOfDay(for: Date())
-    @State private var showNotificationAlert = false
     @StateObject private var calendarPresenter = CalendarEventEditPresenter()
     private let calendar = Calendar.current
 
@@ -19,18 +18,19 @@ struct CourseTableDetail: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 0) {
-            CourseDateRail(selectedDate: $selectedDate)
-                .padding(.top, min(110, screen.height * 0.13))
+            VStack(alignment: .leading, spacing: 8) {
+                dateSelector
+                CourseDateRail(selectedDate: $selectedDate)
+            }
+            .padding(.top, screen.height * 0.035)
             ScrollView {
                 VStack(alignment: .leading, spacing: 22) {
-                    dateSelector
                     dayHeading
                     if !courseStore.isLoading, courseStore.errorMessage == nil {
                         CourseScheduleTags(insights: CourseDayInsights(events: dayEvents, date: selectedDate))
                         weekSection
                     }
                     daySection
-                    actions
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.leading, 8)
@@ -45,11 +45,6 @@ struct CourseTableDetail: View {
         .sheet(item: $calendarPresenter.selectedEvent) { event in
             CalendarEventEditSheet(event: event, eventStore: calendarPresenter.eventStore)
         }
-        .alert("暂未开放", isPresented: $showNotificationAlert) {
-            Button("知道了", role: .cancel) { }
-        } message: {
-            Text("课表通知管理功能正在开发中。")
-        }
         .alert("无法添加到日历", isPresented: Binding(
             get: { calendarPresenter.errorMessage != nil },
             set: { if !$0 { calendarPresenter.errorMessage = nil } }
@@ -62,10 +57,12 @@ struct CourseTableDetail: View {
 
     private var dateSelector: some View {
         HStack(spacing: 8) {
-            DatePicker("选择日程日期", selection: $selectedDate, displayedComponents: .date)
-                .labelsHidden()
+            DatePicker(selection: $selectedDate, displayedComponents: .date) {
+                Image(systemName: "calendar")
+            }
                 .datePickerStyle(.compact)
                 .environment(\.locale, Locale(identifier: "zh_CN"))
+                .accessibilityLabel("选择日程日期")
             Spacer(minLength: 0)
             if !calendar.isDateInToday(selectedDate) {
                 Button("今天") { selectedDate = calendar.startOfDay(for: Date()) }
@@ -89,7 +86,7 @@ struct CourseTableDetail: View {
     }
 
     private var dateLabel: some View {
-        Text(selectedDate.formatted(.dateTime.month().day().locale(Locale(identifier: "zh_CN"))))
+        Text(selectedDate.formatted(.dateTime.year().month().day().locale(Locale(identifier: "zh_CN"))))
             .font(.title2)
             .fixedSize(horizontal: true, vertical: false)
     }
@@ -150,14 +147,6 @@ struct CourseTableDetail: View {
                 }
             }
         }
-    }
-
-    private var actions: some View {
-        Button { showNotificationAlert = true } label: {
-            Label("管理课表通知", systemImage: "bell.badge")
-                .font(.subheadline)
-        }
-        .padding(.bottom, 20)
     }
 
     @ViewBuilder private func exportLink(events: [ICSEventItem], week: Bool) -> some View {

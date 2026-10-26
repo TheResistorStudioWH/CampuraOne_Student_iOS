@@ -99,7 +99,7 @@ struct CourseWeekGrid: View {
                     .frame(width: 36)
 
                     ForEach(Array(dates.enumerated()), id: \.element) { index, date in
-                        dayColumn(date, events: events[index])
+                        dayColumn(date, index: index + 1, events: events[index])
                             .id(calendar.startOfDay(for: date))
                     }
                 }
@@ -114,7 +114,7 @@ struct CourseWeekGrid: View {
         }
     }
 
-    private func dayColumn(_ date: Date, events: [ICSEventItem]) -> some View {
+    private func dayColumn(_ date: Date, index: Int, events: [ICSEventItem]) -> some View {
         let today = calendar.isDateInToday(date)
         let selected = calendar.isDate(date, inSameDayAs: selectedDate)
         return Button {
@@ -122,10 +122,11 @@ struct CourseWeekGrid: View {
             TapSoft()
         } label: {
             VStack(spacing: 0) {
-                VStack(spacing: 4) {
-                    Text(date.formatted(.dateTime.weekday(.abbreviated).locale(Locale(identifier: "zh_CN"))))
+                VStack(spacing: 6) {
+                    Text(date.formatted(.dateTime.weekday(.abbreviated).locale(Locale(identifier: "en_US"))).uppercased())
                         .font(.caption2.weight(.semibold))
-                    Text(date.formatted(.dateTime.day())).font(.subheadline.bold())
+                    Image(systemName: "\(index).calendar")
+                        .font(.title3.weight(.semibold))
                 }
                 .foregroundStyle(today ? Color.accentColor : Color.primary)
                 .frame(height: 56)

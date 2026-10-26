@@ -274,7 +274,6 @@ struct HomePageView: View {
                             Spacer()
                         }
                         .padding(.bottom, screen.height/15)
-                        AD_LargeBannerRemoteModule()
                         dashboardTiles(layout: layout)
                     }
                     .padding(.bottom)
@@ -292,6 +291,9 @@ struct HomePageView: View {
                             userProfile: userProfile
                         )
                         .offset(y: -screen.height/37)
+                        AD_LargeBannerRemoteModule()
+                            .padding(.top, layout.outerSpacing)
+                            .zIndex(2)
                         Spacer()
                     }
                 }
@@ -573,7 +575,7 @@ private struct DashboardTile<Content: View, ToolBar: View>: View {
         if detailID == "smallAd" {
             // The photo pile owns tap and horizontal swipe; a tile-wide button
             // would open the old detail page before Messages-style browsing.
-            tileSurface
+            adTileSurface
         } else {
             tileSurface
                 .beButton {
@@ -584,6 +586,14 @@ private struct DashboardTile<Content: View, ToolBar: View>: View {
                 }
                 .buttonStyle(.plain)
         }
+    }
+
+    private var adTileSurface: some View {
+        content
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .opacity(isOpened ? 0 : 1)
+            .clipped()
+            .contentShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
     }
 
     private var tileSurface: some View {

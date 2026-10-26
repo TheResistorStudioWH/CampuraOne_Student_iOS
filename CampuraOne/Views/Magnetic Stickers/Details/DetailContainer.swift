@@ -18,6 +18,7 @@ struct DetailContainer: View {
     let namespace: Namespace.ID
     @Binding var isOpened: Bool
     let onClose: () -> Void
+    @State private var isShowingSettings = false
     
     var body: some View {
         RoundedRectangle(cornerRadius: 24, style: .continuous)
@@ -68,22 +69,46 @@ struct DetailContainer: View {
                     .matchedGeometryEffect(id: "\(selectedDetail.id)-title", in: namespace, properties: .position)
             }
 
-            Spacer()
+            VStack(spacing: 6) {
+                Image(systemName: "xmark")
+                    .font(.title)
+                    .bold()
+                    .padding()
+                    .background {
+                        Circle().fill(Material.regular)
+                    }
+                    .beButton {
+                        onClose()
+                        withAnimation { isOpened = false }
+                    }
+                    .buttonStyle(.borderless)
 
-            Image(systemName: "xmark")
-                .font(.title)
-                .bold()
-                .padding()
-                .background {
-                    Circle().fill(Material.regular)
+                Button {
+                    withAnimation(.smooth(duration: 0.24)) {
+                        isShowingSettings = true
+                    }
+                } label: {
+                    Image(systemName: "chevron.down")
+                        .font(.headline.bold())
+                        .frame(width: 44, height: 36)
+                        .contentShape(Rectangle())
                 }
-                .beButton {
-                    onClose()
-                    withAnimation { isOpened = false }
-                }
-                .buttonStyle(.borderless)
+                .accessibilityLabel("展开磁贴设置")
+                .accessibilityHint("管理当前功能磁贴的通知")
+                .rotationEffect(.degrees(isShowingSettings ? 180 : 0))
+            }
         }
         .padding(.leading, selectedDetail.id == "courseTable" ? 16 : 0)
+        .sheet(isPresented: $isShowingSettings) {
+            NavigationStack {
+                DashboardTileSettingsView(
+                    featureID: selectedDetail.id,
+                    featureTitle: selectedDetail.title
+                )
+            }
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.visible)
+        }
     }
     
 }

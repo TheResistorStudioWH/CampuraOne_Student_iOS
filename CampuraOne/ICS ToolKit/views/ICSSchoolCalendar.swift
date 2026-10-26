@@ -197,9 +197,13 @@ struct ICSSchoolCalendarMini: View {
     }
     
     private var weekDays: [Date] {
-        let today = calendar.startOfDay(for: Date())
-        return (0..<8).compactMap { dayOffset in
-            calendar.date(byAdding: .day, value: dayOffset, to: today)
+        let selectedDay = calendar.startOfDay(for: selectedDate)
+        let daysSinceMonday = (calendar.component(.weekday, from: selectedDay) + 5) % 7
+        guard let monday = calendar.date(byAdding: .day, value: -daysSinceMonday, to: selectedDay) else {
+            return []
+        }
+        return (0..<7).compactMap { dayOffset in
+            calendar.date(byAdding: .day, value: dayOffset, to: monday)
         }
     }
 
@@ -208,15 +212,15 @@ struct ICSSchoolCalendarMini: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 9) {
             if viewModel.isLoading {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if viewModel.errorMessage != nil {
                 miniErrorView
             } else {
+                selectedDateHeader
                 weekStrip
-                Divider().opacity(0.35)
                 weekEventList
             }
         }
@@ -227,26 +231,45 @@ struct ICSSchoolCalendarMini: View {
     }
     
     private var weekStrip: some View {
-        VStack(spacing: 2) {
-            ForEach(0..<2, id: \.self) { rowIndex in
-                HStack(spacing: 2) {
-                    ForEach(rowDays(rowIndex), id: \.self) { day in
-                        miniDayCell(day)
-                            .beButton {
-                                withAnimation(.snappy) {
-                                    selectedDate = calendar.startOfDay(for: day)
-                                }
-                            }
+        HStack(spacing: 2) {
+            ForEach(weekDays, id: \.self) { day in
+                miniDayCell(day)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        withAnimation(.snappy(duration: 0.24)) {
+                            selectedDate = calendar.startOfDay(for: day)
+                        }
+                        TapSoft()
                     }
-                }
+                    .accessibilityLabel(accessibilityDayTitle(day))
+                    .accessibilityAddTraits(
+                        calendar.isDate(day, inSameDayAs: selectedDate) ? .isSelected : []
+                    )
             }
         }
     }
 
-    private func rowDays(_ rowIndex: Int) -> [Date] {
-        let startIndex = rowIndex * 4
-        let endIndex = min(startIndex + 4, weekDays.count)
-        return Array(weekDays[startIndex..<endIndex])
+    private var selectedDateHeader: some View {
+        HStack(alignment: .center, spacing: 8) {
+            Text(selectedDateTitle)
+                .font(.subheadline.weight(.semibold))
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+                .contentTransition(.numericText())
+
+            Spacer(minLength: 4)
+
+            Text("\(selectedDateEvents.count) 项")
+                .font(.caption2.weight(.bold))
+                .foregroundStyle(Color.accentColor)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background {
+                    Capsule(style: .continuous)
+                        .fill(Color.accentColor.opacity(0.14))
+                }
+                .contentTransition(.numericText())
+        }
     }
 
     private func miniDayCell(_ day: Date) -> some View {
@@ -254,58 +277,56 @@ struct ICSSchoolCalendarMini: View {
         let isToday = calendar.isDateInToday(day)
         let isSelected = calendar.isDate(day, inSameDayAs: selectedDate)
         
-        return VStack(spacing: 2) {
+        return VStack(spacing: 3) {
+            Text(weekdaySymbol(day))
+                .font(.system(size: 9, weight: .medium, design: .rounded))
+                .foregroundStyle(isSelected ? Color.accentColor : Color.secondary)
+
             Text(dayNumber(day))
-                .font(.system(size: 10, weight: .bold, design: .rounded))
+                .font(.system(size: 12, weight: .bold, design: .rounded))
                 .foregroundStyle(isSelected ? .white : .primary)
-                .frame(width: 20, height: 20)
+                .frame(width: 23, height: 23)
                 .background {
                     Circle()
-                        .fill(isSelected ? Color.accentColor : Color.secondary.opacity(0.12))
+                        .fill(isSelected ? Color.accentColor : Color.clear)
                 }
-            
-            VStack(alignment: .leading, spacing: 1) {
-                Text(weekdaySymbol(day))
-                    .font(.system(size: 8, weight: .semibold, design: .rounded))
-                    .foregroundStyle(isSelected ? Color.accentColor : Color.secondary)
-                
-                Circle()
-                    .fill(dayEvents.isEmpty ? Color.clear : Color.accentColor)
-                    .frame(width: 4, height: 4)
-                    .shadow(radius: 5)
-            }
-            
+                .overlay {
+                    Circle()
+                        .stroke(Color.accentColor, lineWidth: 1)
+                        .opacity(isToday && !isSelected ? 0.55 : 0)
+                }
+
+            Circle()
+                .fill(dayEvents.isEmpty ? Color.clear : Color.accentColor)
+                .frame(width: 3, height: 3)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 4)
         .background {
-            RoundedRectangle(cornerRadius: 13, style: .continuous)
-                .fill(isSelected ? Color.accentColor.opacity(0.16) : Color.clear)
-        }
-        .overlay {
-            RoundedRectangle(cornerRadius: 13, style: .continuous)
-                .stroke(isToday && !isSelected ? Color.accentColor.opacity(0.45) : Color.clear, lineWidth: 1)
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .fill(isSelected ? Color.accentColor.opacity(0.13) : Color.clear)
         }
     }
     
     private var weekEventList: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 5) {
             if selectedDateEvents.isEmpty {
-                Text(emptySelectedDateTitle)
+                Label(emptySelectedDateTitle, systemImage: "checkmark")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             } else {
-                ForEach(selectedDateEvents.prefix(3)) { event in
-                    HStack(spacing: 8) {
+                ForEach(selectedDateEvents.prefix(2)) { event in
+                    HStack(spacing: 7) {
                         RoundedRectangle(cornerRadius: 2, style: .continuous)
-                            .fill(event.occurs(on: selectedDate) ? Color.accentColor : Color.secondary.opacity(0.35))
-                            .frame(width: 4, height: 20)
+                            .fill(Color.accentColor)
+                            .frame(width: 3, height: 20)
                         
                         VStack(alignment: .leading, spacing: 1) {
                             Text(event.title)
                                 .font(.caption)
-                                .fontWeight(event.occurs(on: selectedDate) ? .bold : .semibold)
+                                .fontWeight(.semibold)
                                 .lineLimit(1)
                             
                             Text(miniDateTitle(event))
@@ -316,13 +337,16 @@ struct ICSSchoolCalendarMini: View {
                     }
                 }
                 
-                if selectedDateEvents.count > 3 {
-                    Text("还有 \(selectedDateEvents.count - 3) 项")
+                if selectedDateEvents.count > 2 {
+                    Text("还有 \(selectedDateEvents.count - 2) 项")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .padding(.top, 2)
+        .animation(.snappy(duration: 0.24), value: selectedDate)
     }
     
     private var miniErrorView: some View {
@@ -338,10 +362,31 @@ struct ICSSchoolCalendarMini: View {
     }
     
     private func weekdaySymbol(_ date: Date) -> String {
+        let weekday = calendar.component(.weekday, from: date)
+        return ["日", "一", "二", "三", "四", "五", "六"][weekday - 1]
+    }
+
+    private var selectedDateTitle: String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "zh_CN")
-        formatter.dateFormat = "E"
-        return formatter.string(from: date)
+        formatter.dateFormat = "M月d日"
+        let dateTitle = formatter.string(from: selectedDate)
+
+        if calendar.isDateInToday(selectedDate) {
+            return "\(dateTitle) · 今天"
+        }
+        let tomorrow = calendar.date(byAdding: .day, value: 1, to: Date()) ?? Date()
+        if calendar.isDate(selectedDate, inSameDayAs: tomorrow) {
+            return "\(dateTitle) · 明天"
+        }
+        return dateTitle
+    }
+
+    private func accessibilityDayTitle(_ day: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "zh_CN")
+        formatter.dateFormat = "M月d日 EEEE"
+        return formatter.string(from: day)
     }
     
     private func dayNumber(_ date: Date) -> String {
