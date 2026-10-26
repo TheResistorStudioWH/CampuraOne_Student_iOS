@@ -1,689 +1,177 @@
-//
-//  CourseTableDetail.swift
-//  CampuraOne
-//
-//  Created by Lin Shay on 09/06/2026.
-//
-
 import SwiftUI
 import SwiftData
 
 struct CourseTableDetail: View {
-    /// 与首页卡片、地图标签观察同一份课表数据。
     @ObservedObject private var courseStore = CourseScheduleStore.shared
-
-    @State private var selectedDate = Date()
+    @State private var selectedDate = Calendar.current.startOfDay(for: Date())
     @State private var showNotificationAlert = false
     @StateObject private var calendarPresenter = CalendarEventEditPresenter()
-
     private let calendar = Calendar.current
 
-    private var allEvents: [ICSEventItem] {
-        courseStore.events
+    private var weekDates: [Date] {
+        let day = calendar.startOfDay(for: selectedDate)
+        let daysSinceMonday = (calendar.component(.weekday, from: day) + 5) % 7
+        let monday = calendar.date(byAdding: .day, value: -daysSinceMonday, to: day)!
+        return (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: monday) }
     }
+    private var dayEvents: [ICSEventItem] { events(on: selectedDate) }
+    private var weekEvents: [[ICSEventItem]] { weekDates.map { events(on: $0) } }
 
-    private var selectedWeekDates: [Date] {
-        guard let interval = calendar.dateInterval(
-            of: .weekOfYear,
-            for: selectedDate
-        ) else {
-            return [selectedDate]
-        }
-
-        return (0..<7).compactMap { dayOffset in
-            calendar.date(
-                byAdding: .day,
-                value: dayOffset,
-                to: interval.start
-            )
-        }
-    }
-
-    private var selectedDayEvents: [DisplayedCourseEvent] {
-        displayedEvents(on: selectedDate)
-    }
-
-    private var selectedWeekEvents: [DisplayedCourseEvent] {
-        selectedWeekDates
-            .flatMap { date in
-                displayedEvents(on: date)
-            }
-            .sorted {
-                $0.startDate < $1.startDate
-            }
-    }
-    
     var body: some View {
         HStack(alignment: .top, spacing: 0) {
-            dayRail
+            CourseDateRail(selectedDate: $selectedDate)
+                .padding(.top, min(110, screen.height * 0.13))
             ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
-                Label(
-                    "管理课表通知",
-                    systemImage: "bell.badge"
-                )
-                .beButton {
-                    showNotificationAlert = true
+                VStack(alignment: .leading, spacing: 22) {
+                    dateSelector
+                    dayHeading
+                    if !courseStore.isLoading, courseStore.errorMessage == nil {
+                        CourseScheduleTags(insights: CourseDayInsights(events: dayEvents, date: selectedDate))
+                        weekSection
+                    }
+                    daySection
+                    actions
                 }
-                dateControlCard
-                weekSection
-                daySection
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading, 8)
+                .padding(.trailing, 2)
+                .padding(.vertical, 12)
             }
-            .padding()
-            }
+            .scrollIndicators(.hidden)
         }
-        .navigationTitle("日程表")
-        .navigationBarTitleDisplayMode(.inline)
-        .onAppear {
-            selectedDate = calendar.startOfDay(for: Date())
-        }
-        .task {
-            await courseStore.load()
-
-        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .onAppear { selectedDate = calendar.startOfDay(for: Date()) }
+        .task { await courseStore.load() }
         .sheet(item: $calendarPresenter.selectedEvent) { event in
-            CalendarEventEditSheet(
-                event: event,
-                eventStore: calendarPresenter.eventStore
-            )
+            CalendarEventEditSheet(event: event, eventStore: calendarPresenter.eventStore)
         }
-        .alert(
-            "暂未开放",
-            isPresented: $showNotificationAlert
-        ) {
+        .alert("暂未开放", isPresented: $showNotificationAlert) {
             Button("知道了", role: .cancel) { }
         } message: {
             Text("课表通知管理功能正在开发中。")
         }
-        .alert(
-            "无法添加到日历",
-            isPresented: Binding(
-                get: {
-                    calendarPresenter.errorMessage != nil
-                },
-                set: { isPresented in
-                    if !isPresented {
-                        calendarPresenter.errorMessage = nil
-                    }
-                }
-            )
-        ) {
-            Button("知道了", role: .cancel) {
-                calendarPresenter.errorMessage = nil
-            }
+        .alert("无法添加到日历", isPresented: Binding(
+            get: { calendarPresenter.errorMessage != nil },
+            set: { if !$0 { calendarPresenter.errorMessage = nil } }
+        )) {
+            Button("知道了", role: .cancel) { calendarPresenter.errorMessage = nil }
         } message: {
             Text(calendarPresenter.errorMessage ?? "未知错误")
         }
     }
 
-    private var dayRail: some View {
-        CourseDateRail(selectedDate: $selectedDate)
-            .padding(.top, min(110, screen.height * 0.13))
-    }
-
-    private var dateControlCard: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack(alignment: .center, spacing: 14) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("查看课程")
-                        .font(.headline)
-
-                    Text("按住左侧刻度滑动 · 当天共 \(selectedDayEvents.count) 节课")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Spacer(minLength: 12)
-
-                DatePicker(
-                    "选择日期",
-                    selection: $selectedDate,
-                    displayedComponents: .date
-                )
+    private var dateSelector: some View {
+        HStack(spacing: 8) {
+            DatePicker("选择日程日期", selection: $selectedDate, displayedComponents: .date)
                 .labelsHidden()
                 .datePickerStyle(.compact)
-                .fixedSize()
+                .environment(\.locale, Locale(identifier: "zh_CN"))
+            Spacer(minLength: 0)
+            if !calendar.isDateInToday(selectedDate) {
+                Button("今天") { selectedDate = calendar.startOfDay(for: Date()) }
+                    .font(.subheadline.weight(.semibold))
             }
-
-            HStack(spacing: 10) {
-                dateInfoBlock(
-                    title: "年份",
-                    value: selectedDate.formatted(
-                        .dateTime.year()
-                    )
-                )
-
-                dateInfoBlock(
-                    title: "日期",
-                    value: selectedDate.formatted(
-                        .dateTime
-                            .month(.twoDigits)
-                            .day(.twoDigits)
-                    )
-                )
-
-                dateInfoBlock(
-                    title: "星期",
-                    value: selectedDate.formatted(
-                        .dateTime
-                            .weekday(.wide)
-                            .locale(Locale(identifier: "zh_CN"))
-                    )
-                )
-            }
-
-            HStack(spacing: 10) {
-                Button {
-                    withAnimation(.smooth) {
-                        selectedDate = Date()
-                    }
-                } label: {
-                    Label(
-                        "回到今天",
-                        systemImage: "calendar"
-                    )
-                }
-                .buttonStyle(.bordered)
-
-                Spacer()
-
-                Menu {
-                    if let dayURL = makeICSURL(
-                        from: selectedDayEvents,
-                        calendarName: "当天课程",
-                        fileName: "课程表-当天"
-                    ) {
-                        ShareLink(item: dayURL) {
-                            Label(
-                                "添加当天课程",
-                                systemImage: "calendar.badge.plus"
-                            )
-                        }
-                    }
-
-                    if let weekURL = makeICSURL(
-                        from: selectedWeekEvents,
-                        calendarName: "本周课程",
-                        fileName: "课程表-本周"
-                    ) {
-                        ShareLink(item: weekURL) {
-                            Label(
-                                "添加本周课程",
-                                systemImage: "calendar.badge.plus"
-                            )
-                        }
-                    }
-                } label: {
-                    Label(
-                        "添加到日历",
-                        systemImage: "calendar.badge.plus"
-                    )
-                }
-                .buttonStyle(.borderedProminent)
-                .disabled(
-                    selectedDayEvents.isEmpty
-                    && selectedWeekEvents.isEmpty
-                )
-            }
-        }
-        .padding(16)
-        .background {
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(.thinMaterial)
         }
     }
 
-    private func dateInfoBlock(
-        title: String,
-        value: String
-    ) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.caption2)
-                .foregroundStyle(.secondary)
+    private var dayHeading: some View {
+        ViewThatFits(in: .horizontal) {
+            HStack(alignment: .firstTextBaseline, spacing: 10) {
+                dateLabel
+                Spacer(minLength: 0)
+                lessonCount
+            }
+            VStack(alignment: .leading, spacing: 10) {
+                dateLabel
+                lessonCount
+            }
+        }
+    }
 
-            Text(value)
-                .font(.subheadline.weight(.semibold))
-                .lineLimit(1)
-                .minimumScaleFactor(0.8)
+    private var dateLabel: some View {
+        Text(selectedDate.formatted(.dateTime.month().day().locale(Locale(identifier: "zh_CN"))))
+            .font(.title2)
+            .fixedSize(horizontal: true, vertical: false)
+    }
+
+    private var lessonCount: some View {
+        HStack(spacing: 2) {
+            Text("共")
+            if courseStore.isLoading || courseStore.errorMessage != nil {
+                Text("—").foregroundStyle(Color.accentColor)
+            } else {
+                Text("\(dayEvents.count)").foregroundStyle(Color.accentColor).fontWeight(.bold)
+            }
+            Text("节课")
         }
-        .frame(maxWidth: .infinity, minHeight: 52, alignment: .leading)
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
-        .background {
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color.secondary.opacity(0.1))
-        }
+        .font(.subheadline)
+        .fixedSize()
+        .padding(.horizontal, 10)
+        .padding(.vertical, 7)
+        .background(Color.accentColor.opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
     }
 
     private var weekSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("本周课表")
-                    .font(.headline)
-
+                Text("本周课表").font(.headline)
                 Spacer()
-
-                if let weekURL = makeICSURL(
-                    from: selectedWeekEvents,
-                    calendarName: "本周课程",
-                    fileName: "课程表-本周"
-                ) {
-                    ShareLink(item: weekURL) {
-                        Image(systemName: "calendar.badge.plus")
-                    }
-                    .buttonStyle(.bordered)
-                    .accessibilityLabel("添加本周课程到日历")
-                }
+                exportLink(events: weekEvents.flatMap { $0 }, week: true)
             }
-
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 10) {
-                    ForEach(selectedWeekDates, id: \.self) { date in
-                        weekDayCard(date)
-                    }
-                }
-            }
+            CourseWeekGrid(dates: weekDates, events: weekEvents, selectedDate: $selectedDate)
         }
-    }
-
-    private func weekDayCard(_ date: Date) -> some View {
-        let events = displayedEvents(on: date)
-        let isSelected = calendar.isDate(
-            date,
-            inSameDayAs: selectedDate
-        )
-
-        return Button {
-            withAnimation(.smooth) {
-                selectedDate = date
-            }
-        } label: {
-            VStack(spacing: 8) {
-                Text(
-                    date.formatted(
-                        .dateTime
-                            .weekday(.abbreviated)
-                            .locale(Locale(identifier: "zh_CN"))
-                    )
-                )
-                .font(.caption.weight(.semibold))
-
-                Text(
-                    date.formatted(
-                        .dateTime.day()
-                    )
-                )
-                .font(.title3.bold())
-
-                Text(events.isEmpty ? "无课" : "\(events.count) 节")
-                    .font(.caption2)
-                    .foregroundStyle(
-                        isSelected
-                        ? Color.white.opacity(0.85)
-                        : Color.secondary
-                    )
-                ForEach(events.prefix(3)) { event in
-                    Text(event.event.title)
-                        .font(.system(size: 10))
-                        .lineLimit(2)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(4)
-                        .background(Color.secondary.opacity(0.1), in: RoundedRectangle(cornerRadius: 5))
-                }
-                Spacer(minLength: 0)
-            }
-            .padding(8)
-            .frame(width: 86, height: 196, alignment: .top)
-            .background {
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(
-                        isSelected
-                        ? Color.accentColor
-                        : Color.secondary.opacity(0.12)
-                    )
-            }
-            .foregroundStyle(
-                isSelected ? Color.white : Color.primary
-            )
-        }
-        .buttonStyle(.plain)
     }
 
     private var daySection: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 16) {
             HStack {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("当天课程")
-                        .font(.headline)
-
-                    Text(
-                        selectedDate.formatted(
-                            .dateTime
-                                .month()
-                                .day()
-                                .weekday(.wide)
-                                .locale(Locale(identifier: "zh_CN"))
-                        )
-                    )
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                }
-
+                Text(calendar.isDateInToday(selectedDate) ? "今日日程" : "当日日程").font(.headline)
                 Spacer()
-
-                if let dayURL = makeICSURL(
-                    from: selectedDayEvents,
-                    calendarName: "当天课程",
-                    fileName: "课程表-当天"
-                ) {
-                    ShareLink(item: dayURL) {
-                        Image(systemName: "calendar.badge.plus")
-                    }
-                    .buttonStyle(.bordered)
-                    .accessibilityLabel("添加当天课程到日历")
-                }
+                exportLink(events: dayEvents, week: false)
             }
-
             if courseStore.isLoading {
-                ProgressView("正在加载课表")
-                    .frame(maxWidth: .infinity, minHeight: 220)
-            } else if let errorMessage = courseStore.errorMessage {
+                ProgressView("正在加载课表").frame(maxWidth: .infinity, minHeight: 180)
+            } else if let error = courseStore.errorMessage {
                 VStack(spacing: 10) {
-                    Label(
-                        "课表加载失败",
-                        systemImage: "exclamationmark.triangle.fill"
-                    )
-                    .foregroundStyle(.red)
-
-                    Text(errorMessage)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-
-                    Button("重新加载") {
-                        Task {
-                            await courseStore.load(forceRefresh: true)
-                        }
-                    }
-                    .buttonStyle(.bordered)
+                    Label("课表加载失败", systemImage: "exclamationmark.triangle.fill").foregroundStyle(.red)
+                    Text(error).font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.center)
+                    Button("重新加载") { Task { await courseStore.load(forceRefresh: true) } }
+                        .buttonStyle(.bordered)
                 }
-                .frame(maxWidth: .infinity, minHeight: 220)
-            } else if selectedDayEvents.isEmpty {
-                emptyState(
-                    icon: "calendar.badge.checkmark",
-                    title: "这一天没有课程",
-                    message: "可以选择其他日期查看。"
-                )
+                .frame(maxWidth: .infinity, minHeight: 180)
+            } else if dayEvents.isEmpty {
+                ContentUnavailableView("这一天没有课程", systemImage: "calendar.badge.checkmark",
+                                       description: Text("可以选择其他日期查看。"))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 24)
             } else {
-                CourseTableDayTimeline(
-                    events: selectedDayEvents,
-                    onAddEvent: { event in
-                        Task {
-                            await calendarPresenter.present(
-                                event: event.calendarEvent
-                            )
-                        }
-                    }
-                )
-            }
-        }
-    }
-
-
-/// 详情页使用的当天课程时间线。
-/// 布局与首页课表时间线保持一致，但保留单节课程添加到系统日历的按钮。
-private struct CourseTableDayTimeline: View {
-    let events: [DisplayedCourseEvent]
-    let onAddEvent: (DisplayedCourseEvent) -> Void
-
-    private let calendar = Calendar.current
-    private let startHour = 8
-    private let endHour = 20
-    private let hourHeight: CGFloat = 52
-    private let timeColumnWidth: CGFloat = 46
-
-    private var timelineHeight: CGFloat {
-        CGFloat(endHour - startHour) * hourHeight
-    }
-
-    var body: some View {
-        ZStack(alignment: .topLeading) {
-            hourLines
-            eventBlocks
-        }
-        .frame(height: timelineHeight)
-        .frame(maxWidth: .infinity)
-        .clipped()
-    }
-
-    private var hourLines: some View {
-        VStack(spacing: 0) {
-            ForEach(startHour...endHour, id: \.self) { hour in
-                HStack(alignment: .top, spacing: 8) {
-                    Text(String(format: "%02d:00", hour))
-                        .font(.system(size: 11, weight: .semibold, design: .rounded))
-                        .foregroundStyle(.secondary)
-                        .frame(width: timeColumnWidth, alignment: .trailing)
-                        .offset(y: -6)
-
-                    Rectangle()
-                        .fill(.secondary.opacity(0.22))
-                        .frame(height: 1)
+                CourseScheduleDayTimeline(events: dayEvents, date: selectedDate) { event in
+                    Task { await calendarPresenter.present(event: event) }
                 }
-                .frame(
-                    height: hour == endHour ? 1 : hourHeight,
-                    alignment: .top
-                )
             }
         }
     }
 
-    private var eventBlocks: some View {
-        ZStack(alignment: .topLeading) {
-            ForEach(events) { item in
-                CourseTableTimelineEventBlock(
-                    item: item,
-                    onAdd: {
-                        onAddEvent(item)
-                    }
-                )
-                .frame(
-                    height: eventHeight(item)
-                )
-                .padding(.leading, timeColumnWidth + 10)
-                .offset(
-                    y: yOffset(for: item.startDate)
-                )
-            }
+    private var actions: some View {
+        Button { showNotificationAlert = true } label: {
+            Label("管理课表通知", systemImage: "bell.badge")
+                .font(.subheadline)
+        }
+        .padding(.bottom, 20)
+    }
+
+    @ViewBuilder private func exportLink(events: [ICSEventItem], week: Bool) -> some View {
+        if !events.isEmpty, let url = try? ICSFileExporter.makeTemporaryICSFile(
+            events: events, calendarName: week ? "本周课程" : "当天课程",
+            fileName: week ? "课程表-本周" : "课程表-当天"
+        ) {
+            ShareLink(item: url) { Image(systemName: "calendar.badge.plus") }
+                .buttonStyle(.bordered)
+                .accessibilityLabel(week ? "添加本周课程到日历" : "添加当天课程到日历")
         }
     }
 
-    private func yOffset(for date: Date) -> CGFloat {
-        let components = calendar.dateComponents(
-            [.hour, .minute],
-            from: date
-        )
-
-        let hour = components.hour ?? startHour
-        let minute = components.minute ?? 0
-        let decimalHour = CGFloat(hour) + CGFloat(minute) / 60
-        let clampedHour = min(
-            max(decimalHour, CGFloat(startHour)),
-            CGFloat(endHour)
-        )
-
-        return (clampedHour - CGFloat(startHour)) * hourHeight
+    private func events(on date: Date) -> [ICSEventItem] {
+        CourseScheduleResolver.events(on: date, from: courseStore.events, calendar: calendar)
     }
-
-    private func eventHeight(_ item: DisplayedCourseEvent) -> CGFloat {
-        let duration = max(
-            item.endDate.timeIntervalSince(item.startDate),
-            30 * 60
-        )
-
-        return max(
-            46,
-            CGFloat(duration / 3600) * hourHeight
-        )
-    }
-}
-
-private struct CourseTableTimelineEventBlock: View {
-    let item: DisplayedCourseEvent
-    let onAdd: () -> Void
-
-    private var accentColor: Color {
-        let colors: [Color] = [
-            .blue,
-            .green,
-            .purple,
-            .orange,
-            .pink
-        ]
-
-        return colors[abs(item.event.title.hashValue) % colors.count]
-    }
-
-    var body: some View {
-        HStack(alignment: .top, spacing: 8) {
-            RoundedRectangle(cornerRadius: 2, style: .continuous)
-                .fill(accentColor)
-                .frame(width: 4)
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text(item.event.title)
-                    .font(.system(.subheadline, design: .rounded, weight: .bold))
-                    .lineLimit(1)
-
-                HStack(spacing: 6) {
-                    Text(
-                        item.startDate.formatted(
-                            date: .omitted,
-                            time: .shortened
-                        )
-                    )
-
-                    if let location = item.event.location,
-                       !location.isEmpty {
-                        Text("·")
-                        Text(location)
-                            .lineLimit(1)
-                    }
-                }
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            }
-
-            Spacer(minLength: 0)
-
-            Button(action: onAdd) {
-                Image(systemName: "calendar.badge.plus")
-                    .font(.caption.weight(.semibold))
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("添加这节课到系统日历")
-        }
-        .padding(.horizontal, 9)
-        .padding(.vertical, 8)
-        .frame(maxWidth: .infinity, alignment: .topLeading)
-        .background {
-            RoundedRectangle(cornerRadius: 9, style: .continuous)
-                .fill(accentColor.opacity(0.16))
-        }
-        .foregroundStyle(accentColor)
-    }
-}
-
-    private func displayedEvents(
-        on date: Date
-    ) -> [DisplayedCourseEvent] {
-        allEvents
-            .compactMap {
-                DisplayedCourseEvent(
-                    event: $0,
-                    on: date
-                )
-            }
-            .sorted {
-                $0.startDate < $1.startDate
-            }
-    }
-
-    private func makeICSURL(
-        from events: [DisplayedCourseEvent],
-        calendarName: String,
-        fileName: String
-    ) -> URL? {
-        guard !events.isEmpty else {
-            return nil
-        }
-
-        return try? ICSFileExporter.makeTemporaryICSFile(
-            events: events.map(\.calendarEvent),
-            calendarName: calendarName,
-            fileName: fileName
-        )
-    }
-
-    private func emptyState(
-        icon: String,
-        title: String,
-        message: String
-    ) -> some View {
-        ContentUnavailableView(
-            title,
-            systemImage: icon,
-            description: Text(message)
-        )
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 60)
-    }
-}
-
-/// 把 ICS 中的单次课程或每周重复课程转换成指定日期上的实际显示时间
-private struct DisplayedCourseEvent: Identifiable {
-    let event: ICSEventItem
-    let startDate: Date
-    let endDate: Date
-
-    var id: String {
-        "\(event.id)-\(startDate.timeIntervalSince1970)"
-    }
-
-    var calendarEvent: ICSEventItem {
-        ICSEventItem(
-            id: "\(event.id)-\(Int(startDate.timeIntervalSince1970))",
-            title: event.title,
-            startDate: startDate,
-            endDate: endDate,
-            location: event.location,
-            detail: event.detail,
-            recurrenceRule: nil
-        )
-    }
-
-    init?(
-        event: ICSEventItem,
-        on selectedDate: Date,
-        calendar: Calendar = .current
-    ) {
-        guard let occurrence = CourseScheduleResolver.events(
-            on: selectedDate,
-            from: [event],
-            calendar: calendar
-        ).first,
-        let startDate = occurrence.startDate else {
-            return nil
-        }
-        self.event = event
-        self.startDate = startDate
-        self.endDate = occurrence.endDate
-            ?? startDate.addingTimeInterval(60 * 60)
-    }
-}
-
-#Preview("app - 已登录") {
-    ContentView()
-        .modelContainer(PreviewContainer.app)
 }

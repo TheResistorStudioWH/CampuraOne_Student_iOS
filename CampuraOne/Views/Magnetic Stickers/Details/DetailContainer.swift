@@ -37,44 +37,53 @@ struct DetailContainer: View {
     }
     
     @ViewBuilder func DetailContent() -> some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                HStack {
-                    if !selectedDetail.systemImage.isEmpty {
-                        Image(systemName: selectedDetail.systemImage)
-                            .font(.system(size: 34, weight: .semibold))
-                            .matchedGeometryEffect(id: "\(selectedDetail.id)-icon", in: namespace, properties: .frame)
-                    }
-                    
-                    if !selectedDetail.title.isEmpty {
-                        Text(selectedDetail.title)
-                            .font(.system(size: 40))
-                            .fontWeight(.bold)
-                            .matchedGeometryEffect(id: "\(selectedDetail.id)-title", in: namespace, properties: .position)
-                    }
-                    
-                    Spacer()
-                    
-                    Image(systemName: "xmark")
-                        .font(.title)
-                        .bold()
-                        .padding()
-                        .background {
-                            Circle()
-                                .fill(Material.regular)
-                        }
-                        .beButton {
-                            onClose()
-                            withAnimation {
-                                isOpened = false
-                            }
-                        }
-                        .buttonStyle(.borderless)
-                }
-                .padding(.leading, selectedDetail.id == "courseTable" ? 16 : 0)
+        if selectedDetail.id == "courseTable" {
+            VStack(alignment: .leading, spacing: 4) {
+                detailHeader
                 selectedDetail.view
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+        } else {
+            ScrollView {
+                VStack(alignment: .leading) {
+                    detailHeader
+                    selectedDetail.view
+                }
             }
         }
+    }
+
+    private var detailHeader: some View {
+        HStack {
+            if selectedDetail.id != "courseTable", !selectedDetail.systemImage.isEmpty {
+                Image(systemName: selectedDetail.systemImage)
+                    .font(.system(size: 34, weight: .semibold))
+                    .matchedGeometryEffect(id: "\(selectedDetail.id)-icon", in: namespace, properties: .frame)
+            }
+
+            if !selectedDetail.title.isEmpty {
+                Text(selectedDetail.id == "courseTable" ? "日程表" : selectedDetail.title)
+                    .font(.system(size: 40))
+                    .fontWeight(.bold)
+                    .matchedGeometryEffect(id: "\(selectedDetail.id)-title", in: namespace, properties: .position)
+            }
+
+            Spacer()
+
+            Image(systemName: "xmark")
+                .font(.title)
+                .bold()
+                .padding()
+                .background {
+                    Circle().fill(Material.regular)
+                }
+                .beButton {
+                    onClose()
+                    withAnimation { isOpened = false }
+                }
+                .buttonStyle(.borderless)
+        }
+        .padding(.leading, selectedDetail.id == "courseTable" ? 16 : 0)
     }
     
 }

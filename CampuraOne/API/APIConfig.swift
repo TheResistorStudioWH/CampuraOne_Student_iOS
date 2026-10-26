@@ -10,7 +10,7 @@ import Foundation
 
 enum APIConfig {
     
-    static let baseURL = "http://129.211.189.35"
+    static let baseURL = "http://campura.one"
     
     static func api_download(_ path: String) -> String {
         baseURL + "/api/download" + path
