@@ -86,27 +86,46 @@ struct HomePageView: View {
         GeometryReader { proxy in
             let layout = DashboardLayout(screenSize: proxy.size)
             UIKitOffsetScrollView(offset: $scrollOffset) {
+                
                 VStack(spacing: layout.outerSpacing) {
+                    
                     HStack {
                         greet()
                         Spacer()
                     }
 
-                    Announce_BannerRemoteModule(userProfile: userProfile)
-                        .zIndex(1)
+                    
 
                     // Reserve the same 3:1 slot in loading, empty and loaded states.
                     ZStack {
-                        Color.clear
-                            .aspectRatio(3, contentMode: .fit)
-                            .padding(.horizontal)
-                            .allowsHitTesting(false)
-                            .accessibilityHidden(true)
-                        AD_LargeBannerRemoteModule()
+                        VStack {
+                            Spacer()
+                            dashboardTiles(layout: layout)
+                        }
+                        
+                        
+                        VStack {
+                            Color.clear
+                                .aspectRatio(3, contentMode: .fit)
+                                .padding(.horizontal)
+                                .allowsHitTesting(false)
+                                .accessibilityHidden(true)
+                            AD_LargeBannerRemoteModule()
+                            
+                                .zIndex(3)
+                            Spacer()
+                        }
+                        VStack {
+                            Announce_BannerRemoteModule(userProfile: userProfile)
+                                
+                            Spacer()
+                        }
+                        .zIndex(2)
+                        
                     }
-                    .zIndex(2)
+                    
 
-                    dashboardTiles(layout: layout)
+                    
                 }
                 .padding(.bottom)
             }

@@ -1,56 +1,95 @@
 {
-  "fill": {
-    "solid": "srgb:0.08235,0.10588,0.17255,1.00000"
+  "fill" : {
+    "solid" : "srgb:0.08235,0.10588,0.17255,1.00000"
   },
-  "groups": [
+  "groups" : [
     {
-      "layers": [
+      "layers" : [
         {
-          "glass": false,
-          "image-name": "02-heading.png",
-          "name": "Heading"
+          "glass" : false,
+          "image-name" : "02-heading.png",
+          "name" : "Heading"
         }
       ],
-      "specular": false,
-      "translucency": {
-        "enabled": false,
-        "value": 0.5
-      }
-    },
-    {
-      "layers": [
-        {
-          "image-name": "03-outer-arc.png",
-          "name": "Provisional outer arc"
-        }
-      ],
-      "shadow": {
-        "kind": "neutral",
-        "opacity": 0.25
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
       },
-      "specular": true,
-      "translucency": {
-        "enabled": false,
-        "value": 0.5
+      "specular" : false,
+      "translucency" : {
+        "enabled" : false,
+        "value" : 0.5
       }
     },
     {
-      "layers": [
+      "layers" : [
         {
-          "glass": false,
-          "image-name": "04-location.png",
-          "name": "Current location"
+          "blend-mode" : "normal",
+          "fill" : {
+            "linear-gradient" : [
+              "display-p3:0.59080,1.00000,0.75452,1.00000",
+              "display-p3:0.77486,0.96611,0.46996,1.00000"
+            ],
+            "orientation" : {
+              "start" : {
+                "x" : 0,
+                "y" : 0.32206862391930835
+              },
+              "stop" : {
+                "x" : 1,
+                "y" : 0.2008735590778098
+              }
+            }
+          },
+          "glass" : true,
+          "image-name" : "03b-leaves.png",
+          "name" : "Solid leaves",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              -28.3828125,
+              -23.09375
+            ]
+          }
+        },
+        {
+          "image-name" : "03-outer-arc.png",
+          "name" : "Provisional outer arc"
         }
       ],
-      "specular": false,
-      "translucency": {
-        "enabled": false,
-        "value": 0.5
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.25
+      },
+      "specular" : true,
+      "translucency" : {
+        "enabled" : false,
+        "value" : 0.5
+      }
+    },
+    {
+      "layers" : [
+        {
+          "glass" : false,
+          "image-name" : "04-location.png",
+          "name" : "Current location"
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "specular" : false,
+      "translucency" : {
+        "enabled" : false,
+        "value" : 0.5
       }
     }
   ],
-  "supported-platforms": {
-    "circles": ["watchOS"],
-    "squares": "shared"
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
   }
 }

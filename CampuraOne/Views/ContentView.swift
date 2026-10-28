@@ -291,6 +291,7 @@ struct ContentView: View {
                                         
                                        
                                     }
+                                    
                                     Text(item.title)
                                         .font(.caption)
                                         .bold()

@@ -8,7 +8,6 @@
 
 import SwiftUI
 import SwiftData
-import MarkdownUI
 
 #Preview("app - 已登录") {
     PreviewAppView()
@@ -64,6 +63,7 @@ struct Announce_BannerModule: View {
     @State private var showMore = false
     @State private var showMarkdownAnnouncements = false
     @State private var selectedShortAnnounce: AnnouncementItem?
+    @State private var collapsedHeight: CGFloat = 0
     
     init(
         title: String,
@@ -109,6 +109,22 @@ struct Announce_BannerModule: View {
             normalShortBar()
         }
         .padding(.horizontal)
+        .fixedSize(horizontal: false, vertical: true)
+        .background {
+            GeometryReader { geometry in
+                Color.clear.preference(
+                    key: CollapsedAnnouncementHeightKey.self,
+                    value: geometry.size.height
+                )
+            }
+        }
+        .frame(height: collapsedHeight > 0 ? collapsedHeight : nil, alignment: .top)
+        .onPreferenceChange(CollapsedAnnouncementHeightKey.self) { height in
+            // Keep the banner's place in the scroll layout when the notice opens.
+            if !isExpand, height > 0, abs(height - collapsedHeight) > 0.5 {
+                collapsedHeight = height
+            }
+        }
         .onChange(of: isExpand) {
             if !isExpand {
                 showMore = false
@@ -306,6 +322,14 @@ struct Announce_BannerModule: View {
     }
 }
 
+private struct CollapsedAnnouncementHeightKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
 struct ShortAnnounceListCard: View {
     @Environment(\.colorScheme) private var colorScheme
     
@@ -346,64 +370,6 @@ struct ShortAnnounceListCard: View {
                     .foregroundStyle(.secondary)
             }
         }
-    }
-}
-
-struct MarkdownAnnouncementsSheet: View {
-    @Environment(\.dismiss) private var dismiss
-    let announces: [AnnouncementItem]
-
-    private var markdownAnnounces: [AnnouncementItem] {
-        announces.activeMarkdown(at: Date())
-    }
-    
-    var body: some View {
-        NavigationStack {
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 18) {
-                    if markdownAnnounces.isEmpty {
-                        ContentUnavailableView("暂无重要通知", systemImage: "bell",
-                                               description: Text("目前没有仍在有效期内的重要通知"))
-                    }
-                    ForEach(markdownAnnounces) { announce in
-                        VStack(alignment: .leading, spacing: 18) {
-                            Label("重要通知", systemImage: "exclamationmark.octagon.fill")
-                                .font(.title2.bold())
-                                .foregroundStyle(.red)
-
-                            if !announce.dateRangeText.isEmpty {
-                                Text(announce.dateRangeText)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-
-                            Markdown(announce.content)
-                                .markdownTheme(.gitHub)
-                                .tint(.accentColor)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .textSelection(.enabled)
-                        }
-                        if announce.id != markdownAnnounces.last?.id {
-                            Divider()
-                        }
-                    }
-                }
-                .padding(20)
-            }
-            .background(Color(uiColor: .systemGroupedBackground))
-            .navigationTitle(AnnouncementType.importantMarkdown.title)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Text("完成")
-                        .beButton {
-                            dismiss()
-                        }
-                }
-            }
-        }
-        .presentationDetents([.medium, .large])
-        .presentationDragIndicator(.visible)
     }
 }
 

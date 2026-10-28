@@ -96,6 +96,7 @@ struct ToolDrawer: View {
     @Environment(\.colorScheme) private var colorScheme
     @State private var contentHeight: CGFloat = 0
     @State private var isRevealed = false
+    @State private var isClosing = false
     let sourceBounds: CGRect
     let containerSize: CGSize
     let topInset: CGFloat
@@ -167,7 +168,7 @@ struct ToolDrawer: View {
             ToolsItem(
                 kind: .safetyCheckIn,
                 name: "平安确认",
-                description: "功能待开放",
+                description: "给信任的人发送平安路线与实时路线进程",
                 icon: "checkmark.shield",
                 action: {}
             )
@@ -178,6 +179,7 @@ struct ToolDrawer: View {
         ZStack(alignment: .bottomLeading) {
             Color.black.opacity(.colorScheme(light: 0.09, dark: 0.20, colorScheme))
                 .ignoresSafeArea()
+                .opacity(isRevealed ? 1 : 0)
                 .contentShape(Rectangle())
                 .onTapGesture { dismiss() }
                 .accessibilityHidden(true)
@@ -190,15 +192,17 @@ struct ToolDrawer: View {
                             .foregroundStyle(.secondary)
                             .padding(.leading, 12)
                             .accessibilityAddTraits(.isHeader)
+                            .opacity(isRevealed ? 1 : 0)
+                            .animation(.easeInOut(duration: 0.18), value: isRevealed)
 
                         if let recentlyViewed {
                             recentlyViewedCard(recentlyViewed)
-                                .modifier(ToolDrawerArrival(isRevealed: isRevealed, index: persistentItems.count))
+                                .modifier(ToolDrawerArrival(isRevealed: isRevealed, index: persistentItems.count, lastIndex: persistentItems.count))
                         }
 
                         ForEachWithIndex(persistentItems) { index, item in
                             toolButton(item)
-                                .modifier(ToolDrawerArrival(isRevealed: isRevealed, index: persistentItems.count - index - 1))
+                                .modifier(ToolDrawerArrival(isRevealed: isRevealed, index: persistentItems.count - index - 1, lastIndex: persistentItems.count))
                         }
                     }
                     .padding(.vertical, 4)
@@ -207,6 +211,7 @@ struct ToolDrawer: View {
                 .scrollIndicators(.hidden)
                 .scrollBounceBehavior(.basedOnSize)
                 .scrollClipDisabled()
+                .allowsHitTesting(isRevealed && !isClosing)
                 .frame(height: min(contentHeight, maximumContentHeight))
                 .background {
                     RoundedRectangle(cornerRadius: 24, style: .continuous)
@@ -221,7 +226,7 @@ struct ToolDrawer: View {
                         .animation(.easeOut(duration: 0.25), value: isRevealed)
                 }
 
-                ToolDrawerButton(isExpand: $isExpand)
+                ToolDrawerButton(isExpand: $isExpand, onToggle: { dismiss() })
             }
             .frame(width: panelWidth, alignment: .leading)
             .padding(.leading, sourceBounds.minX)
@@ -230,7 +235,11 @@ struct ToolDrawer: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
         .accessibilityAction(.escape) { dismiss() }
         .onChange(of: contentHeight) { _, height in
-            if height > 0 { isRevealed = true }
+            if height > 0, !isClosing {
+                withAnimation(reduceMotion ? .easeOut(duration: 0.15) : .easeOut(duration: 0.24)) {
+                    isRevealed = true
+                }
+            }
         }
     }
 
@@ -242,9 +251,19 @@ struct ToolDrawer: View {
         max(1, sourceBounds.minY - topInset - 16)
     }
 
-    private func dismiss() {
-        withAnimation(reduceMotion ? .easeOut(duration: 0.15) : .snappy(duration: 0.25)) {
-            isExpand = false
+    private func dismiss(afterClosing: @escaping () -> Void = {}) {
+        guard !isClosing else { return }
+        isClosing = true
+        withAnimation(reduceMotion ? .easeOut(duration: 0.1) : .easeInOut(duration: 0.22)) {
+            isRevealed = false
+        }
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(reduceMotion ? 0.12 : 0.34))
+            guard !Task.isCancelled else { return }
+            withAnimation(reduceMotion ? nil : .easeOut(duration: 0.12)) {
+                isExpand = false
+            }
+            afterClosing()
         }
     }
     
@@ -253,8 +272,7 @@ struct ToolDrawer: View {
     private func recentlyViewedCard(_ item: RecentlyViewedItem) -> some View {
         ToolDrawerCard(title: item.title, description: "你刚看过 · \(item.description)", icon: item.icon)
             .beButton {
-                dismiss()
-                openRecentlyViewed(item)
+                dismiss { openRecentlyViewed(item) }
             }
             .buttonStyle(.plain)
     }
@@ -276,8 +294,7 @@ struct ToolDrawer: View {
     private func toolButton(_ item: ToolsItem) -> some View {
         ToolDrawerCard(title: item.name, description: item.description, icon: item.icon)
             .beButton {
-                dismiss()
-                item.action()
+                dismiss(afterClosing: item.action)
             }
             .buttonStyle(.plain)
     }
@@ -293,6 +310,7 @@ struct ToolDrawerAnchorKey: PreferenceKey {
 
 struct ToolDrawerButton: View {
     @Binding var isExpand: Bool
+    var onToggle: (() -> Void)? = nil
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @ScaledMetric(relativeTo: .body) private var diameter: CGFloat = 50
 
@@ -305,8 +323,12 @@ struct ToolDrawerButton: View {
             .background(.regularMaterial, in: Circle())
             .shadow(color: .black.opacity(0.16), radius: 8, x: 0, y: 4)
             .beButton {
-                withAnimation(reduceMotion ? .easeInOut(duration: 0.15) : .snappy(duration: 0.3)) {
-                    isExpand.toggle()
+                if let onToggle {
+                    onToggle()
+                } else {
+                    withAnimation(reduceMotion ? .easeInOut(duration: 0.15) : .snappy(duration: 0.3)) {
+                        isExpand.toggle()
+                    }
                 }
                 TapSoft()
             }
@@ -361,15 +383,19 @@ private struct ToolDrawerArrival: ViewModifier {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let isRevealed: Bool
     let index: Int
+    let lastIndex: Int
 
     func body(content: Content) -> some View {
         content
             .opacity(isRevealed ? 1 : 0)
-            .offset(y: reduceMotion || isRevealed ? 0 : 16)
-            .scaleEffect(reduceMotion || isRevealed ? 1 : 0.92, anchor: .bottomLeading)
+            .offset(y: reduceMotion || isRevealed ? 0 : 12)
+            .scaleEffect(reduceMotion || isRevealed ? 1 : 0.94, anchor: .bottomLeading)
             .animation(
-                reduceMotion ? .easeOut(duration: 0.15) :
-                    .spring(response: 0.32, dampingFraction: 0.86).delay(Double(index) * 0.035),
+                reduceMotion ? .easeOut(duration: 0.12) :
+                    (isRevealed
+                        ? Animation.spring(response: 0.32, dampingFraction: 0.88)
+                        : Animation.easeIn(duration: 0.18))
+                    .delay(Double(isRevealed ? index : lastIndex - index) * 0.025),
                 value: isRevealed
             )
     }
