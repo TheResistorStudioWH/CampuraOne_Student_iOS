@@ -12,8 +12,7 @@ import CoreLocation
 import Combine
 
 #Preview("app - 已登录") {
-    ContentView()
-        .modelContainer(PreviewContainer.app)
+    PreviewAppView()
 }
 
 @MainActor
@@ -49,6 +48,9 @@ final class MapLocationManager: NSObject, ObservableObject {
     }
     
     func requestAuthorizationAndStart() {
+        #if DEBUG
+        if PreviewAPI.isEnabled { return }
+        #endif
         if isAuthorized {
             guard CLLocationManager.locationServicesEnabled() else {
                 locationError = "系统定位服务未开启"
@@ -72,6 +74,9 @@ final class MapLocationManager: NSObject, ObservableObject {
     }
     
     func startUpdatingLocation() {
+        #if DEBUG
+        if PreviewAPI.isEnabled { return }
+        #endif
         guard isAuthorized else {
             return
         }
@@ -81,6 +86,9 @@ final class MapLocationManager: NSObject, ObservableObject {
     }
     
     func requestCurrentLocation() {
+        #if DEBUG
+        if PreviewAPI.isEnabled { return }
+        #endif
         guard isAuthorized else {
             requestAuthorizationAndStart()
             return

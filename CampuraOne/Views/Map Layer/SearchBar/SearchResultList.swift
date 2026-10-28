@@ -147,6 +147,7 @@ struct SearchResultList: View {
 
     /// 使用通用 LoadableListViewModel 加载一次完整搜索响应。
     @StateObject private var viewModel: SearchResultListViewModel
+    @Environment(\.colorScheme) private var colorScheme
 
     init(
         query: String,
@@ -265,7 +266,7 @@ struct SearchResultList: View {
                     smartSummaryRow
                 }
 
-                ForEach(Array(displayedResults.enumerated()), id: \.element.id) { index, item in
+                ForEachWithIndex(displayedResults) { index, item in
                     resultRow(item)
                         .modifier(SearchResultArrival(index: index))
                 }
@@ -292,6 +293,18 @@ struct SearchResultList: View {
                 .padding(.vertical, 2)
             }
             .scrollIndicators(.hidden)
+            .mask {
+                LinearGradient(
+                    stops: [
+                        .init(color: .clear, location: 0),
+                        .init(color: .black, location: 0.07),
+                        .init(color: .black, location: 0.93),
+                        .init(color: .clear, location: 1)
+                    ],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            }
             HStack {
                 VStack {
                     if #available(iOS 26.0, *) {
@@ -335,10 +348,15 @@ struct SearchResultList: View {
         }
         .font(.caption.weight(.semibold))
         .padding(.horizontal, 11)
-        .padding(.vertical, 8)
+        .padding(.vertical, 5)
         .background {
                 Capsule()
-                .fill(categoryColor(suggestion.info.categoryColor).opacity(0.3))
+                .fill(
+                    ColorSchemeValue(
+                        light: Color(.systemGray5),
+                        dark: Color(.systemGray6)
+                    ).value(colorScheme)
+                )
         }
         .contentShape(Capsule())
         .beButton {

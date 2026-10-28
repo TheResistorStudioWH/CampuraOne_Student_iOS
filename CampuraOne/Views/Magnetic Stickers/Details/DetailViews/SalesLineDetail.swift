@@ -9,11 +9,14 @@ import SwiftUI
 import SwiftData
 
 #Preview("app - 已登录") {
-    ContentView()
-        .modelContainer(PreviewContainer.app)
+    PreviewAppView()
 }
 
-struct SalesTimeLineDetailView: View {
+struct SalesTimeLineDetailView: DashboardDetailContent {
+    static let tileDescriptor = DashboardTileDescriptor(
+        id: "salesTimeline", title: "最近促销", systemImage: "tag.fill"
+    )
+
     @State var mode: SalesTimelineMode
     @State var refreshID = 0
     @State var randomSaleIDs: [Int] = []
@@ -122,10 +125,7 @@ struct SalesTimeLineDetailView: View {
         if !viewModel.items.isEmpty {
             ScrollView {
                 LazyVStack(spacing: 10) {
-                    ForEach(
-                        Array(displayedEvents.enumerated()),
-                        id: \.element.saleID
-                    ) { index, event in
+                    ForEachWithIndex(displayedEvents, id: \.saleID) { index, event in
                         SalesTimelineDetailRow(
                             event: event,
                             rank: mode == .hot ? index + 1 : nil

@@ -14,6 +14,19 @@ struct CampuraOneApp: App {
 
     var body: some Scene {
         WindowGroup {
+            #if DEBUG
+            if PreviewAPI.isEnabled {
+                PreviewAppView()
+            } else {
+                liveContent
+            }
+            #else
+            liveContent
+            #endif
+        }
+    }
+
+    private var liveContent: some View {
             AppRootView()
                 .environmentObject(authSession)
                 .modelContainer(for: [
@@ -24,6 +37,5 @@ struct CampuraOneApp: App {
                             AppUser.self,
                             Student.self
                         ])
-        }
     }
 }

@@ -33,15 +33,15 @@ enum PreviewContainer {
             
             let demoUser = AppUser(
                 userID: 1,
-                userName: "琳曦",
-                userImg: "https://picsum.photos/200",
-                shopIDs: [1001, 1002],
+                userName: "演示",
+                token: "preview.local.only",
+                shopIDs: [],
                 studentID: 20260001
             )
             
             let demoStudent = Student(
                 studentID: 20260001,
-                studentName: "陵长镜",
+                studentName: "演示",
                 gender: "男",
                 schoolID: 1,
                 compoundID: 1,
@@ -51,6 +51,7 @@ enum PreviewContainer {
             
             context.insert(demoUser)
             context.insert(demoStudent)
+            try context.save()
             
             return container
         } catch {
@@ -78,5 +79,22 @@ enum PreviewContainer {
         } catch {
             fatalError("创建 Empty PreviewContainer 失败: \(error)")
         }
+    }
+}
+
+/// 所有整页预览共用的内存账户；不会读取或修改设备上真实的登录记录。
+struct PreviewAppView: View {
+    @StateObject private var session = AuthSession()
+    @State private var container: ModelContainer
+
+    init(signedIn: Bool = true) {
+        _container = State(initialValue: signedIn ? PreviewContainer.app : PreviewContainer.empty)
+    }
+
+    var body: some View {
+        AppRootView()
+            .environmentObject(session)
+            .modelContainer(container)
+            .environment(\.scenePhase, .active)
     }
 }

@@ -9,15 +9,11 @@ import SwiftUI
 import SwiftData
 
 #Preview("app - 已登录") {
-    ContentView()
-        .environmentObject(AuthSession())
-        .modelContainer(PreviewContainer.app)
+    PreviewAppView()
 }
 
 #Preview("app - 未登录") {
-    ContentView()
-        .environmentObject(AuthSession())
-        .modelContainer(PreviewContainer.empty)
+    PreviewAppView(signedIn: false)
 }
 
 struct AccountSheet: View {

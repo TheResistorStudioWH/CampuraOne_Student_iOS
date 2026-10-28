@@ -4,12 +4,12 @@ import SwiftUI
 /// so magnification never changes the date under the finger.
 struct CourseDateRail: View {
     @Binding var selectedDate: Date
+    var width: CGFloat = 60
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @GestureState private var touch: CGPoint?
     @State private var lastWeekJump = Date.distantPast
     @State private var centerDate = Calendar.current.startOfDay(for: Date())
     private let calendar = Calendar.current
-    private let inset: CGFloat = 24
 
     private var dates: [Date] {
         // Keep a stable window during a drag: today starts at the middle tick,
@@ -20,15 +20,16 @@ struct CourseDateRail: View {
     var body: some View {
         VStack(spacing: 0) {
             Button { moveWeek(-1) } label: { Image(systemName: "chevron.up") }
-                .frame(width: 60, height: 44, alignment: .leading).accessibilityLabel("上一周")
+                .frame(width: width, height: 44, alignment: .leading).accessibilityLabel("上一周")
             GeometryReader { geometry in
+                let inset = min(24, geometry.size.height * 0.08)
                 let span = max(1, geometry.size.height - inset * 2)
                 ZStack(alignment: .topLeading) {
                     ForEach(0..<25, id: \.self) { tick in
                         let y = inset + span * CGFloat(tick) / 24
                         tickMark(tick, y: y)
-                            .frame(width: 60, height: 30, alignment: .leading)
-                            .position(x: 30, y: y)
+                            .frame(width: width, height: 30, alignment: .leading)
+                            .position(x: width / 2, y: y)
                     }
                 }
                 .contentShape(Rectangle())
@@ -49,7 +50,6 @@ struct CourseDateRail: View {
                     .onEnded { _ in lastWeekJump = .distantPast })
                 .animation(reduceMotion ? nil : .spring(response: 0.25, dampingFraction: 0.85), value: touch != nil)
             }
-            .frame(height: 390)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("课表日期时间轴")
             .accessibilityValue(selectedDate.formatted(date: .complete, time: .omitted))
@@ -59,10 +59,9 @@ struct CourseDateRail: View {
                 if let date = calendar.date(byAdding: .day, value: offset, to: selectedDate) { select(date) }
             }
             Button { moveWeek(1) } label: { Image(systemName: "chevron.down") }
-                .frame(width: 60, height: 44, alignment: .leading).accessibilityLabel("下一周")
+                .frame(width: width, height: 44, alignment: .leading).accessibilityLabel("下一周")
         }
-        .frame(width: 60)
-        .frame(maxHeight: 500)
+        .frame(width: width)
         .onAppear {
             centerDate = calendar.startOfDay(for: Date())
             selectedDate = centerDate
@@ -120,6 +119,7 @@ private struct CourseDateRailPreview: View {
     var body: some View {
         HStack {
             CourseDateRail(selectedDate: $date)
+                .frame(height: 520)
             Text(date.formatted(date: .complete, time: .omitted))
         }.padding()
     }

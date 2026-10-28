@@ -9,8 +9,7 @@ import SwiftUI
 import SwiftData
 
 #Preview("app - 已登录") {
-    ContentView()
-        .modelContainer(PreviewContainer.app)
+    PreviewAppView()
 }
 
 // MARK: - “你刚看过”的数据类型
@@ -76,6 +75,7 @@ struct ToolsItem: Identifiable {
         case shoppingBag
         case lastPurchase
         case randomRecommendation
+        case safetyCheckIn
         
         var id: String { rawValue }
     }
@@ -95,6 +95,7 @@ struct ToolDrawer: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.colorScheme) private var colorScheme
     @State private var contentHeight: CGFloat = 0
+    @State private var isRevealed = false
     let sourceBounds: CGRect
     let containerSize: CGSize
     let topInset: CGFloat
@@ -162,13 +163,20 @@ struct ToolDrawer: View {
                 description: "查看已加入的商品",
                 icon: "cart.fill",
                 action: onOpenShoppingBag
+            ),
+            ToolsItem(
+                kind: .safetyCheckIn,
+                name: "平安确认",
+                description: "功能待开放",
+                icon: "checkmark.shield",
+                action: {}
             )
         ]
     }
     
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            Color.black.opacity(colorScheme == .dark ? 0.20 : 0.09)
+            Color.black.opacity(.colorScheme(light: 0.09, dark: 0.20, colorScheme))
                 .ignoresSafeArea()
                 .contentShape(Rectangle())
                 .onTapGesture { dismiss() }
@@ -185,12 +193,12 @@ struct ToolDrawer: View {
 
                         if let recentlyViewed {
                             recentlyViewedCard(recentlyViewed)
-                                .transition(cardTransition(index: persistentItems.count))
+                                .modifier(ToolDrawerArrival(isRevealed: isRevealed, index: persistentItems.count))
                         }
 
-                        ForEach(Array(persistentItems.enumerated()), id: \.element.id) { index, item in
+                        ForEachWithIndex(persistentItems) { index, item in
                             toolButton(item)
-                                .transition(cardTransition(index: persistentItems.count - index - 1))
+                                .modifier(ToolDrawerArrival(isRevealed: isRevealed, index: persistentItems.count - index - 1))
                         }
                     }
                     .padding(.vertical, 4)
@@ -200,6 +208,18 @@ struct ToolDrawer: View {
                 .scrollBounceBehavior(.basedOnSize)
                 .scrollClipDisabled()
                 .frame(height: min(contentHeight, maximumContentHeight))
+                .background {
+                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                        .fill(.ultraThinMaterial)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                                .foregroundColorScheme(light: .white, dark: .black)
+                                .opacity(.colorScheme(light: 0.34, dark: 0.28, colorScheme))
+                        }
+                        .blur(radius: 8)
+                        .opacity(isRevealed ? 0.85 : 0)
+                        .animation(.easeOut(duration: 0.25), value: isRevealed)
+                }
 
                 ToolDrawerButton(isExpand: $isExpand)
             }
@@ -209,6 +229,9 @@ struct ToolDrawer: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
         .accessibilityAction(.escape) { dismiss() }
+        .onChange(of: contentHeight) { _, height in
+            if height > 0 { isRevealed = true }
+        }
     }
 
     private var panelWidth: CGFloat {
@@ -217,15 +240,6 @@ struct ToolDrawer: View {
 
     private var maximumContentHeight: CGFloat {
         max(1, sourceBounds.minY - topInset - 16)
-    }
-
-    private func cardTransition(index: Int) -> AnyTransition {
-        guard !reduceMotion else { return .opacity }
-        return .asymmetric(
-            insertion: .scale(scale: 0.9, anchor: .bottomLeading).combined(with: .opacity)
-                .animation(.spring(response: 0.3, dampingFraction: 0.86).delay(Double(index) * 0.025)),
-            removal: .opacity.animation(.easeOut(duration: 0.12))
-        )
     }
 
     private func dismiss() {
@@ -237,13 +251,12 @@ struct ToolDrawer: View {
     // MARK: 你刚看过
     
     private func recentlyViewedCard(_ item: RecentlyViewedItem) -> some View {
-        Button {
-            dismiss()
-            openRecentlyViewed(item)
-        } label: {
-            ToolDrawerCard(title: item.title, description: "你刚看过 · \(item.description)", icon: item.icon)
-        }
-        .buttonStyle(.plain)
+        ToolDrawerCard(title: item.title, description: "你刚看过 · \(item.description)", icon: item.icon)
+            .beButton {
+                dismiss()
+                openRecentlyViewed(item)
+            }
+            .buttonStyle(.plain)
     }
     
     /// 根据最近浏览内容的实际类型，调用正确的外部闭包。
@@ -261,13 +274,12 @@ struct ToolDrawer: View {
     // MARK: 常驻工具按钮
     
     private func toolButton(_ item: ToolsItem) -> some View {
-        Button {
-            dismiss()
-            item.action()
-        } label: {
-            ToolDrawerCard(title: item.name, description: item.description, icon: item.icon)
-        }
-        .buttonStyle(.plain)
+        ToolDrawerCard(title: item.name, description: item.description, icon: item.icon)
+            .beButton {
+                dismiss()
+                item.action()
+            }
+            .buttonStyle(.plain)
     }
 }
 
@@ -285,27 +297,27 @@ struct ToolDrawerButton: View {
     @ScaledMetric(relativeTo: .body) private var diameter: CGFloat = 50
 
     var body: some View {
-        Button {
-            withAnimation(reduceMotion ? .easeInOut(duration: 0.15) : .snappy(duration: 0.3)) {
-                isExpand.toggle()
+        Image(systemName: isExpand ? "xmark" : "list.bullet")
+            .font(.title3.weight(.semibold))
+            .foregroundStyle(.primary)
+            .contentTransition(.symbolEffect(.replace))
+            .frame(width: diameter, height: diameter)
+            .background(.regularMaterial, in: Circle())
+            .shadow(color: .black.opacity(0.16), radius: 8, x: 0, y: 4)
+            .beButton {
+                withAnimation(reduceMotion ? .easeInOut(duration: 0.15) : .snappy(duration: 0.3)) {
+                    isExpand.toggle()
+                }
+                TapSoft()
             }
-            TapSoft()
-        } label: {
-            Image(systemName: isExpand ? "xmark" : "list.bullet")
-                .font(.title3.weight(.semibold))
-                .foregroundStyle(.primary)
-                .contentTransition(.symbolEffect(.replace))
-                .frame(width: diameter, height: diameter)
-                .background(.regularMaterial, in: Circle())
-                .shadow(color: .black.opacity(0.16), radius: 8, x: 0, y: 4)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(isExpand ? "收起实用工具" : "展开实用工具")
-        .accessibilityValue(isExpand ? "已展开" : "已收起")
+            .buttonStyle(.plain)
+            .accessibilityLabel(isExpand ? "收起实用工具" : "展开实用工具")
+            .accessibilityValue(isExpand ? "已展开" : "已收起")
     }
 }
 
 private struct ToolDrawerCard: View {
+    @Environment(\.colorScheme) private var colorScheme
     let title: String
     let description: String
     let icon: String
@@ -316,7 +328,6 @@ private struct ToolDrawerCard: View {
                 .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(Color.accentColor)
                 .frame(width: 32, height: 32)
-                .background(Color.accentColor.opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
@@ -329,21 +340,37 @@ private struct ToolDrawerCard: View {
                     .lineLimit(2)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .shadow(color: .black.opacity(.colorScheme(light: 0.15, dark: 0.4, colorScheme)), radius: 2, x: 0, y: 1)
+
+            Spacer(minLength: 4)
+            Image(systemName: "arrow.up.right")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .accessibilityHidden(true)
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
-        .background {
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(.regularMaterial)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 18, style: .continuous)
-                        .strokeBorder(.primary.opacity(0.05), lineWidth: 0.5)
-                }
-                .shadow(color: .black.opacity(0.16), radius: 10, x: 0, y: 4)
-        }
         .contentShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(title)
         .accessibilityHint(description)
+    }
+}
+
+private struct ToolDrawerArrival: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    let isRevealed: Bool
+    let index: Int
+
+    func body(content: Content) -> some View {
+        content
+            .opacity(isRevealed ? 1 : 0)
+            .offset(y: reduceMotion || isRevealed ? 0 : 16)
+            .scaleEffect(reduceMotion || isRevealed ? 1 : 0.92, anchor: .bottomLeading)
+            .animation(
+                reduceMotion ? .easeOut(duration: 0.15) :
+                    .spring(response: 0.32, dampingFraction: 0.86).delay(Double(index) * 0.035),
+                value: isRevealed
+            )
     }
 }

@@ -14,13 +14,11 @@ extension Notification.Name {
 }
 
 #Preview("app - 已登录") {
-    ContentView()
-        .modelContainer(PreviewContainer.app)
+    PreviewAppView()
 }
 
 #Preview("app - 未登录") {
-    ContentView()
-        .modelContainer(PreviewContainer.empty)
+    PreviewAppView(signedIn: false)
 }
 
 enum AppTab: String, CaseIterable, Identifiable {
@@ -68,13 +66,6 @@ enum AppTab: String, CaseIterable, Identifiable {
             MapView()
         }
     }
-}
-
-struct SelectedDashboardDetail {
-    let id: String
-    let title: String
-    let systemImage: String
-    let view: AnyView
 }
 
 struct ContentView: View {
@@ -245,7 +236,7 @@ struct ContentView: View {
             currentTab = item
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        DispatchAfter(after: 0.1) {
             withAnimation(.easeInOut(duration: 0.2)) {
                 scaleValue = 0.75
             }
@@ -255,7 +246,7 @@ struct ContentView: View {
             }
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        DispatchAfter(after: 0.3) {
             withAnimation(.smooth(duration: 0.2)) {
                 scaleValue = 1.11
             }
@@ -265,7 +256,7 @@ struct ContentView: View {
             }
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+        DispatchAfter(after: 0.6) {
             withAnimation(.easeInOut(duration: 0.3)) {
                 scaleValue = 1.0
             }

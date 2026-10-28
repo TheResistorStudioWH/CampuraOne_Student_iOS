@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B486BAAD46714B68AF7AC71D /* PreviewAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAAC00FB6114B70BAF27D9C /* PreviewAPI.swift */; };
+		0B05CA57308F732700C604AE /* CamapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0B05CA56308F732700C604AE /* CamapKit */; };
 		0B12AC872FDFC72500ECFC94 /* SalesLineDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B12AC862FDFC71C00ECFC94 /* SalesLineDetail.swift */; };
 		0B3F59592FC338D800980B94 /* #PetaToolKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3F59582FC338D800980B94 /* #PetaToolKit.swift */; };
 		0B6FF15F2FC45C360002559F /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 0B6FF15E2FC45C360002559F /* SwiftyJSON */; };
@@ -47,7 +49,6 @@
 		0B83034B2FDF0D7300B5269A /* DetailContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B83030D2FDF0D7300B5269A /* DetailContainer.swift */; };
 		0B83034C2FDF0D7300B5269A /* MainShopListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8302E02FDF0D7300B5269A /* MainShopListViewModel.swift */; };
 		0B83034D2FDF0D7300B5269A /* AccountMiniCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8303042FDF0D7300B5269A /* AccountMiniCard.swift */; };
-		0B83034E2FDF0D7300B5269A /* ICSCalendarMiniCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8302F52FDF0D7300B5269A /* ICSCalendarMiniCard.swift */; };
 		0B83034F2FDF0D7300B5269A /* ICSSchoolCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8302F72FDF0D7300B5269A /* ICSSchoolCalendar.swift */; };
 		0B8303502FDF0D7300B5269A /* Data-School.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8302EF2FDF0D7300B5269A /* Data-School.swift */; };
 		0B8303512FDF0D7300B5269A /* SchoolCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8303142FDF0D7300B5269A /* SchoolCalendar.swift */; };
@@ -63,9 +64,43 @@
 		0BD38C3930133A6B005DB96D /* SetupPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD38C3830133A63005DB96D /* SetupPage.swift */; };
 		0BE0CEB32FD9573B009CB551 /* PagingView in Frameworks */ = {isa = PBXBuildFile; productRef = 0BE0CEB22FD9573B009CB551 /* PagingView */; };
 		CA1022000000000000000002 /* APIDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1022000000000000000001 /* APIDate.swift */; };
+		CA1027000000000000000001 /* DashboardTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1027000000000000000002 /* DashboardTile.swift */; };
+		CA1027000000000000000003 /* DashboardDetailPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1027000000000000000004 /* DashboardDetailPresentation.swift */; };
+		CA1027000000000000000005 /* DashboardTileNotificationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1027000000000000000006 /* DashboardTileNotificationSettings.swift */; };
+		CA1027000000000000000007 /* CourseDateRail.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1027000000000000000008 /* CourseDateRail.swift */; };
+		CA1027000000000000000009 /* CourseScheduleMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA102700000000000000000A /* CourseScheduleMetrics.swift */; };
+		CA102700000000000000000B /* CourseScheduleOverview.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA102700000000000000000C /* CourseScheduleOverview.swift */; };
+		CA102700000000000000000D /* SchoolCalendarDateWheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA102700000000000000000E /* SchoolCalendarDateWheel.swift */; };
+		CA102700000000000000000F /* SchoolCalendarDateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1027000000000000000010 /* SchoolCalendarDateWindow.swift */; };
+		CA102800000000000000000F /* CourseScheduleResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA102800000000000000000E; };
+		CA1028000000000000000011 /* SchoolCalendarCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1028000000000000000010; };
+		CA1028000000000000000012 = {isa = PBXBuildFile; fileRef = CA102800000000000000000E; };
+		CA1028000000000000000013 = {isa = PBXBuildFile; fileRef = CA1028000000000000000010; };
+		CA1028000000000000000014 = {isa = PBXBuildFile; fileRef = 0B8302E42FDF0D7300B5269A; };
+		CA1028000000000000000015 = {isa = PBXBuildFile; fileRef = 0B8302FA2FDF0D7300B5269A; };
+		CA1028000000000000000016 = {isa = PBXBuildFile; fileRef = 0B8302FD2FDF0D7300B5269A; };
+		CA1028000000000000000017 = {isa = PBXBuildFile; fileRef = 0B8303022FDF0D7300B5269A; };
+		CA1028000000000000000018 = {isa = PBXBuildFile; fileRef = CA102700000000000000000A; };
+		CA1028000000000000000019 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = CA102800000000000000000A; };
+		CA102800000000000000001A /* CampuraOneWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = CA1028000000000000000002; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		CA102800000000000000000B /* Embed Watch Content */ = {isa = PBXCopyFilesBuildPhase; buildActionMask = 2147483647; dstPath = "$(CONTENTS_FOLDER_PATH)/Watch"; dstSubfolderSpec = 16; files = (CA102800000000000000001A, ); name = "Embed Watch Content"; runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXContainerItemProxy section */
+		CA102800000000000000000C = {isa = PBXContainerItemProxy; containerPortal = 0B3F59312FC3380E00980B94; proxyType = 1; remoteGlobalIDString = CA1028000000000000000001; remoteInfo = CampuraOneWatch; };
+		CA102900000000000000000A = {isa = PBXContainerItemProxy; containerPortal = 0B3F59312FC3380E00980B94; proxyType = 1; remoteGlobalIDString = CA1028000000000000000001; remoteInfo = CampuraOneWatch; };
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+		CA102800000000000000000D = {isa = PBXTargetDependency; target = CA1028000000000000000001; targetProxy = CA102800000000000000000C; };
+		CA102900000000000000000B = {isa = PBXTargetDependency; target = CA1028000000000000000001; targetProxy = CA102900000000000000000A; };
+/* End PBXTargetDependency section */
+
 /* Begin PBXFileReference section */
+		4CAAC00FB6114B70BAF27D9C /* PreviewAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewAPI.swift; sourceTree = "<group>"; };
 		0B12AC862FDFC71C00ECFC94 /* SalesLineDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalesLineDetail.swift; sourceTree = "<group>"; };
 		0B3F59392FC3380E00980B94 /* CampuraOne.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CampuraOne.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0B3F59582FC338D800980B94 /* #PetaToolKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "#PetaToolKit.swift"; sourceTree = "<group>"; };
@@ -87,7 +122,6 @@
 		0B8302F12FDF0D7300B5269A /* Data-Shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data-Shop.swift"; sourceTree = "<group>"; };
 		0B8302F22FDF0D7300B5269A /* Data-Student.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data-Student.swift"; sourceTree = "<group>"; };
 		0B8302F42FDF0D7300B5269A /* ICSCalendar_TimeLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICSCalendar_TimeLine.swift; sourceTree = "<group>"; };
-		0B8302F52FDF0D7300B5269A /* ICSCalendarMiniCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICSCalendarMiniCard.swift; sourceTree = "<group>"; };
 		0B8302F72FDF0D7300B5269A /* ICSSchoolCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICSSchoolCalendar.swift; sourceTree = "<group>"; };
 		0B8302F92FDF0D7300B5269A /* CalendarEventEditSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEventEditSheet.swift; sourceTree = "<group>"; };
 		0B8302FA2FDF0D7300B5269A /* ICSEventItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICSEventItem.swift; sourceTree = "<group>"; };
@@ -120,6 +154,18 @@
 		0BD38C3530133A41005DB96D /* StartupPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartupPage.swift; sourceTree = "<group>"; };
 		0BD38C3830133A63005DB96D /* SetupPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPage.swift; sourceTree = "<group>"; };
 		CA1022000000000000000001 /* APIDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIDate.swift; sourceTree = "<group>"; };
+		CA1027000000000000000002 /* DashboardTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardTile.swift; sourceTree = "<group>"; };
+		CA1027000000000000000004 /* DashboardDetailPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardDetailPresentation.swift; sourceTree = "<group>"; };
+		CA1027000000000000000006 /* DashboardTileNotificationSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardTileNotificationSettings.swift; sourceTree = "<group>"; };
+		CA1027000000000000000008 /* CourseDateRail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDateRail.swift; sourceTree = "<group>"; };
+		CA102700000000000000000A /* CourseScheduleMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseScheduleMetrics.swift; sourceTree = "<group>"; };
+		CA102700000000000000000C /* CourseScheduleOverview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseScheduleOverview.swift; sourceTree = "<group>"; };
+		CA102700000000000000000E /* SchoolCalendarDateWheel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolCalendarDateWheel.swift; sourceTree = "<group>"; };
+		CA1027000000000000000010 /* SchoolCalendarDateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolCalendarDateWindow.swift; sourceTree = "<group>"; };
+		CA102800000000000000000E /* CourseScheduleResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseScheduleResolver.swift; sourceTree = "<group>"; };
+		CA1028000000000000000010 /* SchoolCalendarCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolCalendarCore.swift; sourceTree = "<group>"; };
+		CA1028000000000000000002 /* CampuraOneWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CampuraOneWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA1029000000000000000002 = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WatchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -143,6 +189,8 @@
 			path = Advertisements;
 			sourceTree = "<group>";
 		};
+		CA1028000000000000000003 /* CampuraOneWatch */ = {isa = PBXFileSystemSynchronizedRootGroup; path = CampuraOneWatch; sourceTree = "<group>"; };
+		CA1029000000000000000003 /* WatchUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; path = WatchUITests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,16 +201,21 @@
 				0BC584C72FCFC34C0005B84E /* MarkdownUI in Frameworks */,
 				0B6FF15F2FC45C360002559F /* SwiftyJSON in Frameworks */,
 				0B6FF1622FC45C820002559F /* Alamofire in Frameworks */,
+				0B05CA57308F732700C604AE /* CamapKit in Frameworks */,
 				0BE0CEB32FD9573B009CB551 /* PagingView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CA1028000000000000000005 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (CA1028000000000000000019, ); runOnlyForDeploymentPostprocessing = 0; };
+		CA1029000000000000000005 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		0B3F59302FC3380E00980B94 = {
 			isa = PBXGroup;
 			children = (
+				CA1029000000000000000003 /* WatchUITests */,
+				CA1028000000000000000003 /* CampuraOneWatch */,
 				0B3F59582FC338D800980B94 /* #PetaToolKit.swift */,
 				0B3F593A2FC3380E00980B94 /* Products */,
 				0B8303252FDF0D7300B5269A /* CampuraOne */,
@@ -172,6 +225,8 @@
 		0B3F593A2FC3380E00980B94 /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				CA1029000000000000000002 /* WatchUITests.xctest */,
+				CA1028000000000000000002 /* CampuraOneWatch.app */,
 				0B3F59392FC3380E00980B94 /* CampuraOne.app */,
 			);
 			name = Products;
@@ -191,6 +246,7 @@
 			isa = PBXGroup;
 			children = (
 				0B8302E32FDF0D7300B5269A /* APIClient.swift */,
+				4CAAC00FB6114B70BAF27D9C /* PreviewAPI.swift */,
 				0B8302E42FDF0D7300B5269A /* APIConfig.swift */,
 				CA1022000000000000000001 /* APIDate.swift */,
 				0B8302E52FDF0D7300B5269A /* APIResponse.swift */,
@@ -227,7 +283,6 @@
 			isa = PBXGroup;
 			children = (
 				0B8302F42FDF0D7300B5269A /* ICSCalendar_TimeLine.swift */,
-				0B8302F52FDF0D7300B5269A /* ICSCalendarMiniCard.swift */,
 			);
 			path = CourseTable;
 			sourceTree = "<group>";
@@ -244,6 +299,8 @@
 		0B8302FE2FDF0D7300B5269A /* ICS ToolKit */ = {
 			isa = PBXGroup;
 			children = (
+				CA1028000000000000000010 /* SchoolCalendarCore.swift */,
+				CA102800000000000000000E /* CourseScheduleResolver.swift */,
 				0B8302F82FDF0D7300B5269A /* views */,
 				0B8302F92FDF0D7300B5269A /* CalendarEventEditSheet.swift */,
 				0B8302FA2FDF0D7300B5269A /* ICSEventItem.swift */,
@@ -301,7 +358,7 @@
 			isa = PBXGroup;
 			children = (
 				0B12AC862FDFC71C00ECFC94 /* SalesLineDetail.swift */,
-				0B83030A2FDF0D7300B5269A /* CourseTableDetail.swift */,
+				CA1027000000000000000011 /* CourseTable */,
 				0B83030B2FDF0D7300B5269A /* SchoolCalendarDetail.swift */,
 			);
 			path = DetailViews;
@@ -312,6 +369,8 @@
 			children = (
 				0B83030C2FDF0D7300B5269A /* DetailViews */,
 				0B83030D2FDF0D7300B5269A /* DetailContainer.swift */,
+				CA1027000000000000000004 /* DashboardDetailPresentation.swift */,
+				CA1027000000000000000006 /* DashboardTileNotificationSettings.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -324,7 +383,7 @@
 				0B8303112FDF0D7300B5269A /* Announce_Banner.swift */,
 				0B8303122FDF0D7300B5269A /* CourseTable.swift */,
 				0B8303132FDF0D7300B5269A /* SalesTimeLine.swift */,
-				0B8303142FDF0D7300B5269A /* SchoolCalendar.swift */,
+				CA1027000000000000000012 /* SchoolCalendar */,
 				0B8303152FDF0D7300B5269A /* ToolBox.swift */,
 			);
 			path = Modules;
@@ -335,6 +394,7 @@
 			children = (
 				0B83030E2FDF0D7300B5269A /* Details */,
 				0B8303162FDF0D7300B5269A /* Modules */,
+				CA1027000000000000000002 /* DashboardTile.swift */,
 			);
 			path = "Magnetic Stickers";
 			sourceTree = "<group>";
@@ -400,6 +460,27 @@
 			path = Setup;
 			sourceTree = "<group>";
 		};
+		CA1027000000000000000011 /* CourseTable */ = {
+			isa = PBXGroup;
+			children = (
+				0B83030A2FDF0D7300B5269A /* CourseTableDetail.swift */,
+				CA1027000000000000000008 /* CourseDateRail.swift */,
+				CA102700000000000000000A /* CourseScheduleMetrics.swift */,
+				CA102700000000000000000C /* CourseScheduleOverview.swift */,
+			);
+			path = CourseTable;
+			sourceTree = "<group>";
+		};
+		CA1027000000000000000012 /* SchoolCalendar */ = {
+			isa = PBXGroup;
+			children = (
+				0B8303142FDF0D7300B5269A /* SchoolCalendar.swift */,
+				CA102700000000000000000E /* SchoolCalendarDateWheel.swift */,
+				CA1027000000000000000010 /* SchoolCalendarDateWindow.swift */,
+			);
+			path = SchoolCalendar;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -407,6 +488,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0B3F59442FC3381000980B94 /* Build configuration list for PBXNativeTarget "CampuraOne" */;
 			buildPhases = (
+				CA102800000000000000000B /* Embed Watch Content */,
 				0B3F59352FC3380E00980B94 /* Sources */,
 				0B3F59362FC3380E00980B94 /* Frameworks */,
 				0B3F59372FC3380E00980B94 /* Resources */,
@@ -414,6 +496,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				CA102800000000000000000D,
 			);
 			fileSystemSynchronizedGroups = (
 				0B4CA4F92FE01365008B3B2D /* Map Layer */,
@@ -427,11 +510,30 @@
 				0B6FF1612FC45C820002559F /* Alamofire */,
 				0BC584C62FCFC34C0005B84E /* MarkdownUI */,
 				0BE0CEB22FD9573B009CB551 /* PagingView */,
+				0B05CA56308F732700C604AE /* CamapKit */,
 			);
 			productName = CampuraOne;
 			productReference = 0B3F59392FC3380E00980B94 /* CampuraOne.app */;
 			productType = "com.apple.product-type.application";
 		};
+		CA1028000000000000000001 /* CampuraOneWatch */ = {
+            isa = PBXNativeTarget;
+            buildConfigurationList = CA1028000000000000000007;
+            buildPhases = (CA1028000000000000000004, CA1028000000000000000005, CA1028000000000000000006, );
+            buildRules = ();
+            dependencies = ();
+            fileSystemSynchronizedGroups = (CA1028000000000000000003, );
+            name = CampuraOneWatch;
+            packageProductDependencies = (CA102800000000000000000A, );
+            productName = CampuraOneWatch;
+            productReference = CA1028000000000000000002;
+            productType = "com.apple.product-type.application";
+        };
+		CA1029000000000000000001 /* WatchUITests */ = {
+ isa = PBXNativeTarget; buildConfigurationList = CA1029000000000000000007; buildPhases = (CA1029000000000000000004, CA1029000000000000000005, CA1029000000000000000006, );
+ buildRules = (); dependencies = (CA102900000000000000000B, ); fileSystemSynchronizedGroups = (CA1029000000000000000003, );
+ name = WatchUITests; productName = WatchUITests; productReference = CA1029000000000000000002; productType = "com.apple.product-type.bundle.ui-testing";
+ };
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -442,6 +544,8 @@
 				LastSwiftUpdateCheck = 2630;
 				LastUpgradeCheck = 2630;
 				TargetAttributes = {
+					CA1029000000000000000001 = {CreatedOnToolsVersion = 26.3; TestTargetID = CA1028000000000000000001; };
+					CA1028000000000000000001 = {CreatedOnToolsVersion = 26.3; };
 					0B3F59382FC3380E00980B94 = {
 						CreatedOnToolsVersion = 26.3;
 					};
@@ -461,12 +565,15 @@
 				0B6FF1602FC45C820002559F /* XCRemoteSwiftPackageReference "Alamofire" */,
 				0BC584C52FCFC34C0005B84E /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				0BE0CEB12FD9573B009CB551 /* XCRemoteSwiftPackageReference "PagingView" */,
+				0B05CA55308F732700C604AE /* XCRemoteSwiftPackageReference "CampuraOne_Camap_SDK" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0B3F593A2FC3380E00980B94 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				CA1029000000000000000001 /* WatchUITests */,
+				CA1028000000000000000001 /* CampuraOneWatch */,
 				0B3F59382FC3380E00980B94 /* CampuraOne */,
 			);
 		};
@@ -481,6 +588,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CA1028000000000000000006 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		CA1029000000000000000006 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -488,6 +597,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA1028000000000000000011 /* SchoolCalendarCore.swift in Sources */,
+				CA102800000000000000000F /* CourseScheduleResolver.swift in Sources */,
+				B486BAAD46714B68AF7AC71D /* PreviewAPI.swift in Sources */,
 				0B8303282FDF0D7300B5269A /* APIClient.swift in Sources */,
 				0B8303292FDF0D7300B5269A /* APIConfig.swift in Sources */,
 				CA1022000000000000000002 /* APIDate.swift in Sources */,
@@ -526,7 +638,6 @@
 				0B83034C2FDF0D7300B5269A /* MainShopListViewModel.swift in Sources */,
 				0BD38C3930133A6B005DB96D /* SetupPage.swift in Sources */,
 				0B83034D2FDF0D7300B5269A /* AccountMiniCard.swift in Sources */,
-				0B83034E2FDF0D7300B5269A /* ICSCalendarMiniCard.swift in Sources */,
 				0B83034F2FDF0D7300B5269A /* ICSSchoolCalendar.swift in Sources */,
 				0B8303502FDF0D7300B5269A /* Data-School.swift in Sources */,
 				0B8303512FDF0D7300B5269A /* SchoolCalendar.swift in Sources */,
@@ -539,9 +650,19 @@
 				0B8303572FDF0D7300B5269A /* MapView.swift in Sources */,
 				0B8303582FDF0D7300B5269A /* Data-Announce.swift in Sources */,
 				0B3F59592FC338D800980B94 /* #PetaToolKit.swift in Sources */,
+				CA1027000000000000000001 /* DashboardTile.swift in Sources */,
+				CA1027000000000000000003 /* DashboardDetailPresentation.swift in Sources */,
+				CA1027000000000000000005 /* DashboardTileNotificationSettings.swift in Sources */,
+				CA1027000000000000000007 /* CourseDateRail.swift in Sources */,
+				CA1027000000000000000009 /* CourseScheduleMetrics.swift in Sources */,
+				CA102700000000000000000B /* CourseScheduleOverview.swift in Sources */,
+				CA102700000000000000000D /* SchoolCalendarDateWheel.swift in Sources */,
+				CA102700000000000000000F /* SchoolCalendarDateWindow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CA1028000000000000000004 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (CA1028000000000000000012, CA1028000000000000000013, CA1028000000000000000014, CA1028000000000000000015, CA1028000000000000000016, CA1028000000000000000017, CA1028000000000000000018, ); runOnlyForDeploymentPostprocessing = 0; };
+		CA1029000000000000000004 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
@@ -742,6 +863,74 @@
 			};
 			name = Release;
 		};
+		CA1028000000000000000008 /* Debug */ = {
+            isa = XCBuildConfiguration;
+            buildSettings = {
+                ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+                CODE_SIGN_STYLE = Automatic;
+                CURRENT_PROJECT_VERSION = 1;
+                DEVELOPMENT_TEAM = 3839Y9532A;
+                ENABLE_PREVIEWS = YES;
+                GENERATE_INFOPLIST_FILE = YES;
+                INFOPLIST_KEY_CFBundleDisplayName = "域校屿";
+                INFOPLIST_KEY_WKApplication = YES;
+                INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.LX.CampuraOne;
+                INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+                INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+                LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+                MARKETING_VERSION = 1.0;
+                PRODUCT_BUNDLE_IDENTIFIER = com.LX.CampuraOne.watchkitapp;
+                PRODUCT_NAME = "$(TARGET_NAME)";
+                SDKROOT = watchos;
+                SKIP_INSTALL = YES;
+                SUPPORTED_PLATFORMS = "watchos watchsimulator";
+                SWIFT_APPROACHABLE_CONCURRENCY = YES;
+                SWIFT_VERSION = 5.0;
+                TARGETED_DEVICE_FAMILY = 4;
+                WATCHOS_DEPLOYMENT_TARGET = 11.0;
+            };
+            name = Debug;
+        };
+		CA1028000000000000000009 /* Release */ = {
+            isa = XCBuildConfiguration;
+            buildSettings = {
+                ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+                CODE_SIGN_STYLE = Automatic;
+                CURRENT_PROJECT_VERSION = 1;
+                DEVELOPMENT_TEAM = 3839Y9532A;
+                ENABLE_PREVIEWS = YES;
+                GENERATE_INFOPLIST_FILE = YES;
+                INFOPLIST_KEY_CFBundleDisplayName = "域校屿";
+                INFOPLIST_KEY_WKApplication = YES;
+                INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.LX.CampuraOne;
+                INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+                INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+                LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+                MARKETING_VERSION = 1.0;
+                PRODUCT_BUNDLE_IDENTIFIER = com.LX.CampuraOne.watchkitapp;
+                PRODUCT_NAME = "$(TARGET_NAME)";
+                SDKROOT = watchos;
+                SKIP_INSTALL = YES;
+                SUPPORTED_PLATFORMS = "watchos watchsimulator";
+                SWIFT_APPROACHABLE_CONCURRENCY = YES;
+                SWIFT_VERSION = 5.0;
+                TARGETED_DEVICE_FAMILY = 4;
+                WATCHOS_DEPLOYMENT_TARGET = 11.0;
+            };
+            name = Release;
+        };
+		CA1029000000000000000008 = {isa = XCBuildConfiguration; buildSettings = {
+ CODE_SIGN_STYLE = Automatic; DEVELOPMENT_TEAM = 3839Y9532A; GENERATE_INFOPLIST_FILE = YES;
+ PRODUCT_BUNDLE_IDENTIFIER = com.LX.CampuraOne.watchuitests; PRODUCT_NAME = "$(TARGET_NAME)";
+ SDKROOT = watchos; SUPPORTED_PLATFORMS = "watchos watchsimulator"; SWIFT_VERSION = 5.0;
+ TARGETED_DEVICE_FAMILY = 4; WATCHOS_DEPLOYMENT_TARGET = 11.0; TEST_TARGET_NAME = CampuraOneWatch;
+ }; name = Debug; };
+		CA1029000000000000000009 = {isa = XCBuildConfiguration; buildSettings = {
+ CODE_SIGN_STYLE = Automatic; DEVELOPMENT_TEAM = 3839Y9532A; GENERATE_INFOPLIST_FILE = YES;
+ PRODUCT_BUNDLE_IDENTIFIER = com.LX.CampuraOne.watchuitests; PRODUCT_NAME = "$(TARGET_NAME)";
+ SDKROOT = watchos; SUPPORTED_PLATFORMS = "watchos watchsimulator"; SWIFT_VERSION = 5.0;
+ TARGETED_DEVICE_FAMILY = 4; WATCHOS_DEPLOYMENT_TARGET = 11.0; TEST_TARGET_NAME = CampuraOneWatch;
+ }; name = Release; };
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -763,9 +952,19 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		CA1028000000000000000007 = {isa = XCConfigurationList; buildConfigurations = (CA1028000000000000000008, CA1028000000000000000009, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		CA1029000000000000000007 = {isa = XCConfigurationList; buildConfigurations = (CA1029000000000000000008, CA1029000000000000000009, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		0B05CA55308F732700C604AE /* XCRemoteSwiftPackageReference "CampuraOne_Camap_SDK" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TheResistorStudioWH/CampuraOne_Camap_SDK.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		0B6FF15D2FC45C360002559F /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON";
@@ -801,6 +1000,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0B05CA56308F732700C604AE /* CamapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0B05CA55308F732700C604AE /* XCRemoteSwiftPackageReference "CampuraOne_Camap_SDK" */;
+			productName = CamapKit;
+		};
 		0B6FF15E2FC45C360002559F /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 0B6FF15D2FC45C360002559F /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
@@ -821,6 +1025,7 @@
 			package = 0BE0CEB12FD9573B009CB551 /* XCRemoteSwiftPackageReference "PagingView" */;
 			productName = PagingView;
 		};
+		CA102800000000000000000A /* Alamofire */ = {isa = XCSwiftPackageProductDependency; package = 0B6FF1602FC45C820002559F; productName = Alamofire; };
 /* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0B3F59312FC3380E00980B94 /* Project object */;

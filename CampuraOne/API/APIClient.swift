@@ -60,7 +60,11 @@ final class APIClient {
         parameters: Parameters? = nil,
         cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
     ) async throws -> JSON {
-        
+        #if DEBUG
+        if PreviewAPI.isEnabled {
+            return try PreviewAPI.response(url: url, parameters: parameters)
+        }
+        #endif
         return try await withCheckedThrowingContinuation { continuation in
             var headers: HTTPHeaders = []
             if let token = authToken {
@@ -116,7 +120,11 @@ final class APIClient {
         url: String,
         parameters: Parameters? = nil
     ) async throws -> JSON {
-        
+        #if DEBUG
+        if PreviewAPI.isEnabled {
+            return try PreviewAPI.response(url: url, parameters: parameters)
+        }
+        #endif
         return try await withCheckedThrowingContinuation { continuation in
             var headers: HTTPHeaders = []
             if let token = authToken {

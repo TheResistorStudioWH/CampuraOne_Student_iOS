@@ -9,8 +9,7 @@ import SwiftUI
 import SwiftData
 
 #Preview("app - 已登录") {
-    ContentView()
-        .modelContainer(PreviewContainer.app)
+    PreviewAppView()
 }
 
 struct ShoppingBag: View {

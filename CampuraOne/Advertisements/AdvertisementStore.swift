@@ -1,6 +1,9 @@
 import SwiftUI
 import Combine
 import ImageIO
+#if DEBUG
+import SwiftyJSON
+#endif
 
 /// An image belongs to one verified ad revision and one signed-in account.
 /// No advertisement image is read from or written to a persistent disk cache.
@@ -31,7 +34,21 @@ final class AdvertisementStore: ObservableObject {
     private var lastVerified: Date?
     private var refreshing = false
 
+    private init() {
+        #if DEBUG
+        if PreviewAPI.isEnabled {
+            items = PreviewAPI.advertisementRows.map { JSONMapper.makeAdvertisement(from: JSON($0)) }
+        }
+        #endif
+    }
+
     func run(userID: Int) async {
+        #if DEBUG
+        if PreviewAPI.isEnabled {
+            await refresh()
+            return
+        }
+        #endif
         guard !Task.isCancelled else { return }
         let owner = String(userID)
         let runID = UUID()
@@ -92,6 +109,14 @@ final class AdvertisementStore: ObservableObject {
     }
 
     func refresh() async {
+        #if DEBUG
+        if PreviewAPI.isEnabled {
+            items = PreviewAPI.advertisementRows.map { JSONMapper.makeAdvertisement(from: JSON($0)) }
+            errorMessage = nil
+            isLoading = false
+            return
+        }
+        #endif
         guard let scope, !refreshing else { return }
         let runID = generation
         refreshing = true
@@ -152,6 +177,11 @@ final class AdvertisementStore: ObservableObject {
     }
 
     func image(for ad: Advertisement) -> UIImage? {
+        #if DEBUG
+        if PreviewAPI.isEnabled {
+            return PreviewAPI.image(index: ad.adID, banner: ad.type == "L")
+        }
+        #endif
         guard items.contains(ad), ad.isActive(), let key = descriptors[ad.adID] else { return nil }
         return snapshots[key]
     }

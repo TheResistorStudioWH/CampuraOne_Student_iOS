@@ -11,8 +11,7 @@ import SwiftData
 import MarkdownUI
 
 #Preview("app - 已登录") {
-    ContentView()
-        .modelContainer(PreviewContainer.app)
+    PreviewAppView()
 }
 
 #Preview("通知横幅 - 本地数据") {

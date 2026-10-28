@@ -9,13 +9,11 @@ import SwiftUI
 import SwiftData
 
 #Preview("app - 已登录") {
-    ContentView()
-        .modelContainer(PreviewContainer.app)
+    PreviewAppView()
 }
 
 #Preview("app - 未登录") {
-    ContentView()
-        .modelContainer(PreviewContainer.empty)
+    PreviewAppView(signedIn: false)
 }
 // MARK: - 搜索模式
 
@@ -74,7 +72,6 @@ enum SearchPickerItem: CaseIterable, Identifiable, Hashable {
 
 struct SearchBar: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @Namespace var bgTransitionContainer
     @Namespace var SearchBarTransitionContainer
     
     
@@ -361,12 +358,24 @@ struct SearchBar: View {
     @ViewBuilder
     func PickerBar() -> some View {
         VStack(alignment: .leading) {
-            ForEach(Array(SearchPickerItem.allCases.enumerated()), id: \.element) { index, item in
+            ForEachWithIndex(SearchPickerItem.allCases, id: \.self) { index, item in
                 PickerBarItem(item)
                     .modifier(SearchModeArrival(index: index))
             }
         }
         .padding(5)
+        .backgroundPreferenceValue(SearchPickerHighlightKey.self) { anchor in
+            GeometryReader { geometry in
+                if let anchor {
+                    let bounds = geometry[anchor]
+                    PickerBarBG()
+                        .frame(width: bounds.width, height: bounds.height)
+                        .position(x: bounds.midX, y: bounds.midY)
+                        .animation(reduceMotion ? .easeInOut(duration: 0.15) : .smooth(duration: 0.25), value: PickerSelection)
+                }
+            }
+            .allowsHitTesting(false)
+        }
         .background {
             RoundedRectangle(cornerRadius: 18, style: .continuous)
                 .fill(.ultraThinMaterial)
@@ -375,8 +384,8 @@ struct SearchBar: View {
     
     
     /// 单个搜索类型选项。
-    /// 只有当前选中的项目才会放入 PickerBarBG，
-    /// matchedGeometryEffect 会负责把背景平滑移动到新选项。
+    /// The shared highlight uses each row's bounds, keeping its view identity
+    /// stable so position and accent color animate together.
     @ViewBuilder
     func PickerBarItem(_ item: SearchPickerItem) -> some View {
         HStack(spacing: 10) {
@@ -401,16 +410,14 @@ struct SearchBar: View {
         .frame(width: screen.width/4.2, alignment: .leading)
         .padding(10)
         
-        .background {
-            if PickerSelection == item {
-                PickerBarBG()
-            }
+        .anchorPreference(key: SearchPickerHighlightKey.self, value: .bounds) {
+            PickerSelection == item ? $0 : nil
         }
         .contentShape(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
         )
         .onTapGesture {
-            withAnimation(.smooth) {
+            withAnimation(reduceMotion ? .easeInOut(duration: 0.15) : .smooth(duration: 0.25)) {
                 PickerSelection = item
                 showResultList = false
                 submittedSearchText = ""
@@ -422,12 +429,19 @@ struct SearchBar: View {
     
     @ViewBuilder func PickerBarBG() -> some View {
         RoundedRectangle(cornerRadius: 14, style: .continuous)
-            .fill(Material.regular)
-            .matchedGeometryEffect(id: "SearchPickerBG", in: bgTransitionContainer, properties: .position)
+            .fill(PickerSelection.color.opacity(0.26))
     }
     
     
    
+}
+
+private struct SearchPickerHighlightKey: PreferenceKey {
+    static var defaultValue: Anchor<CGRect>? { nil }
+
+    static func reduce(value: inout Anchor<CGRect>?, nextValue: () -> Anchor<CGRect>?) {
+        value = nextValue() ?? value
+    }
 }
 
 /// Brief, staggered zoom from the mode button; the existing layout stays unchanged.

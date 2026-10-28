@@ -9,13 +9,11 @@ import SwiftUI
 import SwiftData
 
 #Preview("app - 已登录") {
-    ContentView()
-        .modelContainer(PreviewContainer.app)
+    PreviewAppView()
 }
 
 #Preview("app - 未登录") {
-    ContentView()
-        .modelContainer(PreviewContainer.empty)
+    PreviewAppView(signedIn: false)
 }
 
 

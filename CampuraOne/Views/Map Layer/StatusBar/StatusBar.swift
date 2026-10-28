@@ -11,8 +11,7 @@ import MapKit
 import CoreLocation
 
 #Preview("app - 已登录") {
-    ContentView()
-        .modelContainer(PreviewContainer.app)
+    PreviewAppView()
 }
 
 // MARK: - 状态栏需要的简单数据
@@ -212,6 +211,8 @@ struct StatusBar: View {
                         .statusBarCapsuleStyle()
                     }
                     
+                    safetyCheckInCapsule
+
                     if let lastPurchase {
                         lastPurchaseCapsule(lastPurchase)
                     }
@@ -467,6 +468,19 @@ struct StatusBar: View {
         return remaining > 0 && remaining <= 90 * 60
     }
     
+    // MARK: 平安确认
+
+    /// 固定推荐占位，不依赖课程、定位或地图加载结果。
+    /// 后续再接入情境推荐与系统分享；当前点击不启动监测或发送消息。
+    private var safetyCheckInCapsule: some View {
+        Label("平安确认 · 推荐宿舍楼17栋", systemImage: "checkmark.shield")
+            .fixedSize(horizontal: true, vertical: false)
+            .font(.system(size: 12))
+            .statusBarCapsuleStyle(isHighlighted: true, tint: .yellow)
+            .beButton { }
+            .buttonStyle(.plain)
+    }
+
     // MARK: 上次购买
     
     private func lastPurchaseCapsule(

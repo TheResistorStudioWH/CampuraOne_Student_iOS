@@ -7,23 +7,31 @@ struct AdvertisementPhotoStack: View {
     let advertisements: [Advertisement]
     let aspectRatio: CGFloat
 
-    @State private var selectedID: Int?
+    @State private var deck = AdvertisementDeck()
     @State private var dragOffset: CGFloat = 0
     @State private var isBrowsing = false
     @State private var isHorizontalDrag = false
     @State private var showingViewer = false
+    @State private var departingID: Int?
+    @State private var departingOffset: CGFloat = 0
+    @State private var isReturningCard = false
+    @State private var turnToken: UUID?
 
     private var ids: [Int] { advertisements.map(\.adID) }
     private var selectedIndex: Int {
-        guard let selectedID, let index = ids.firstIndex(of: selectedID) else { return 0 }
+        guard let selectedID = deck.ids.first, let index = ids.firstIndex(of: selectedID) else { return 0 }
         return index
     }
-    private var visibleIndices: [Int] {
-        guard !advertisements.isEmpty else { return [] }
-        return Array(max(0, selectedIndex - 1)...min(advertisements.count - 1, selectedIndex + 2))
-    }
     private var visibleAds: [Advertisement] {
-        visibleIndices.map { advertisements[$0] }
+        var visibleIDs = Array(deck.ids.prefix(3))
+        if dragOffset > 0, let last = deck.ids.last, !visibleIDs.contains(last) {
+            visibleIDs.append(last)
+        }
+        if let departingID, !visibleIDs.contains(departingID) {
+            visibleIDs.append(departingID)
+        }
+        let available = Dictionary(advertisements.map { ($0.adID, $0) }, uniquingKeysWith: { first, _ in first })
+        return visibleIDs.compactMap { available[$0] }
     }
 
     var body: some View {
@@ -36,14 +44,15 @@ struct AdvertisementPhotoStack: View {
 
             ZStack {
                 ForEach(visibleAds) { advertisement in
-                    let index = ids.firstIndex(of: advertisement.adID) ?? 0
-                    let relative = index - selectedIndex
+                    let leaving = departingID == advertisement.adID
+                    let relative = depth(for: advertisement.adID)
+                    let displayDepth = leaving && !isReturningCard ? 0 : relative
                     photoCard(advertisement, size: cardSize)
-                        .scaleEffect(relative == 0 ? 0.94 : 0.94 + CGFloat(max(relative, 0)) * 0.025)
-                        .rotationEffect(.degrees(relative == 0 ? 0 : (relative == 1 ? -4.5 : 4.5)))
-                        .offset(x: horizontalOffset(relative: relative, width: size.width, shadowOutset: shadowOutset),
-                                y: CGFloat(max(relative, 0)) * -4)
-                        .zIndex(relative == 0 ? 4 : Double(3 - abs(relative)))
+                        .scaleEffect(0.94 + CGFloat(min(displayDepth, 2)) * 0.025)
+                        .rotationEffect(.degrees(displayDepth == 0 ? 0 : (displayDepth == 1 ? -4.5 : 4.5)))
+                        .offset(x: leaving && !isReturningCard ? departingOffset : horizontalOffset(relative: relative),
+                                y: CGFloat(displayDepth) * -4)
+                        .zIndex(leaving ? (isReturningCard ? 0 : 5) : (relative == 0 ? 4 : Double(3 - relative)))
                         .allowsHitTesting(false)
                 }
             }
@@ -51,7 +60,10 @@ struct AdvertisementPhotoStack: View {
             // Keep offscreen pages hidden, but leave room for every card's shadow.
             .clipShape(Rectangle().inset(by: -shadowOutset))
             .contentShape(Rectangle())
-            .onTapGesture { showingViewer = true }
+            .onTapGesture {
+                guard turnToken == nil else { return }
+                showingViewer = true
+            }
             .simultaneousGesture(swipeGesture(width: size.width))
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("广告图片叠放")
@@ -63,14 +75,15 @@ struct AdvertisementPhotoStack: View {
         }
         .aspectRatio(aspectRatio, contentMode: .fit)
         .fullScreenCover(isPresented: $showingViewer) {
-            AdvertisementPhotoViewer(advertisements: advertisements, initialID: selectedID ?? ids.first)
+            AdvertisementPhotoViewer(advertisements: advertisements, initialID: deck.ids.first ?? ids.first)
         }
         .onChange(of: ids, initial: true) { _, newIDs in
-            dragOffset = 0
-            if !newIDs.contains(selectedID ?? -1) { selectedID = newIDs.first }
+            resetMotion()
+            deck.synchronize(with: newIDs)
             if newIDs.isEmpty { showingViewer = false }
         }
-        .sensoryFeedback(.selection, trigger: selectedID)
+        .onDisappear { resetMotion() }
+        .sensoryFeedback(.selection, trigger: deck.ids.first)
     }
 
     private func photoCard(_ advertisement: Advertisement, size: CGSize) -> some View {
@@ -85,48 +98,89 @@ struct AdvertisementPhotoStack: View {
             .modifier(AdvertisementPhotoShadow())
     }
 
-    private func horizontalOffset(relative: Int, width: CGFloat, shadowOutset: CGFloat) -> CGFloat {
-        switch relative {
-        case -1: return dragOffset > 0 ? 0 : -width - shadowOutset * 2
-        case 0: return dragOffset
-        default: return CGFloat(relative) * 3
-        }
+    private func depth(for id: Int) -> Int {
+        if dragOffset > 0, id == deck.ids.last, id != deck.ids.first { return 1 }
+        return min(3, deck.ids.firstIndex(of: id) ?? 3)
+    }
+
+    private func horizontalOffset(relative: Int) -> CGFloat {
+        relative == 0 ? dragOffset : (dragOffset > 0 && relative == 1 ? 0 : CGFloat(relative) * 3)
     }
 
     private func swipeGesture(width: CGFloat) -> some Gesture {
         DragGesture(minimumDistance: 12)
             .onChanged { value in
-                guard advertisements.count > 1 else { return }
+                guard deck.ids.count > 1, turnToken == nil else { return }
                 if !isBrowsing {
                     isBrowsing = true
                     isHorizontalDrag = abs(value.translation.width) > abs(value.translation.height)
                 }
                 guard isHorizontalDrag else { return }
-                let atEdge = (selectedIndex == 0 && value.translation.width > 0)
-                    || (selectedIndex == advertisements.count - 1 && value.translation.width < 0)
-                dragOffset = value.translation.width * (atEdge ? 0.15 : 1)
+                dragOffset = value.translation.width
             }
             .onEnded { value in
                 defer {
                     isBrowsing = false
                     isHorizontalDrag = false
                 }
-                guard isHorizontalDrag, advertisements.count > 1 else { return }
+                guard isHorizontalDrag, deck.ids.count > 1, turnToken == nil else { return }
                 let projected = value.predictedEndTranslation.width
                 let threshold = max(35, width * 0.18)
                 let step = projected < 0 ? 1 : -1
-                withAnimation(reduceMotion ? .easeOut(duration: 0.1) : .spring(response: 0.38, dampingFraction: 0.84)) {
-                    if abs(projected) > threshold, ids.indices.contains(selectedIndex + step) {
-                        advance(by: step)
-                    }
-                    dragOffset = 0
+                if abs(projected) > threshold {
+                    advance(by: step, width: width)
+                } else {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.86)) { dragOffset = 0 }
                 }
             }
     }
 
-    private func advance(by step: Int) {
-        guard advertisements.count > 1 else { return }
-        selectedID = ids[min(max(selectedIndex + step, 0), advertisements.count - 1)]
+    private func advance(by step: Int, width: CGFloat? = nil) {
+        guard deck.ids.count > 1, turnToken == nil else { return }
+        guard let width, !reduceMotion else {
+            withAnimation(.easeInOut(duration: 0.15)) {
+                deck.advance(by: step)
+                dragOffset = 0
+            }
+            return
+        }
+
+        let token = UUID()
+        turnToken = token
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.86)) {
+            departingID = deck.ids.first
+            departingOffset = dragOffset
+            isReturningCard = false
+            deck.advance(by: step)
+            dragOffset = 0
+        }
+        // The departing card leaves above the pile, then returns underneath it.
+        withAnimation(.easeOut(duration: 0.17), completionCriteria: .removed) {
+            departingOffset = (step > 0 ? -1 : 1) * (width + 48)
+        } completion: {
+            guard turnToken == token else { return }
+            withAnimation(.smooth(duration: 0.22), completionCriteria: .removed) {
+                isReturningCard = true
+                departingOffset = 0
+            } completion: {
+                guard turnToken == token else { return }
+                resetMotion()
+            }
+        }
+    }
+
+    private func resetMotion() {
+        var transaction = Transaction()
+        transaction.disablesAnimations = true
+        withTransaction(transaction) {
+            turnToken = nil
+            departingID = nil
+            departingOffset = 0
+            dragOffset = 0
+            isReturningCard = false
+            isBrowsing = false
+            isHorizontalDrag = false
+        }
     }
 }
 
@@ -222,7 +276,7 @@ private struct AdvertisementPhotoShadow: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .shadow(color: .black.opacity(colorScheme == .dark ? 0.48 : 0.24), radius: 10, x: 0, y: 6)
+            .shadow(color: .black.opacity(.colorScheme(light: 0.24, dark: 0.48, colorScheme)), radius: 10, x: 0, y: 6)
             .shadow(color: .black.opacity(0.12), radius: 2, x: 0, y: 1)
     }
 }

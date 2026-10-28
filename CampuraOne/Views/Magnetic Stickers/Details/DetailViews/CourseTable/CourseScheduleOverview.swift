@@ -1,15 +1,26 @@
 import SwiftUI
+import UIKit
 
 struct CourseScheduleTags: View {
     let insights: CourseDayInsights
 
     var body: some View {
         CourseTagLayout(spacing: 7) {
-            if insights.earlyHour == 8 { tag("早8", color: .orange) }
-            if insights.earlyHour == 10 { tag("早10", color: .yellow) }
-            if insights.morningFree { tag("上午空闲", color: .green) }
-            if insights.afternoonFree { tag("下午空闲", color: .green) }
-            if insights.eveningStudy { tag("晚自习", color: .purple) }
+            if insights.earlyHour == 8 {
+                tag("早8", color: .orange)
+            }
+            if insights.earlyHour == 10 {
+                tag("早10", color: .yellow)
+            }
+            if insights.morningFree {
+                tag("上午空闲", color: .green)
+            }
+            if insights.afternoonFree {
+                tag("下午空闲", color: .green)
+            }
+            if insights.eveningStudy {
+                tag("晚自习", color: .purple)
+            }
             if insights.napMinutes >= 30 {
                 (Text("可午休约").foregroundColor(.primary)
                  + Text("\(insights.napMinutes / 60)").foregroundColor(.pink)
@@ -76,45 +87,61 @@ struct CourseWeekGrid: View {
     let events: [[ICSEventItem]]
     @Binding var selectedDate: Date
     private let calendar = Calendar.current
-    private let rowHeight: CGFloat = 74
+    @ScaledMetric(relativeTo: .caption) private var rowHeight: CGFloat = 74
+    private let headerHeight: CGFloat = 60
 
     private var slots: [Int] {
         Set(events.flatMap { $0 }.compactMap { $0.startDate }.map { minute(of: $0) }).sorted()
     }
 
     var body: some View {
-        ScrollViewReader { proxy in
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(alignment: .top, spacing: 5) {
+        GeometryReader { geometry in
+            let gutterWidth = max(32, geometry.size.width * 0.1)
+            let viewportWidth = max(1, geometry.size.width - gutterWidth - 6)
+            let columnWidth = max(64, (viewportWidth - 6 * 5) / 7)
+            ScrollViewReader { proxy in
+                HStack(alignment: .top, spacing: 6) {
                     VStack(spacing: 0) {
-                        Text("时间").frame(height: 56)
-                        ForEach(slots, id: \.self) { slot in
-                            Text(String(format: "%02d:%02d", slot / 60, slot % 60))
-                                .padding(.top, 6)
-                                .frame(height: rowHeight, alignment: .top)
+                        Text("时间").frame(height: headerHeight)
+                        if slots.isEmpty {
+                            Color.clear.frame(height: rowHeight)
+                        } else {
+                            ForEach(slots, id: \.self) { slot in
+                                Text(String(format: "%02d:%02d", slot / 60, slot % 60))
+                                    .padding(.top, 6)
+                                    .frame(height: rowHeight, alignment: .top)
+                            }
                         }
                     }
                     .font(.system(size: 10, weight: .medium, design: .rounded))
                     .foregroundStyle(.secondary)
-                    .frame(width: 36)
+                    .frame(width: gutterWidth)
 
-                    ForEach(Array(dates.enumerated()), id: \.element) { index, date in
-                        dayColumn(date, index: index + 1, events: events[index])
-                            .id(calendar.startOfDay(for: date))
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(alignment: .top, spacing: 5) {
+                            ForEachWithIndex(dates, id: \.self) { index, date in
+                                dayColumn(date, events: events.indices.contains(index) ? events[index] : [], width: columnWidth)
+                                    .id(calendar.startOfDay(for: date))
+                            }
+                        }
+                        .padding(.horizontal, 1)
                     }
+                    .scrollBounceBehavior(.basedOnSize)
                 }
                 .padding(.vertical, 3)
-            }
-            .onAppear { proxy.scrollTo(calendar.startOfDay(for: selectedDate), anchor: .center) }
-            .onChange(of: selectedDate) { _, date in
-                withAnimation(.smooth(duration: 0.22)) {
-                    proxy.scrollTo(calendar.startOfDay(for: date), anchor: .center)
+                .task(id: calendar.startOfDay(for: selectedDate)) {
+                    await Task.yield()
+                    guard !Task.isCancelled else { return }
+                    withAnimation(.smooth(duration: 0.22)) {
+                        proxy.scrollTo(calendar.startOfDay(for: selectedDate), anchor: .center)
+                    }
                 }
             }
         }
+        .frame(height: headerHeight + CGFloat(max(1, slots.count)) * rowHeight + 6)
     }
 
-    private func dayColumn(_ date: Date, index: Int, events: [ICSEventItem]) -> some View {
+    private func dayColumn(_ date: Date, events: [ICSEventItem], width: CGFloat) -> some View {
         let today = calendar.isDateInToday(date)
         let selected = calendar.isDate(date, inSameDayAs: selectedDate)
         return Button {
@@ -125,11 +152,11 @@ struct CourseWeekGrid: View {
                 VStack(spacing: 6) {
                     Text(date.formatted(.dateTime.weekday(.abbreviated).locale(Locale(identifier: "en_US"))).uppercased())
                         .font(.caption2.weight(.semibold))
-                    Image(systemName: "\(index).calendar")
-                        .font(.title3.weight(.semibold))
+                    daySymbol(date)
+                        .font(.title2.weight(.semibold))
                 }
                 .foregroundStyle(today ? Color.accentColor : Color.primary)
-                .frame(height: 56)
+                .frame(height: headerHeight)
 
                 if slots.isEmpty {
                     Text("无课").font(.caption2).foregroundStyle(.secondary)
@@ -149,14 +176,14 @@ struct CourseWeekGrid: View {
                             Spacer(minLength: 0)
                         }
                         .padding(6)
-                        .frame(width: 72, height: rowHeight, alignment: .topLeading)
+                        .frame(width: width, height: rowHeight, alignment: .topLeading)
                         .background(alignment: .top) {
                             Rectangle().fill(.secondary.opacity(0.12)).frame(height: 0.5)
                         }
                     }
                 }
             }
-            .frame(width: 72)
+            .frame(width: width)
             .background(today ? Color.accentColor.opacity(0.13) : Color.clear,
                         in: RoundedRectangle(cornerRadius: 12))
             .overlay {
@@ -166,6 +193,22 @@ struct CourseWeekGrid: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel("\(date.formatted(date: .complete, time: .omitted))，共\(events.count)节课")
+    }
+
+    @ViewBuilder private func daySymbol(_ date: Date) -> some View {
+        let day = calendar.component(.day, from: date)
+        let symbol = "\(day).calendar"
+        if UIImage(systemName: symbol) != nil {
+            Image(systemName: symbol)
+        } else {
+            Image(systemName: "dock.rectangle")
+                .rotationEffect(.degrees(180), anchor: .center)
+                .overlay(alignment: .bottom) {
+                    Text("\(day)")
+                        .font(.system(size: 9, weight: .bold))
+                        .padding(.bottom, 3)
+                }
+        }
     }
 
     private func minute(of date: Date) -> Int {

@@ -9,19 +9,7 @@ import SwiftUI
 import SwiftData
 
 #Preview("app - 已登录") {
-    
-    @Previewable @StateObject var authSession = AuthSession()
-    
-    AppRootView()
-        .environmentObject(authSession)
-        .modelContainer(for: [
-            School.self,
-            Campus.self,
-            SchoolCalendar.self,
-            CourseTable.self,
-            AppUser.self,
-            Student.self
-        ])
+    PreviewAppView()
 }
 
 struct AD_LargeBanner: View {

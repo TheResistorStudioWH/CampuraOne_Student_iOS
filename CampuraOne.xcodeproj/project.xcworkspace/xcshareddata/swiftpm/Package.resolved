@@ -1,5 +1,5 @@
 {
-  "originHash" : "6752b3b82cd304e1619776b4fb0bbf15082fbbe591040f9680d53454f3c56bfa",
+  "originHash" : "76a2a5a14e0d86a641106dd196656b060fe5db218de8b8317136c7dd040f3864",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "7595cbcf59809f9977c5f6378500de2ad73b7ddb",
         "version" : "5.12.0"
+      }
+    },
+    {
+      "identity" : "campuraone_camap_sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/TheResistorStudioWH/CampuraOne_Camap_SDK.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "e41fc9a95a30a45a12c58e7a4b1d27a60f31a13d"
       }
     },
     {

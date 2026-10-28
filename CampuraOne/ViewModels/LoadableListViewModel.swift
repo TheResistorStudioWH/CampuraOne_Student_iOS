@@ -22,7 +22,7 @@ final class LoadableListViewModel<Item>: ObservableObject {
     }
     
     func load() async {
-        
+        guard !isLoading else { return }
         withAnimation {
             isLoading = true
             errorMessage = nil
@@ -30,6 +30,8 @@ final class LoadableListViewModel<Item>: ObservableObject {
         
         do {
             items = try await loader()
+        } catch is CancellationError {
+            // Leaving a screen is not a failed request; retain the previous items.
         } catch {
             withAnimation {
                 errorMessage = error.localizedDescription

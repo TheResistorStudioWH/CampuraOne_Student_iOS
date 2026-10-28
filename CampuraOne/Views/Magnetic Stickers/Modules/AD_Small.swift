@@ -9,8 +9,19 @@ import SwiftUI
 import SwiftData
 
 #Preview("app - 已登录") {
-    ContentView()
-        .modelContainer(PreviewContainer.app)
+    PreviewAppView()
+}
+
+/// This tile uses the photo pile itself as its surface and owns its browsing gestures.
+struct SmallAdvertisementTile: View {
+    let context: DashboardTileContext
+
+    var body: some View {
+        AD_SmallModule()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .opacity(context.isOpened ? 0 : 1)
+            .contentShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+    }
 }
 
 struct AD_SmallModule: View {

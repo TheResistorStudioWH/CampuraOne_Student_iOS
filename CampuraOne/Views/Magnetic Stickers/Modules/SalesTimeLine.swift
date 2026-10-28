@@ -9,13 +9,11 @@ import SwiftUI
 import SwiftData
 
 #Preview("app - 已登录") {
-    ContentView()
-        .modelContainer(PreviewContainer.app)
+    PreviewAppView()
 }
 
 #Preview("app - 未登录") {
-    ContentView()
-        .modelContainer(PreviewContainer.empty)
+    PreviewAppView(signedIn: false)
 }
 
 enum SalesTimelineMode: String, CaseIterable, Identifiable {
@@ -54,6 +52,53 @@ enum SalesTimelineMode: String, CaseIterable, Identifiable {
 
 typealias SalesTimelineViewModel = LoadableListViewModel<SaleEvent>
 typealias SalesTimelineProductViewModel = LoadableListViewModel<Product>
+
+struct SalesTimelineTile: View {
+    let context: DashboardTileContext
+    @State private var mode: SalesTimelineMode = .random
+    @State private var refreshID = 0
+
+    var body: some View {
+        DashboardTile(
+            descriptor: SalesTimeLineDetailView.tileDescriptor,
+            context: context,
+            onOpen: { context.open(SalesTimeLineDetailView()) }
+        ) {
+            SalesTimeLineModule(mode: $mode, refreshID: refreshID)
+        } toolBar: {
+            modePicker
+        }
+    }
+
+    private var modePicker: some View {
+        HStack(spacing: 2) {
+            ForEach(SalesTimelineMode.allCases) { option in
+                Image(systemName: option.systemImage)
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundStyle(mode == option ? option.primaryColor : Color.secondary)
+                    .frame(width: 22, height: 22)
+                    .background {
+                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                            .fill(mode == option ? Material.regular : Material.ultraThin)
+                    }
+                    .contentShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    .onTapGesture {
+                        if mode == option {
+                            refreshID += 1
+                            TapSucceed()
+                        } else {
+                            withAnimation(.snappy) {
+                                mode = option
+                            }
+                            TapSoft()
+                        }
+                    }
+                    .accessibilityLabel(option.title)
+                    .accessibilityHint(mode == option ? "再次点击可刷新当前榜单" : "切换到\(option.title)")
+            }
+        }
+    }
+}
 
 struct SalesTimeLineModule: View {
     @Binding var mode: SalesTimelineMode
@@ -156,7 +201,7 @@ struct SalesTimeLineModule: View {
     
     private var compactContent: some View {
         VStack(alignment: .leading, spacing: 7) {
-            ForEach(Array(displayedEvents.prefix(3).enumerated()), id: \.element.saleID) { index, event in
+            ForEachWithIndex(Array(displayedEvents.prefix(3)), id: \.saleID) { index, event in
                 SalesTimelineCompactRow(
                     event: event,
                     rank: mode == .hot ? index + 1 : nil

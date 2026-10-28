@@ -9,8 +9,7 @@ import SwiftUI
 import SwiftData
 
 #Preview("app - 已登录") {
-    ContentView()
-        .modelContainer(PreviewContainer.app)
+    PreviewAppView()
 }
 
 struct ICSSchoolCalendar: View {
@@ -184,6 +183,8 @@ struct ICSSchoolCalendar: View {
 }
 
 struct ICSSchoolCalendarMini: View {
+    var onOpen: () -> Void = {}
+
     @StateObject private var viewModel = LoadableListViewModel<RemoteSchoolCalendarEvent>(loader: {
         try await RemoteSchoolCalendarService.shared.fetchSchoolCalendar(schoolID: 1)
     })
@@ -196,17 +197,6 @@ struct ICSSchoolCalendarMini: View {
         viewModel.items
     }
     
-    private var weekDays: [Date] {
-        let selectedDay = calendar.startOfDay(for: selectedDate)
-        let daysSinceMonday = (calendar.component(.weekday, from: selectedDay) + 5) % 7
-        guard let monday = calendar.date(byAdding: .day, value: -daysSinceMonday, to: selectedDay) else {
-            return []
-        }
-        return (0..<7).compactMap { dayOffset in
-            calendar.date(byAdding: .day, value: dayOffset, to: monday)
-        }
-    }
-
     private var selectedDateEvents: [RemoteSchoolCalendarEvent] {
         events.events(on: selectedDate)
     }
@@ -216,12 +206,28 @@ struct ICSSchoolCalendarMini: View {
             if viewModel.isLoading {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .contentShape(Rectangle())
+                    .onTapGesture(perform: onOpen)
             } else if viewModel.errorMessage != nil {
                 miniErrorView
+                    .contentShape(Rectangle())
+                    .onTapGesture(perform: onOpen)
             } else {
-                selectedDateHeader
-                weekStrip
-                weekEventList
+                Button(action: onOpen) {
+                    selectedDateHeader
+                }
+                .buttonStyle(.plain)
+
+                SchoolCalendarDateWheel(selection: $selectedDate, calendar: calendar) { day in
+                    events.contains { $0.occurs(on: day) }
+                }
+
+                Button(action: onOpen) {
+                    weekEventList
+                }
+                .buttonStyle(.plain)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                .accessibilityHint("打开完整校历")
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -230,25 +236,6 @@ struct ICSSchoolCalendarMini: View {
         }
     }
     
-    private var weekStrip: some View {
-        HStack(spacing: 2) {
-            ForEach(weekDays, id: \.self) { day in
-                miniDayCell(day)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        withAnimation(.snappy(duration: 0.24)) {
-                            selectedDate = calendar.startOfDay(for: day)
-                        }
-                        TapSoft()
-                    }
-                    .accessibilityLabel(accessibilityDayTitle(day))
-                    .accessibilityAddTraits(
-                        calendar.isDate(day, inSameDayAs: selectedDate) ? .isSelected : []
-                    )
-            }
-        }
-    }
-
     private var selectedDateHeader: some View {
         HStack(alignment: .center, spacing: 8) {
             Text(selectedDateTitle)
@@ -272,41 +259,6 @@ struct ICSSchoolCalendarMini: View {
         }
     }
 
-    private func miniDayCell(_ day: Date) -> some View {
-        let dayEvents = events.events(on: day)
-        let isToday = calendar.isDateInToday(day)
-        let isSelected = calendar.isDate(day, inSameDayAs: selectedDate)
-        
-        return VStack(spacing: 3) {
-            Text(weekdaySymbol(day))
-                .font(.system(size: 9, weight: .medium, design: .rounded))
-                .foregroundStyle(isSelected ? Color.accentColor : Color.secondary)
-
-            Text(dayNumber(day))
-                .font(.system(size: 12, weight: .bold, design: .rounded))
-                .foregroundStyle(isSelected ? .white : .primary)
-                .frame(width: 23, height: 23)
-                .background {
-                    Circle()
-                        .fill(isSelected ? Color.accentColor : Color.clear)
-                }
-                .overlay {
-                    Circle()
-                        .stroke(Color.accentColor, lineWidth: 1)
-                        .opacity(isToday && !isSelected ? 0.55 : 0)
-                }
-
-            Circle()
-                .fill(dayEvents.isEmpty ? Color.clear : Color.accentColor)
-                .frame(width: 3, height: 3)
-        }
-        .frame(maxWidth: .infinity)
-        .background {
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(isSelected ? Color.accentColor.opacity(0.13) : Color.clear)
-        }
-    }
-    
     private var weekEventList: some View {
         VStack(alignment: .leading, spacing: 5) {
             if selectedDateEvents.isEmpty {
@@ -361,11 +313,6 @@ struct ICSSchoolCalendarMini: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
-    private func weekdaySymbol(_ date: Date) -> String {
-        let weekday = calendar.component(.weekday, from: date)
-        return ["日", "一", "二", "三", "四", "五", "六"][weekday - 1]
-    }
-
     private var selectedDateTitle: String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "zh_CN")
@@ -382,19 +329,6 @@ struct ICSSchoolCalendarMini: View {
         return dateTitle
     }
 
-    private func accessibilityDayTitle(_ day: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "zh_CN")
-        formatter.dateFormat = "M月d日 EEEE"
-        return formatter.string(from: day)
-    }
-    
-    private func dayNumber(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d"
-        return formatter.string(from: date)
-    }
-    
     private var emptySelectedDateTitle: String {
         if calendar.isDateInToday(selectedDate) {
             return "今天暂无校历事项"
@@ -553,43 +487,6 @@ private struct RemoteSchoolCalendarDocument: Decodable {
     }
 }
 
-private struct RemoteSchoolCalendarEvent: Identifiable, Codable {
-    let uid: String
-    let title: String
-    let content: String?
-    let startTime: Date
-    let endTime: Date?
-    let isAllDay: Bool
-    
-    var id: String { uid }
-    
-    init(
-        uid: String,
-        title: String,
-        content: String? = nil,
-        startTime: Date,
-        endTime: Date? = nil,
-        isAllDay: Bool = true
-    ) {
-        self.uid = uid
-        self.title = title
-        self.content = content
-        self.startTime = startTime
-        self.endTime = endTime
-        self.isAllDay = isAllDay
-    }
-    
-    func occurs(on date: Date) -> Bool {
-        let calendar = Calendar.current
-        let dayStart = calendar.startOfDay(for: date)
-        let dayEnd = calendar.date(byAdding: .day, value: 1, to: dayStart) ?? dayStart
-        let defaultEnd = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: startTime)) ?? startTime
-        let eventEnd = endTime ?? defaultEnd
-        
-        return startTime < dayEnd && eventEnd > dayStart
-    }
-}
-
 private final class RemoteSchoolCalendarService {
     static let shared = RemoteSchoolCalendarService()
     
@@ -601,6 +498,11 @@ private final class RemoteSchoolCalendarService {
     }
     
     func fetchSchoolCalendar(schoolID: Int) async throws -> [RemoteSchoolCalendarEvent] {
+        #if DEBUG
+        if PreviewAPI.isEnabled {
+            return SchoolCalendarICSParser.parse(PreviewAPI.calendarICS)
+        }
+        #endif
         var components = URLComponents(string: APIConfig.api_download(APIConfig.DLPath.schoolCalendar))
         components?.queryItems = [
             URLQueryItem(name: "schoolID", value: "\(schoolID)")
@@ -636,136 +538,10 @@ private final class RemoteSchoolCalendarService {
     }
 }
 
-private enum SchoolCalendarICSParser {
-    static func parse(_ content: String) -> [RemoteSchoolCalendarEvent] {
-        let lines = unfoldedLines(content)
-        var events: [RemoteSchoolCalendarEvent] = []
-        var currentEvent: [String: String]?
-        
-        for line in lines {
-            if line == "BEGIN:VEVENT" {
-                currentEvent = [:]
-                continue
-            }
-            
-            if line == "END:VEVENT" {
-                if let currentEvent,
-                   let event = makeEvent(from: currentEvent) {
-                    events.append(event)
-                }
-                currentEvent = nil
-                continue
-            }
-            
-            guard currentEvent != nil else {
-                continue
-            }
-            
-            let parsedLine = parseLine(line)
-            currentEvent?[parsedLine.key] = parsedLine.value
-        }
-        
-        return events.sortedByStartTime
-    }
-    
-    private static func unfoldedLines(_ content: String) -> [String] {
-        let rawLines = content
-            .replacingOccurrences(of: "\r\n", with: "\n")
-            .replacingOccurrences(of: "\r", with: "\n")
-            .components(separatedBy: "\n")
-        
-        var lines: [String] = []
-        
-        for rawLine in rawLines {
-            guard !rawLine.isEmpty else { continue }
-            
-            if rawLine.hasPrefix(" ") || rawLine.hasPrefix("\t") {
-                if let last = lines.indices.last {
-                    lines[last] += String(rawLine.dropFirst())
-                }
-            } else {
-                lines.append(rawLine)
-            }
-        }
-        
-        return lines
-    }
-    
-    private static func parseLine(_ line: String) -> (key: String, value: String) {
-        guard let colonIndex = line.firstIndex(of: ":") else {
-            return (line, "")
-        }
-        
-        let keyPart = String(line[..<colonIndex])
-        let value = String(line[line.index(after: colonIndex)...])
-        let key = keyPart.components(separatedBy: ";").first ?? keyPart
-        
-        return (key, unescaped(value))
-    }
-    
-    private static func makeEvent(from dictionary: [String: String]) -> RemoteSchoolCalendarEvent? {
-        guard let startRaw = dictionary["DTSTART"],
-              let startTime = parseICSDate(startRaw) else {
-            return nil
-        }
-        
-        let endTime = dictionary["DTEND"].flatMap { parseICSDate($0) }
-        let uid = dictionary["UID"] ?? UUID().uuidString
-        let title = dictionary["SUMMARY"] ?? "校历事项"
-        let content = dictionary["DESCRIPTION"]
-        
-        return RemoteSchoolCalendarEvent(
-            uid: uid,
-            title: title,
-            content: content,
-            startTime: startTime,
-            endTime: endTime,
-            isAllDay: startRaw.count == 8
-        )
-    }
-    
-    private static func parseICSDate(_ rawValue: String) -> Date? {
-        if rawValue.count == 8 {
-            let formatter = DateFormatter()
-            formatter.locale = Locale(identifier: "en_US_POSIX")
-            formatter.timeZone = Calendar.current.timeZone
-            formatter.dateFormat = "yyyyMMdd"
-            return formatter.date(from: rawValue)
-        }
-        
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
-        formatter.dateFormat = rawValue.hasSuffix("Z") ? "yyyyMMdd'T'HHmmss'Z'" : "yyyyMMdd'T'HHmmss"
-        return formatter.date(from: rawValue)
-    }
-    
-    private static func unescaped(_ value: String) -> String {
-        value
-            .replacingOccurrences(of: "\\n", with: "\n")
-            .replacingOccurrences(of: "\\,", with: ",")
-            .replacingOccurrences(of: "\\;", with: ";")
-            .replacingOccurrences(of: "\\\\", with: "\\")
-    }
-}
-
 private struct RemoteSchoolCalendarAPIResponse<T: Decodable>: Decodable {
     let code: Int
     let message: String
     let data: T?
-}
-
-private extension Array where Element == RemoteSchoolCalendarEvent {
-    var sortedByStartTime: [RemoteSchoolCalendarEvent] {
-        sorted { $0.startTime < $1.startTime }
-    }
-    
-    func events(on date: Date) -> [RemoteSchoolCalendarEvent] {
-        filter { event in
-            event.occurs(on: date)
-        }
-        .sortedByStartTime
-    }
 }
 
 private extension Calendar {
