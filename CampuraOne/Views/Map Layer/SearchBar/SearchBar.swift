@@ -847,11 +847,18 @@ struct SearchButton: View {
     
     var body: some View {
         Image(systemName: "magnifyingglass")
+            .font(showLargeBar ? .body : .system(size: 25, weight: .bold))
             .foregroundStyle(.blue)
-            .padding(8)
+            .padding(10)
             .background(alignment: .center) {
-                Circle()
-                    .fill(Material.thick)
+                if showLargeBar {
+                    Circle()
+                        .fill(Color.blue.opacity(0.2))
+                } else {
+                    Circle()
+                        .fill(Material.thick)
+                }
+                
             }
             .beButton {
                 if showLargeBar {

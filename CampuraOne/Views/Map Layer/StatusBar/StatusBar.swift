@@ -226,6 +226,18 @@ struct StatusBar: View {
             }
             
             .scrollIndicators(.hidden)
+            .mask {
+                LinearGradient(
+                    stops: [
+                        .init(color: .clear, location: 0),
+                        .init(color: .black, location: 0.07),
+                        .init(color: .black, location: 0.93),
+                        .init(color: .clear, location: 1)
+                    ],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            }
             .task(id: context.date) {
                 /// TimelineView 每分钟触发一次，课程开始以后会重新寻找下一节。
                 resolveNextCourse(after: context.date)

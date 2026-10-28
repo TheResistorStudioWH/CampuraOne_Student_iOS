@@ -147,7 +147,6 @@ struct SearchResultList: View {
 
     /// 使用通用 LoadableListViewModel 加载一次完整搜索响应。
     @StateObject private var viewModel: SearchResultListViewModel
-    @Environment(\.colorScheme) private var colorScheme
 
     init(
         query: String,
@@ -349,15 +348,6 @@ struct SearchResultList: View {
         .font(.caption.weight(.semibold))
         .padding(.horizontal, 11)
         .padding(.vertical, 5)
-        .background {
-                Capsule()
-                .fill(
-                    ColorSchemeValue(
-                        light: Color(.systemGray5),
-                        dark: Color(.systemGray6)
-                    ).value(colorScheme)
-                )
-        }
         .contentShape(Capsule())
         .beButton {
             /// 后续使用 suggestion.info.kind 和 suggestion.info.targetID 打开详情。
