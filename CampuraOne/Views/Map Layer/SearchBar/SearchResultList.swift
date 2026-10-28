@@ -324,10 +324,6 @@ struct SearchResultList: View {
             }
         }
         .padding(10)
-        .background {
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(.ultraThinMaterial)
-        }
     }
 
     private func suggestionCapsule(

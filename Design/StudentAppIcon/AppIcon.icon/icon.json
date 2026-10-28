@@ -1,0 +1,56 @@
+{
+  "fill": {
+    "solid": "srgb:0.08235,0.10588,0.17255,1.00000"
+  },
+  "groups": [
+    {
+      "layers": [
+        {
+          "glass": false,
+          "image-name": "02-heading.png",
+          "name": "Heading"
+        }
+      ],
+      "specular": false,
+      "translucency": {
+        "enabled": false,
+        "value": 0.5
+      }
+    },
+    {
+      "layers": [
+        {
+          "image-name": "03-outer-arc.png",
+          "name": "Provisional outer arc"
+        }
+      ],
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.25
+      },
+      "specular": true,
+      "translucency": {
+        "enabled": false,
+        "value": 0.5
+      }
+    },
+    {
+      "layers": [
+        {
+          "glass": false,
+          "image-name": "04-location.png",
+          "name": "Current location"
+        }
+      ],
+      "specular": false,
+      "translucency": {
+        "enabled": false,
+        "value": 0.5
+      }
+    }
+  ],
+  "supported-platforms": {
+    "circles": ["watchOS"],
+    "squares": "shared"
+  }
+}
