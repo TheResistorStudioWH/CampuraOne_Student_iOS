@@ -9,7 +9,6 @@ import SwiftUI
 import PetaToolKit
 import Combine
 import SwiftData
-import UIKit
 
 #Preview("app - 已登录") {
     PreviewAppView()
@@ -29,9 +28,15 @@ struct HomePageView: View {
     let bgTransitionContainer: Namespace.ID
     let openDetail: (_ detail: SelectedDashboardDetail) -> Void
     @Binding var isOpened: Bool
-    
+
     @Binding var scrollOffset: CGFloat
     @State private var studentViewModel: LoadableListViewModel<Student>?
+    @State private var announcementBannerHeight: CGFloat = 0
+    @State private var advertisementBannerHeight: CGFloat = 0
+
+    private enum ScrollAnchor: Hashable {
+        case top
+    }
 
     private var tileContext: DashboardTileContext {
         DashboardTileContext(
@@ -69,7 +74,7 @@ struct HomePageView: View {
             SalesTimelineTile(context: tileContext)
                 .frame(height: layout.middleTileHeight)
         }
-        .frame(maxWidth: .infinity)
+        .frame(minWidth: 0, maxWidth: .infinity)
     }
 
     @ViewBuilder private func regularColumn(layout: DashboardLayout) -> some View {
@@ -80,55 +85,76 @@ struct HomePageView: View {
             SchoolCalendarTile(context: tileContext)
                 .frame(height: layout.largeTileHeight)
         }
-        .frame(maxWidth: .infinity)
+        .frame(minWidth: 0, maxWidth: .infinity)
     }
 
     var body: some View {
         GeometryReader { proxy in
             let layout = DashboardLayout(screenSize: proxy.size)
-            UIKitOffsetScrollView(offset: $scrollOffset) {
-                
-                VStack(spacing: layout.outerSpacing) {
-                    
-                    HStack {
-                        greet()
-                        Spacer()
-                    }
-
-                    
-
-                    // Reserve the same 3:1 slot in loading, empty and loaded states.
-                    ZStack {
-                        VStack {
-                            Spacer()
-                            dashboardTiles(layout: layout)
-                        }
-                        
-                        
-                        VStack {
+            ScrollViewReader { scrollProxy in
+                ScrollView(.vertical) {
+                    ZStack(alignment: .top) {
+                        VStack(spacing: 0) {
                             Color.clear
-                                .aspectRatio(3, contentMode: .fit)
-                                .padding(.horizontal)
+                                .frame(height: announcementBannerHeight
+                                       + advertisementBannerHeight
+                                       + layout.bannerSpacing
+                                )
                                 .allowsHitTesting(false)
                                 .accessibilityHidden(true)
-                            AD_LargeBannerRemoteModule()
-                            
-                                .zIndex(3)
-                            Spacer()
+
+                            dashboardTiles(layout: layout)
                         }
-                        VStack {
+
+                        VStack(spacing: 0) {
+                            Color.clear
+                                .frame(
+                                    height: announcementBannerHeight + layout.bannerSpacing
+                                )
+                                .allowsHitTesting(false)
+                                .accessibilityHidden(true)
+
+                            AD_LargeBannerRemoteModule()
+                                .readSize { size in
+                                    if abs(advertisementBannerHeight - size.height) > 0.5 {
+                                        advertisementBannerHeight = size.height
+                                    }
+                                }
+                        }
+
+                        VStack(spacing: 0) {
+                            HStack {
+                                greet()
+                                Spacer()
+                            }
+
                             Announce_BannerRemoteModule(userProfile: userProfile)
-                                
-                            Spacer()
+                        }
+                        .fixedSize(horizontal: false, vertical: true)
+                        .readSize { size in
+                            if abs(announcementBannerHeight - size.height) > 0.5 {
+                                announcementBannerHeight = size.height
+                            }
                         }
                         .zIndex(2)
-                        
                     }
-                    
-
-                    
+                    // Width comes from the viewport, never a tile's changing ideal size.
+                    .frame(width: proxy.size.width)
+                    .id(ScrollAnchor.top)
+                    .padding(.bottom)
                 }
-                .padding(.bottom)
+                .scrollIndicators(.hidden)
+                .scrollBounceBehavior(.always, axes: .vertical)
+                .onScrollGeometryChange(for: CGFloat.self) { geometry in
+                    max(0, geometry.contentOffset.y + geometry.contentInsets.top)
+                } action: { _, newOffset in
+                    scrollOffset = newOffset
+                }
+                .onReceive(NotificationCenter.default.publisher(for: .scrollHomePageToTop)) { _ in
+                    withAnimation(.smooth) {
+                        scrollProxy.scrollTo(ScrollAnchor.top, anchor: .top)
+                    }
+                }
             }
         }
         .padding(.bottom, screen.height/20)
@@ -272,8 +298,8 @@ private struct DashboardLayout {
         screenSize.height
     }
     
-    var outerSpacing: CGFloat {
-        screenHeight * 0.018
+    var bannerSpacing: CGFloat {
+        screenHeight / 30
     }
     
     var gridSpacing: CGFloat {
@@ -289,121 +315,5 @@ private struct DashboardLayout {
     
     var largeTileHeight: CGFloat {
         smallTileHeight * 2 + gridSpacing
-    }
-}
-
-private struct UIKitOffsetScrollView<Content: View>: UIViewControllerRepresentable {
-    @Binding var offset: CGFloat
-    let content: Content
-    
-    init(
-        offset: Binding<CGFloat>,
-        @ViewBuilder content: () -> Content
-    ) {
-        self._offset = offset
-        self.content = content()
-    }
-    
-    func makeUIViewController(context: Context) -> Controller {
-        let controller = Controller(rootView: content)
-        controller.onOffsetChange = { value in
-            offset = max(value, 0)
-        }
-        return controller
-    }
-    
-    func updateUIViewController(_ controller: Controller, context: Context) {
-        controller.update(rootView: content)
-        controller.onOffsetChange = { value in
-            offset = max(value, 0)
-        }
-    }
-    
-    final class Controller: UIViewController, UIScrollViewDelegate {
-        
-        let scrollView = UIScrollView()
-        let hostingController: UIHostingController<Content>
-        
-        var onOffsetChange: ((CGFloat) -> Void)?
-        var scrollToTopObserver: NSObjectProtocol?
-        
-        init(rootView: Content) {
-            self.hostingController = UIHostingController(rootView: rootView)
-            super.init(nibName: nil, bundle: nil)
-        }
-        
-        @available(*, unavailable)
-        required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-        
-        override func viewDidLoad() {
-            super.viewDidLoad()
-            
-            view.backgroundColor = .clear
-            
-            scrollView.backgroundColor = .clear
-            scrollView.alwaysBounceVertical = true
-            scrollView.showsVerticalScrollIndicator = false
-            scrollView.delegate = self
-            scrollView.translatesAutoresizingMaskIntoConstraints = false
-            
-            scrollToTopObserver = NotificationCenter.default.addObserver(
-                forName: .scrollHomePageToTop,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                self?.scrollToTop(animated: true)
-            }
-            
-            view.addSubview(scrollView)
-            
-            NSLayoutConstraint.activate([
-                scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-                scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-            ])
-            
-            addChild(hostingController)
-            hostingController.view.backgroundColor = .clear
-            hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-            scrollView.addSubview(hostingController.view)
-            hostingController.didMove(toParent: self)
-            
-            NSLayoutConstraint.activate([
-                hostingController.view.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-                hostingController.view.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
-                hostingController.view.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-                hostingController.view.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
-                hostingController.view.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
-            ])
-        }
-        
-        deinit {
-            if let scrollToTopObserver {
-                NotificationCenter.default.removeObserver(scrollToTopObserver)
-            }
-        }
-        
-        private func scrollToTop(animated: Bool) {
-            let topOffset = CGPoint(
-                x: 0,
-                y: -scrollView.adjustedContentInset.top
-            )
-            
-            scrollView.setContentOffset(
-                topOffset,
-                animated: animated
-            )
-        }
-        
-        func update(rootView: Content) {
-            hostingController.rootView = rootView
-        }
-        
-        func scrollViewDidScroll(_ scrollView: UIScrollView) {
-            onOffsetChange?(scrollView.contentOffset.y)
-        }
     }
 }

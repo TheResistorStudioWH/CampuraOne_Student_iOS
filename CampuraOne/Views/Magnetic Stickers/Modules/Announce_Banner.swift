@@ -8,6 +8,7 @@
 
 import SwiftUI
 import PetaKitUIX
+import PetaToolKit
 import SwiftData
 
 #Preview("app - 已登录") {
@@ -111,21 +112,13 @@ struct Announce_BannerModule: View {
         }
         .padding(.horizontal)
         .fixedSize(horizontal: false, vertical: true)
-        .background {
-            GeometryReader { geometry in
-                Color.clear.preference(
-                    key: CollapsedAnnouncementHeightKey.self,
-                    value: geometry.size.height
-                )
+        .readSize { size in
+            // Keep the banner's place in the scroll layout when the notice opens.
+            if !isExpand, size.height > 0, abs(size.height - collapsedHeight) > 0.5 {
+                collapsedHeight = size.height
             }
         }
         .frame(height: collapsedHeight > 0 ? collapsedHeight : nil, alignment: .top)
-        .onPreferenceChange(CollapsedAnnouncementHeightKey.self) { height in
-            // Keep the banner's place in the scroll layout when the notice opens.
-            if !isExpand, height > 0, abs(height - collapsedHeight) > 0.5 {
-                collapsedHeight = height
-            }
-        }
         .onChange(of: isExpand) {
             if !isExpand {
                 showMore = false
@@ -320,14 +313,6 @@ struct Announce_BannerModule: View {
             isExpand.toggle()
         }
         .buttonStyle(.plain)
-    }
-}
-
-private struct CollapsedAnnouncementHeightKey: PreferenceKey {
-    static var defaultValue: CGFloat = 0
-
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-        value = nextValue()
     }
 }
 

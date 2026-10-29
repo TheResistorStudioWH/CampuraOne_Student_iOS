@@ -12,6 +12,8 @@
 		0B6FF15F2FC45C360002559F /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 0B6FF15E2FC45C360002559F /* SwiftyJSON */; };
 		0B6FF1622FC45C820002559F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 0B6FF1612FC45C820002559F /* Alamofire */; };
 		0B8303262FDF0D7300B5269A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0B8303212FDF0D7300B5269A /* Assets.xcassets */; };
+		CA1029000000000000000201 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = CA1029000000000000000200 /* AppIcon.icon */; };
+		CA1029000000000000000202 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = CA1029000000000000000200 /* AppIcon.icon */; };
 		0B8303282FDF0D7300B5269A /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8302E32FDF0D7300B5269A /* APIClient.swift */; };
 		0B8303292FDF0D7300B5269A /* APIConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8302E42FDF0D7300B5269A /* APIConfig.swift */; };
 		0B83032A2FDF0D7300B5269A /* RemoteDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8302E72FDF0D7300B5269A /* RemoteDataService.swift */; };
@@ -167,6 +169,7 @@
 		0B83031D2FDF0D7300B5269A /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		0B83031F2FDF0D7300B5269A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0B8303212FDF0D7300B5269A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CA1029000000000000000200 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		0B8303222FDF0D7300B5269A /* CampuraOneApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampuraOneApp.swift; sourceTree = "<group>"; };
 		0B8303232FDF0D7300B5269A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0B8303242FDF0D7300B5269A /* PreviewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContainer.swift; sourceTree = "<group>"; };
@@ -260,11 +263,28 @@
 		0B3F59302FC3380E00980B94 = {
 			isa = PBXGroup;
 			children = (
+				CA1029000000000000000203 /* Design */,
 				CA1029000000000000000003 /* WatchUITests */,
 				CA1028000000000000000003 /* CampuraOneWatch */,
 				0B3F593A2FC3380E00980B94 /* Products */,
 				0B8303252FDF0D7300B5269A /* CampuraOne */,
 			);
+			sourceTree = "<group>";
+		};
+		CA1029000000000000000203 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				CA1029000000000000000204 /* StudentAppIcon */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
+		CA1029000000000000000204 /* StudentAppIcon */ = {
+			isa = PBXGroup;
+			children = (
+				CA1029000000000000000200 /* AppIcon.icon */,
+			);
+			path = StudentAppIcon;
 			sourceTree = "<group>";
 		};
 		0B3F593A2FC3380E00980B94 /* Products */ = {
@@ -660,6 +680,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B8303262FDF0D7300B5269A /* Assets.xcassets in Resources */,
+				CA1029000000000000000201 /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -667,6 +688,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA1029000000000000000202 /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -985,6 +1007,7 @@
 		CA1028000000000000000008 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1016,6 +1039,7 @@
 		CA1028000000000000000009 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
