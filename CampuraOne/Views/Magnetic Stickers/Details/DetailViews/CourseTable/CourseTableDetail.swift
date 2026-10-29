@@ -1,4 +1,5 @@
 import SwiftUI
+import PetaKitUIX
 import SwiftData
 
 struct CourseTableDetail: DashboardDetailContent {
@@ -69,16 +70,22 @@ struct CourseTableDetail: DashboardDetailContent {
     private func dateSidebar(width: CGFloat) -> some View {
         GeometryReader { geometry in
             VStack(alignment: .leading, spacing: 8) {
-                dateSelector
-                    .frame(maxWidth: .infinity)
+                dateSelector(width: width)
+                railButton(color: .blue, width: width) {
+                    selectedDate = calendar.startOfDay(for: Date())
+                } label: {
+                    VStack(spacing: 2) {
+                        Image(systemName: "calendar.badge.clock")
+                            .symbolRenderingMode(.multicolor)
+                            .font(.system(size: 19, weight: .semibold))
+                        Text("今天")
+                            .font(.system(size: 10, weight: .semibold))
+                    }
+                    .foregroundStyle(.blue)
+                }
+                .accessibilityLabel("回到今天")
                 CourseDateRail(selectedDate: $selectedDate, width: width)
                     .frame(maxHeight: .infinity)
-                Button("今天") { selectedDate = calendar.startOfDay(for: Date()) }
-                    .font(.caption.weight(.semibold))
-                    .frame(maxWidth: .infinity, minHeight: 36)
-                    .opacity(calendar.isDateInToday(selectedDate) ? 0 : 1)
-                    .allowsHitTesting(!calendar.isDateInToday(selectedDate))
-                    .accessibilityHidden(calendar.isDateInToday(selectedDate))
             }
             .padding(.top, geometry.size.height * 0.04)
             .padding(.bottom, geometry.size.height * 0.02)
@@ -86,14 +93,15 @@ struct CourseTableDetail: DashboardDetailContent {
         .frame(width: width)
     }
 
-    private var dateSelector: some View {
-        Button { showsDatePicker = true } label: {
+    private func dateSelector(width: CGFloat) -> some View {
+        railButton(color: .red, width: width) {
+            showsDatePicker = true
+        } label: {
             Image(systemName: "calendar")
-                .font(.title3.weight(.semibold))
-                .frame(width: 44, height: 44)
-                .background(.thinMaterial, in: Circle())
+                .symbolRenderingMode(.multicolor)
+                .font(.system(size: 21, weight: .semibold))
+                .foregroundStyle(.red)
         }
-        .buttonStyle(.plain)
         .accessibilityLabel("选择日程日期")
         .popover(isPresented: $showsDatePicker, arrowEdge: .leading) {
             VStack(spacing: 12) {
@@ -115,8 +123,26 @@ struct CourseTableDetail: DashboardDetailContent {
         }
     }
 
+    private func railButton<Label: View>(
+        color: Color,
+        width: CGFloat,
+        action: @escaping () -> Void,
+        @ViewBuilder label: () -> Label
+    ) -> some View {
+        label()
+            .frame(width: width, height: width)
+            .background(color.opacity(0.14), in: UnevenRoundedRectangle(
+                topLeadingRadius: 0,
+                bottomLeadingRadius: 0,
+                bottomTrailingRadius: 13,
+                topTrailingRadius: 13
+            ))
+            .beButton(action)
+            .buttonStyle(.plain)
+    }
+
     private var dayHeading: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        HStack(spacing: 8) {
             dateLabel
             lessonCount
         }
@@ -125,7 +151,8 @@ struct CourseTableDetail: DashboardDetailContent {
     private var dateLabel: some View {
         Text(selectedDate.formatted(.dateTime.year().month().day().locale(Locale(identifier: "zh_CN"))))
             .font(.title2)
-            .fixedSize(horizontal: false, vertical: true)
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
     }
 
     private var lessonCount: some View {

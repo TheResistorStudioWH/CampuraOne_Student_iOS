@@ -1,4 +1,6 @@
 import SwiftUI
+import PetaKitUIX
+import PetaToolKit
 import MarkdownUI
 
 /// 重要通知的列表和阅读页；入口留在通知磁贴中。

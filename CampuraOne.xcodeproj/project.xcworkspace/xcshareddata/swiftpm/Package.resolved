@@ -1,5 +1,5 @@
 {
-  "originHash" : "76a2a5a14e0d86a641106dd196656b060fe5db218de8b8317136c7dd040f3864",
+  "originHash" : "b47504d1cd19bf21a27610539cbdb56afbe6daba421f29cfdd31bdb4b423bc00",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -20,6 +20,15 @@
       }
     },
     {
+      "identity" : "devicekit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/devicekit/DeviceKit.git",
+      "state" : {
+        "revision" : "19528aa07e1426626ea9fb2c4a161edf43c4f9e8",
+        "version" : "5.9.0"
+      }
+    },
+    {
       "identity" : "networkimage",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/gonzalezreal/NetworkImage",
@@ -35,6 +44,24 @@
       "state" : {
         "revision" : "2282f6aea2d7c701687caac627547b01b3be1309",
         "version" : "0.1.1"
+      }
+    },
+    {
+      "identity" : "petakituix",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PetaHertZ-Studio/PetaKitUIX.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "3acaa34c0b5cb452d368ff2e278d8ef4062f5ad7"
+      }
+    },
+    {
+      "identity" : "petatoolkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PetaHertZ-Studio/PetaToolKit.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "95af40b25122ff5377d1d95249b8c852cb6da7ee"
       }
     },
     {

@@ -74,15 +74,15 @@
 				<key>location-parameters</key>
 				<dict>
 					<key>EndingColumnNumber</key>
-					<string>24</string>
+					<string>5</string>
 					<key>EndingLineNumber</key>
 					<string>36</string>
 					<key>StartingColumnNumber</key>
-					<string>12</string>
+					<string>5</string>
 					<key>StartingLineNumber</key>
 					<string>36</string>
 					<key>Timestamp</key>
-					<string>803217156.672452</string>
+					<string>814942027.6790479</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -98,15 +98,15 @@
 			<key>text-context</key>
 			<dict>
 				<key>focused</key>
-				<string>///真实热度字段接入前</string>
+				<string></string>
 				<key>leading</key>
-				<string>        switch mode {
-        case .hot:
-            </string>
+				<string>            })
+        )
+    }</string>
 				<key>trailing</key>
-				<string>，暂时用“越接近结束越靠前”占位。
-            return viewModel.items.sorted {
-                ($0.endTime ?? .distantFuture) &lt; ($1.endTime ?? .distantFuture)
+				<string>
+    
+    private var displayedEvents: [SaleEvent] {
 </string>
 			</dict>
 			<key>type</key>

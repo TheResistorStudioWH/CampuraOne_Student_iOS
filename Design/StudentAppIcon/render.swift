@@ -85,49 +85,40 @@ private func ring(_ context: CGContext) {
 }
 
 private func leaves(_ context: CGContext) {
-    // Five broad, filled lobes fan across the C's upper-left curve.
-    func leaf(_ start: CGPoint, _ tip: CGPoint,
-              _ upper1: CGPoint, _ upper2: CGPoint,
-              _ lower1: CGPoint, _ lower2: CGPoint) -> CGPath {
-        let path = CGMutablePath()
-        path.move(to: start)
-        path.addCurve(to: tip, control1: upper1, control2: upper2)
-        path.addCurve(to: start, control1: lower1, control2: lower2)
-        path.closeSubpath()
-        return path
-    }
-    let blades = [
-        leaf(CGPoint(x: 275, y: 285), CGPoint(x: 151, y: 501),
-             CGPoint(x: 209, y: 320), CGPoint(x: 158, y: 427),
-             CGPoint(x: 223, y: 457), CGPoint(x: 280, y: 360)),
-        leaf(CGPoint(x: 252, y: 310), CGPoint(x: 178, y: 210),
-             CGPoint(x: 198, y: 282), CGPoint(x: 177, y: 243),
-             CGPoint(x: 230, y: 207), CGPoint(x: 283, y: 267)),
-        leaf(CGPoint(x: 258, y: 306), CGPoint(x: 326, y: 134),
-             CGPoint(x: 258, y: 231), CGPoint(x: 291, y: 157),
-             CGPoint(x: 374, y: 168), CGPoint(x: 331, y: 268)),
-        leaf(CGPoint(x: 255, y: 311), CGPoint(x: 536, y: 166),
-             CGPoint(x: 315, y: 222), CGPoint(x: 436, y: 113),
-             CGPoint(x: 559, y: 211), CGPoint(x: 379, y: 279)),
-        leaf(CGPoint(x: 231, y: 315), CGPoint(x: 439, y: 363),
-             CGPoint(x: 299, y: 293), CGPoint(x: 391, y: 331),
-             CGPoint(x: 406, y: 404), CGPoint(x: 309, y: 391))
+    // A strawberry-like calyx: six broad pointed sepals share one short crown.
+    // Their tips follow the C's upper-left curve, with no stem or outline.
+    let crown = CGPoint(x: 275, y: 252)
+    let clockwiseRotation: CGFloat = 30
+    let sepals: [(angle: CGFloat, length: CGFloat, width: CGFloat)] = [
+        (-68, 139, 30),
+        (-35, 179, 33),
+        (-4, 236, 36),
+        (26, 225, 38),
+        (56, 200, 36),
+        (86, 184, 32)
     ]
     context.saveGState()
     context.setFillColor(color(0xBFFB8B))
-    for blade in blades {
-        context.addPath(blade)
+    for sepal in sepals {
+        let angle = (sepal.angle + clockwiseRotation) * .pi / 180
+        let direction = CGPoint(x: cos(angle), y: sin(angle))
+        let normal = CGPoint(x: -direction.y, y: direction.x)
+        func point(_ along: CGFloat, _ across: CGFloat) -> CGPoint {
+            CGPoint(x: crown.x + direction.x * along + normal.x * across,
+                    y: crown.y + direction.y * along + normal.y * across)
+        }
+        let path = CGMutablePath()
+        path.move(to: point(0, 0))
+        path.addCurve(to: point(sepal.length, 0),
+                      control1: point(sepal.length * 0.27, sepal.width * 0.92),
+                      control2: point(sepal.length * 0.69, sepal.width * 1.18))
+        path.addCurve(to: point(0, 0),
+                      control1: point(sepal.length * 0.69, -sepal.width * 1.18),
+                      control2: point(sepal.length * 0.27, -sepal.width * 0.92))
+        path.closeSubpath()
+        context.addPath(path)
         context.fillPath()
     }
-    context.setStrokeColor(color(0x151B2C))
-    context.setLineWidth(7)
-    context.setLineCap(.round)
-    context.beginPath()
-    context.move(to: CGPoint(x: 292, y: 281))
-    context.addCurve(to: CGPoint(x: 428, y: 236),
-                     control1: CGPoint(x: 340, y: 248),
-                     control2: CGPoint(x: 390, y: 221))
-    context.strokePath()
     context.restoreGState()
 }
 

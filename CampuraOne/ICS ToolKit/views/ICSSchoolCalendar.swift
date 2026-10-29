@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PetaKitUIX
 import SwiftData
 
 #Preview("app - 已登录") {
@@ -213,21 +214,19 @@ struct ICSSchoolCalendarMini: View {
                     .contentShape(Rectangle())
                     .onTapGesture(perform: onOpen)
             } else {
-                Button(action: onOpen) {
-                    selectedDateHeader
-                }
-                .buttonStyle(.plain)
+                selectedDateHeader
+                    .beButton(onOpen)
+                    .buttonStyle(.plain)
 
                 SchoolCalendarDateWheel(selection: $selectedDate, calendar: calendar) { day in
                     events.contains { $0.occurs(on: day) }
                 }
 
-                Button(action: onOpen) {
-                    weekEventList
-                }
-                .buttonStyle(.plain)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                .accessibilityHint("打开完整校历")
+                weekEventList
+                    .beButton(onOpen)
+                    .buttonStyle(.plain)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                    .accessibilityHint("打开完整校历")
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)

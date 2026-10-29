@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import PetaToolKit
+import PetaKitUIX
 import SwiftData
 
 #Preview("搜索结果 - 智能") {

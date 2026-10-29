@@ -1,4 +1,5 @@
 import SwiftUI
+import PetaToolKit
 
 enum DashboardNotificationPreference: String, CaseIterable, Identifiable {
     case off

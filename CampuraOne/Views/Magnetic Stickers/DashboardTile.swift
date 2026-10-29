@@ -1,4 +1,6 @@
 import SwiftUI
+import PetaKitUIX
+import PetaToolKit
 
 struct DashboardTileDescriptor {
     let id: String

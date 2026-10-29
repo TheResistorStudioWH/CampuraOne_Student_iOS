@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0B05CA57308F732700C604AE /* CamapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0B05CA56308F732700C604AE /* CamapKit */; };
 		0B12AC872FDFC72500ECFC94 /* SalesLineDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B12AC862FDFC71C00ECFC94 /* SalesLineDetail.swift */; };
-		0B3F59592FC338D800980B94 /* #PetaToolKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3F59582FC338D800980B94 /* #PetaToolKit.swift */; };
 		0B6FF15F2FC45C360002559F /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 0B6FF15E2FC45C360002559F /* SwiftyJSON */; };
 		0B6FF1622FC45C820002559F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 0B6FF1612FC45C820002559F /* Alamofire */; };
 		0B8303262FDF0D7300B5269A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0B8303212FDF0D7300B5269A /* Assets.xcassets */; };
@@ -84,6 +83,10 @@
 		CA1028000000000000000019 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = CA102800000000000000000A /* Alamofire */; };
 		CA102800000000000000001A /* CampuraOneWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = CA1028000000000000000002 /* CampuraOneWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		CA1028000000000000000022 /* ImportantAnnouncementsDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1028000000000000000021 /* ImportantAnnouncementsDetail.swift */; };
+		CA1029000000000000000107 /* PetaToolKit in Frameworks */ = {isa = PBXBuildFile; productRef = CA1029000000000000000103 /* PetaToolKit */; };
+		CA1029000000000000000108 /* PetaKitUIX in Frameworks */ = {isa = PBXBuildFile; productRef = CA1029000000000000000104 /* PetaKitUIX */; };
+		CA1029000000000000000109 /* PetaToolKit in Frameworks */ = {isa = PBXBuildFile; productRef = CA1029000000000000000105 /* PetaToolKit */; };
+		CA102900000000000000010A /* PetaKitWatchUIX in Frameworks */ = {isa = PBXBuildFile; productRef = CA1029000000000000000106 /* PetaKitWatchUIX */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,7 +123,6 @@
 /* Begin PBXFileReference section */
 		0B12AC862FDFC71C00ECFC94 /* SalesLineDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalesLineDetail.swift; sourceTree = "<group>"; };
 		0B3F59392FC3380E00980B94 /* CampuraOne.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CampuraOne.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		0B3F59582FC338D800980B94 /* #PetaToolKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "#PetaToolKit.swift"; sourceTree = "<group>"; };
 		0B8302DF2FDF0D7300B5269A /* AnnouncementListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementListView.swift; sourceTree = "<group>"; };
 		0B8302E02FDF0D7300B5269A /* MainShopListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainShopListViewModel.swift; sourceTree = "<group>"; };
 		0B8302E12FDF0D7300B5269A /* UserProfileDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileDemo.swift; sourceTree = "<group>"; };
@@ -183,8 +185,8 @@
 		CA1028000000000000000002 /* CampuraOneWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CampuraOneWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA102800000000000000000E /* CourseScheduleResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseScheduleResolver.swift; sourceTree = "<group>"; };
 		CA1028000000000000000010 /* SchoolCalendarCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolCalendarCore.swift; sourceTree = "<group>"; };
-		CA1029000000000000000002 /* WatchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WatchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA1028000000000000000021 /* ImportantAnnouncementsDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportantAnnouncementsDetail.swift; sourceTree = "<group>"; };
+		CA1029000000000000000002 /* WatchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WatchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -230,6 +232,8 @@
 				0B6FF1622FC45C820002559F /* Alamofire in Frameworks */,
 				0B05CA57308F732700C604AE /* CamapKit in Frameworks */,
 				0BE0CEB32FD9573B009CB551 /* PagingView in Frameworks */,
+				CA1029000000000000000107 /* PetaToolKit in Frameworks */,
+				CA1029000000000000000108 /* PetaKitUIX in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,6 +242,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				CA1028000000000000000019 /* Alamofire in Frameworks */,
+				CA1029000000000000000109 /* PetaToolKit in Frameworks */,
+				CA102900000000000000010A /* PetaKitWatchUIX in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,7 +262,6 @@
 			children = (
 				CA1029000000000000000003 /* WatchUITests */,
 				CA1028000000000000000003 /* CampuraOneWatch */,
-				0B3F59582FC338D800980B94 /* #PetaToolKit.swift */,
 				0B3F593A2FC3380E00980B94 /* Products */,
 				0B8303252FDF0D7300B5269A /* CampuraOne */,
 			);
@@ -544,6 +549,8 @@
 				0BC584C62FCFC34C0005B84E /* MarkdownUI */,
 				0BE0CEB22FD9573B009CB551 /* PagingView */,
 				0B05CA56308F732700C604AE /* CamapKit */,
+				CA1029000000000000000103 /* PetaToolKit */,
+				CA1029000000000000000104 /* PetaKitUIX */,
 			);
 			productName = CampuraOne;
 			productReference = 0B3F59392FC3380E00980B94 /* CampuraOne.app */;
@@ -567,6 +574,8 @@
 			name = CampuraOneWatch;
 			packageProductDependencies = (
 				CA102800000000000000000A /* Alamofire */,
+				CA1029000000000000000105 /* PetaToolKit */,
+				CA1029000000000000000106 /* PetaKitWatchUIX */,
 			);
 			productName = CampuraOneWatch;
 			productReference = CA1028000000000000000002 /* CampuraOneWatch.app */;
@@ -630,6 +639,8 @@
 				0BC584C52FCFC34C0005B84E /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				0BE0CEB12FD9573B009CB551 /* XCRemoteSwiftPackageReference "PagingView" */,
 				0B05CA55308F732700C604AE /* XCRemoteSwiftPackageReference "CampuraOne_Camap_SDK" */,
+				CA1029000000000000000101 /* XCRemoteSwiftPackageReference "PetaToolKit" */,
+				CA1029000000000000000102 /* XCRemoteSwiftPackageReference "PetaKitUIX" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0B3F593A2FC3380E00980B94 /* Products */;
@@ -726,7 +737,6 @@
 				CA1028000000000000000022 /* ImportantAnnouncementsDetail.swift in Sources */,
 				0B8303572FDF0D7300B5269A /* MapView.swift in Sources */,
 				0B8303582FDF0D7300B5269A /* Data-Announce.swift in Sources */,
-				0B3F59592FC338D800980B94 /* #PetaToolKit.swift in Sources */,
 				CA1027000000000000000001 /* DashboardTile.swift in Sources */,
 				CA1027000000000000000003 /* DashboardDetailPresentation.swift in Sources */,
 				CA1027000000000000000005 /* DashboardTileNotificationSettings.swift in Sources */,
@@ -1110,6 +1120,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		CA1029000000000000000101 /* XCRemoteSwiftPackageReference "PetaToolKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/PetaHertZ-Studio/PetaToolKit.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		CA1029000000000000000102 /* XCRemoteSwiftPackageReference "PetaKitUIX" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/PetaHertZ-Studio/PetaKitUIX.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		0B05CA55308F732700C604AE /* XCRemoteSwiftPackageReference "CampuraOne_Camap_SDK" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TheResistorStudioWH/CampuraOne_Camap_SDK.git";
@@ -1183,6 +1209,10 @@
 			package = 0B6FF1602FC45C820002559F /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
+		CA1029000000000000000103 /* PetaToolKit */ = {isa = XCSwiftPackageProductDependency; package = CA1029000000000000000101 /* XCRemoteSwiftPackageReference "PetaToolKit" */; productName = PetaToolKit; };
+		CA1029000000000000000104 /* PetaKitUIX */ = {isa = XCSwiftPackageProductDependency; package = CA1029000000000000000102 /* XCRemoteSwiftPackageReference "PetaKitUIX" */; productName = PetaKitUIX; };
+		CA1029000000000000000105 /* PetaToolKit */ = {isa = XCSwiftPackageProductDependency; package = CA1029000000000000000101 /* XCRemoteSwiftPackageReference "PetaToolKit" */; productName = PetaToolKit; };
+		CA1029000000000000000106 /* PetaKitWatchUIX */ = {isa = XCSwiftPackageProductDependency; package = CA1029000000000000000102 /* XCRemoteSwiftPackageReference "PetaKitUIX" */; productName = PetaKitWatchUIX; };
 /* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0B3F59312FC3380E00980B94 /* Project object */;

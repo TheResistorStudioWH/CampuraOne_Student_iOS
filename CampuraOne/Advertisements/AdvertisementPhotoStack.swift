@@ -1,4 +1,6 @@
 import SwiftUI
+import PetaToolKit
+import PetaKitUIX
 
 /// A Messages-style pile shared by the small tile and the wide banner.
 /// Swiping browses the pile in place; tapping opens the full-screen photo browser.
@@ -245,7 +247,7 @@ private struct AdvertisementPhotoViewer: View {
                 Text("\(ids.count) 张图片")
                     .font(.subheadline.weight(.semibold))
                 Spacer()
-                Button("完成") { dismiss() }
+                Text("完成").beButton { dismiss() }
             }
             .tint(.white)
             .foregroundStyle(.white)

@@ -1,4 +1,5 @@
 import SwiftUI
+import PetaKitWatchUIX
 
 enum WatchCalendarMode: String, CaseIterable, Identifiable {
     case list, day, week, month
@@ -48,7 +49,8 @@ struct WatchCalendarView: View {
                     VStack(spacing: 12) {
                         Image(systemName: "wifi.exclamationmark").font(.title2).foregroundStyle(.secondary)
                         Text(error).font(.footnote).multilineTextAlignment(.center)
-                        Button("重试") { Task { await store.refresh() } }
+                        Text("重试")
+                            .beButton { Task { await store.refresh() } }
                     }.padding(.vertical)
                 }
             } else {
@@ -63,7 +65,7 @@ struct WatchCalendarView: View {
             }
             if !Calendar.current.isDateInToday(selectedDate) || mode == .list {
                 ToolbarItem(placement: .bottomBar) {
-                    Button("今天") {
+                    Text("今天").beButton {
                         selectedDate = Date()
                         dayAnchor = UUID()
                     }
@@ -76,7 +78,7 @@ struct WatchCalendarView: View {
             NavigationStack {
                 Form {
                     DatePicker("日期", selection: $selectedDate, displayedComponents: .date)
-                    Button("完成") { showDatePicker = false; dayAnchor = UUID() }
+                    Text("完成").beButton { showDatePicker = false; dayAnchor = UUID() }
                 }.navigationTitle("选择日期")
             }
         }

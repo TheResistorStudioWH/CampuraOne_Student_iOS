@@ -1,4 +1,6 @@
 import SwiftUI
+import PetaToolKit
+
 
 /// Continuous date scrubber. Tick geometry stays fixed while the touch lens grows,
 /// so magnification never changes the date under the finger.

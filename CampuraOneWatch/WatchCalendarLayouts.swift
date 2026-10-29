@@ -1,4 +1,5 @@
 import SwiftUI
+import PetaKitWatchUIX
 
 struct WatchAgendaView: View {
     let kind: WatchCalendarKind
@@ -19,9 +20,8 @@ struct WatchAgendaView: View {
         ScrollViewReader { proxy in
             List {
                 if let status { Text(status).font(.caption2).foregroundStyle(.secondary) }
-                Button(action: onSelectDate) {
-                    Label("选择日期", systemImage: "calendar")
-                }
+                Label("选择日期", systemImage: "calendar")
+                    .beButton(onSelectDate)
                 if groups.isEmpty {
                     Text("暂无安排").foregroundStyle(.secondary)
                 }

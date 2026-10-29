@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import PetaToolKit
+import PetaKitUIX
 import SwiftData
 
 #Preview("app - 已登录") {
@@ -478,7 +480,8 @@ private struct SearchHistoryList: View {
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
                 Spacer()
-                Button("全部清除", action: onDeleteAll)
+                Text("全部清除")
+                    .beButton(onDeleteAll)
                     .font(.caption)
                     .buttonStyle(.plain)
             }
@@ -798,13 +801,12 @@ struct SearchField: View {
                 .padding(.leading)
 
             if !text.isEmpty {
-                Button(action: onClear) {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(.secondary)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("清除搜索内容")
+                Image(systemName: "xmark.circle.fill")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(.secondary)
+                    .beButton(onClear)
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("清除搜索内容")
             }
             
             SearchButton(

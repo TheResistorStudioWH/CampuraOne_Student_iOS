@@ -1,4 +1,5 @@
 import SwiftUI
+import PetaToolKit
 
 enum DashboardDetailChrome {
     static let controlsWidth: CGFloat = 52

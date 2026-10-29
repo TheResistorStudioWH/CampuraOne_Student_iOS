@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PetaToolKit
 import SwiftData
 
 #Preview("app - 已登录") {

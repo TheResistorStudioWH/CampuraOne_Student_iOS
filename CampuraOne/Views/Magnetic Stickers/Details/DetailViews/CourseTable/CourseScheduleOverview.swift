@@ -1,4 +1,6 @@
 import SwiftUI
+import PetaToolKit
+import PetaKitUIX
 import UIKit
 
 struct CourseScheduleTags: View {
@@ -291,7 +293,8 @@ private struct CourseTimelineCard: View {
                     HStack(alignment: .top, spacing: 3) {
                         Text(event.title).font(.subheadline.bold()).lineLimit(2)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        Button(action: onAdd) { Image(systemName: "calendar.badge.plus").font(.caption) }
+                        Image(systemName: "calendar.badge.plus").font(.caption)
+                            .beButton(onAdd)
                             .buttonStyle(.plain)
                             .accessibilityLabel("添加\(event.title)到系统日历")
                     }

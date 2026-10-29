@@ -4,6 +4,8 @@
 //
 
 import SwiftUI
+import PetaKitUIX
+import PetaToolKit
 
 #Preview {
     StudentLoginConfirmView(user: .init(userID: 1, userName: "userName"), student: .init(studentID: 1, studentName: "studentName", schoolID: 1, compoundID: 1, departmentID: 1, classID: 1)) {

@@ -1,15 +1,11 @@
 {
   "fill" : {
-    "solid" : "srgb:0.08235,0.10588,0.17255,1.00000"
+    "solid" : "display-p3:0.06170,0.16499,0.28314,1.00000"
   },
   "groups" : [
     {
       "layers" : [
-        {
-          "glass" : false,
-          "image-name" : "02-heading.png",
-          "name" : "Heading"
-        }
+
       ],
       "shadow" : {
         "kind" : "neutral",
@@ -22,37 +18,53 @@
       }
     },
     {
+      "blur-material" : 0.5,
       "layers" : [
         {
           "blend-mode" : "normal",
-          "fill" : {
-            "linear-gradient" : [
-              "display-p3:0.59080,1.00000,0.75452,1.00000",
-              "display-p3:0.77486,0.96611,0.46996,1.00000"
-            ],
-            "orientation" : {
-              "start" : {
-                "x" : 0,
-                "y" : 0.32206862391930835
-              },
-              "stop" : {
-                "x" : 1,
-                "y" : 0.2008735590778098
-              }
+          "fill-specializations" : [
+            {
+              "value" : "none"
+            },
+            {
+              "appearance" : "dark",
+              "value" : "none"
             }
-          },
-          "glass" : true,
+          ],
+          "glass-specializations" : [
+            {
+              "value" : true
+            },
+            {
+              "idiom" : "square",
+              "value" : true
+            }
+          ],
           "image-name" : "03b-leaves.png",
-          "name" : "Solid leaves",
+          "name" : "Strawberry calyx",
           "position" : {
             "scale" : 1,
             "translation-in-points" : [
-              -28.3828125,
-              -23.09375
+              -52.09375,
+              2.15625
             ]
           }
-        },
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.25
+      },
+      "specular" : true,
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.25
+      }
+    },
+    {
+      "layers" : [
         {
+          "glass" : true,
           "image-name" : "03-outer-arc.png",
           "name" : "Provisional outer arc"
         }
@@ -73,6 +85,11 @@
           "glass" : false,
           "image-name" : "04-location.png",
           "name" : "Current location"
+        },
+        {
+          "glass" : false,
+          "image-name" : "02-heading.png",
+          "name" : "Heading"
         }
       ],
       "shadow" : {
