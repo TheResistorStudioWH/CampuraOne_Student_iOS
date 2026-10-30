@@ -332,7 +332,7 @@ struct ToolDrawerButton: View {
                         isExpand.toggle()
                     }
                 }
-                TapSoft()
+                Haptics.play(.soft)
             }
             .buttonStyle(.plain)
             .accessibilityLabel(isExpand ? "收起实用工具" : "展开实用工具")

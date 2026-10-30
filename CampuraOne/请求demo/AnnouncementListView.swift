@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PetaKitUIX
 import Combine
 import MarkdownUI
 
@@ -39,7 +40,7 @@ struct AnnouncementListView: View {
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                         
-                        Button("重新加载") {
+                        Text("重新加载").beButton {
                             Task {
                                 await vm.load()
                             }

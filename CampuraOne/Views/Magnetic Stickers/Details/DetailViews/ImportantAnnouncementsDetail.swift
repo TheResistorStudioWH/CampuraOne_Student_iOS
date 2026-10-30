@@ -58,7 +58,7 @@ struct MarkdownAnnouncementsSheet: View {
                         LazyVStack(spacing: 14) {
                             ForEach(activeNotices) { notice in
                                 ImportantNoticeCard(notice: notice)
-                                    .jumpView(to: reader(for: notice.announceID))
+                                    .naviLink(to: reader(for: notice.announceID))
                                     .buttonStyle(.plain)
                             }
                         }

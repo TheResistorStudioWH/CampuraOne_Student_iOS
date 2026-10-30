@@ -146,52 +146,51 @@ struct CourseWeekGrid: View {
     private func dayColumn(_ date: Date, events: [ICSEventItem], width: CGFloat) -> some View {
         let today = calendar.isDateInToday(date)
         let selected = calendar.isDate(date, inSameDayAs: selectedDate)
-        return Button {
-            selectedDate = calendar.startOfDay(for: date)
-            TapSoft()
-        } label: {
-            VStack(spacing: 0) {
-                VStack(spacing: 6) {
-                    Text(date.formatted(.dateTime.weekday(.abbreviated).locale(Locale(identifier: "en_US"))).uppercased())
-                        .font(.caption2.weight(.semibold))
-                    daySymbol(date)
-                        .font(.title2.weight(.semibold))
-                }
-                .foregroundStyle(today ? Color.accentColor : Color.primary)
-                .frame(height: headerHeight)
+        return VStack(spacing: 0) {
+            VStack(spacing: 6) {
+                Text(date.formatted(.dateTime.weekday(.abbreviated).locale(Locale(identifier: "en_US"))).uppercased())
+                    .font(.caption2.weight(.semibold))
+                daySymbol(date)
+                    .font(.title2.weight(.semibold))
+            }
+            .foregroundStyle(today ? Color.accentColor : Color.primary)
+            .frame(height: headerHeight)
 
-                if slots.isEmpty {
-                    Text("无课").font(.caption2).foregroundStyle(.secondary)
-                        .frame(height: rowHeight)
-                } else {
-                    ForEach(slots, id: \.self) { slot in
-                        let courses = events.filter { $0.startDate.map { minute(of: $0) == slot } ?? false }
-                        VStack(alignment: .leading, spacing: 3) {
-                            ForEach(courses) { event in
-                                Text(event.title)
-                                    .font(.system(size: 11, weight: .medium))
-                                    .lineLimit(courses.count > 1 ? 1 : 3)
-                                if courses.count == 1, let location = event.location, !location.isEmpty {
-                                    Text(location).font(.system(size: 9)).foregroundStyle(.secondary).lineLimit(1)
-                                }
+            if slots.isEmpty {
+                Text("无课").font(.caption2).foregroundStyle(.secondary)
+                    .frame(height: rowHeight)
+            } else {
+                ForEach(slots, id: \.self) { slot in
+                    let courses = events.filter { $0.startDate.map { minute(of: $0) == slot } ?? false }
+                    VStack(alignment: .leading, spacing: 3) {
+                        ForEach(courses) { event in
+                            Text(event.title)
+                                .font(.system(size: 11, weight: .medium))
+                                .lineLimit(courses.count > 1 ? 1 : 3)
+                            if courses.count == 1, let location = event.location, !location.isEmpty {
+                                Text(location).font(.system(size: 9)).foregroundStyle(.secondary).lineLimit(1)
                             }
-                            Spacer(minLength: 0)
                         }
-                        .padding(6)
-                        .frame(width: width, height: rowHeight, alignment: .topLeading)
-                        .background(alignment: .top) {
-                            Rectangle().fill(.secondary.opacity(0.12)).frame(height: 0.5)
-                        }
+                        Spacer(minLength: 0)
+                    }
+                    .padding(6)
+                    .frame(width: width, height: rowHeight, alignment: .topLeading)
+                    .background(alignment: .top) {
+                        Rectangle().fill(.secondary.opacity(0.12)).frame(height: 0.5)
                     }
                 }
             }
-            .frame(width: width)
-            .background(today ? Color.accentColor.opacity(0.13) : Color.clear,
-                        in: RoundedRectangle(cornerRadius: 12))
-            .overlay {
-                RoundedRectangle(cornerRadius: 12)
-                    .strokeBorder(selected ? Color.accentColor.opacity(0.6) : .clear, lineWidth: 1)
-            }
+        }
+        .frame(width: width)
+        .background(today ? Color.accentColor.opacity(0.13) : Color.clear,
+                    in: RoundedRectangle(cornerRadius: 12))
+        .overlay {
+            RoundedRectangle(cornerRadius: 12)
+                .strokeBorder(selected ? Color.accentColor.opacity(0.6) : .clear, lineWidth: 1)
+        }
+        .beButton {
+            selectedDate = calendar.startOfDay(for: date)
+            Haptics.play(.soft)
         }
         .buttonStyle(.plain)
         .accessibilityLabel("\(date.formatted(date: .complete, time: .omitted))，共\(events.count)节课")

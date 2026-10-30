@@ -238,11 +238,8 @@ private struct AdvertisementPhotoViewer: View {
         }
         .safeAreaInset(edge: .top) {
             HStack {
-                Button {
-                    showsGrid.toggle()
-                } label: {
-                    Image(systemName: showsGrid ? "rectangle.stack" : "square.grid.2x2")
-                }
+                Image(systemName: showsGrid ? "rectangle.stack" : "square.grid.2x2")
+                    .beButton { showsGrid.toggle() }
                 Spacer()
                 Text("\(ids.count) 张图片")
                     .font(.subheadline.weight(.semibold))

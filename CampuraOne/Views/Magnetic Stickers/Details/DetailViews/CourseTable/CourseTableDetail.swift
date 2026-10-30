@@ -108,7 +108,7 @@ struct CourseTableDetail: DashboardDetailContent {
                 DatePicker("选择日程日期", selection: $selectedDate, displayedComponents: .date)
                     .datePickerStyle(.graphical)
                     .labelsHidden()
-                Button("回到今天") {
+                Text("回到今天").beButton {
                     selectedDate = calendar.startOfDay(for: Date())
                     showsDatePicker = false
                 }
@@ -205,7 +205,7 @@ struct CourseTableDetail: DashboardDetailContent {
                 VStack(spacing: 10) {
                     Label("课表加载失败", systemImage: "exclamationmark.triangle.fill").foregroundStyle(.red)
                     Text(error).font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.center)
-                    Button("重新加载") { Task { await courseStore.load(forceRefresh: true) } }
+                    Text("重新加载").beButton { Task { await courseStore.load(forceRefresh: true) } }
                         .buttonStyle(.bordered)
                 }
                 .frame(maxWidth: .infinity, minHeight: 180)

@@ -69,7 +69,7 @@ private struct SchoolCalendarRefreshButton: View {
                 withAnimation(.snappy) {
                     action()
                 }
-                TapSucceed()
+                Haptics.play(.success)
             }
             .animation(.smooth, value: switchSymbol)
     }

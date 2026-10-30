@@ -80,37 +80,36 @@ struct SalesTimeLineDetailView: DashboardDetailContent {
     private var modePicker: some View {
         HStack(spacing: 8) {
             ForEach(SalesTimelineMode.allCases) { option in
-                Button {
+                Label(option.title, systemImage: option.systemImage)
+                    .font(.subheadline.bold())
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 9)
+                    .foregroundStyle(
+                        mode == option
+                        ? Color.primary
+                        : Color.secondary
+                    )
+                    .background {
+                        RoundedRectangle(
+                            cornerRadius: 12,
+                            style: .continuous
+                        )
+                        .fill(
+                            mode == option
+                            ? Material.regular
+                            : Material.ultraThin
+                        )
+                    }
+                .beButton {
                     if mode == option {
                         refreshID += 1
-                        TapSucceed()
+                        Haptics.play(.success)
                     } else {
                         withAnimation(.snappy) {
                             mode = option
                         }
-                        TapSoft()
+                        Haptics.play(.soft)
                     }
-                } label: {
-                    Label(option.title, systemImage: option.systemImage)
-                        .font(.subheadline.bold())
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 9)
-                        .foregroundStyle(
-                            mode == option
-                            ? Color.primary
-                            : Color.secondary
-                        )
-                        .background {
-                            RoundedRectangle(
-                                cornerRadius: 12,
-                                style: .continuous
-                            )
-                            .fill(
-                                mode == option
-                                ? Material.regular
-                                : Material.ultraThin
-                            )
-                        }
                 }
                 .buttonStyle(.plain)
                 .accessibilityHint(
@@ -154,7 +153,7 @@ struct SalesTimeLineDetailView: DashboardDetailContent {
             } description: {
                 Text(errorMessage)
             } actions: {
-                Button("重新加载") {
+                Text("重新加载").beButton {
                     refreshID += 1
                 }
             }

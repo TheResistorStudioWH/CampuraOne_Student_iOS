@@ -60,7 +60,7 @@ struct WatchCalendarView: View {
         .navigationTitle(kind.title)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button("更多选项", systemImage: "ellipsis") { showOptions = true }
+                Label("更多选项", systemImage: "ellipsis").beButton { showOptions = true }
                     .accessibilityIdentifier("calendar.options")
             }
             if !Calendar.current.isDateInToday(selectedDate) || mode == .list {
@@ -133,25 +133,26 @@ struct WatchCalendarView: View {
 
     private func dateHeader(component: Calendar.Component) -> some View {
         HStack(spacing: 4) {
-            Button { move(component, by: -1) } label: { Image(systemName: "chevron.left") }
+            Image(systemName: "chevron.left")
+                .beButton { move(component, by: -1) }
                 .accessibilityLabel(component == .month ? "上个月" : component == .weekOfYear ? "上一周" : "前一天")
             Spacer(minLength: 0)
-            Button { showDatePicker = true } label: {
-                VStack(spacing: 2) {
-                    if component == .day {
-                        Text(WatchDateText.string(selectedDate, "M月d日"))
-                            .font(.caption2).foregroundStyle(.red)
-                    }
-                    Text(headerTitle(component))
-                        .font(component == .day ? .title3.bold() : .headline)
-                        .foregroundStyle(component == .day ? Color.primary : Color.red)
-                        .lineLimit(1).minimumScaleFactor(0.8)
+            VStack(spacing: 2) {
+                if component == .day {
+                    Text(WatchDateText.string(selectedDate, "M月d日"))
+                        .font(.caption2).foregroundStyle(.red)
                 }
+                Text(headerTitle(component))
+                    .font(component == .day ? .title3.bold() : .headline)
+                    .foregroundStyle(component == .day ? Color.primary : Color.red)
+                    .lineLimit(1).minimumScaleFactor(0.8)
             }
+            .beButton { showDatePicker = true }
             .buttonStyle(.plain)
             .accessibilityLabel("选择日期，\(WatchDateText.string(selectedDate, "yyyy年M月d日"))")
             Spacer(minLength: 0)
-            Button { move(component, by: 1) } label: { Image(systemName: "chevron.right") }
+            Image(systemName: "chevron.right")
+                .beButton { move(component, by: 1) }
                 .accessibilityLabel(component == .month ? "下个月" : component == .weekOfYear ? "下一周" : "后一天")
         }
         .buttonStyle(.borderless)
@@ -177,27 +178,26 @@ struct WatchCalendarView: View {
             List {
                 Section("显示方式") {
                     ForEach(WatchCalendarMode.allCases.filter { kind == .courses || $0 != .week }) { choice in
-                        Button {
+                        HStack {
+                            Label(choice.title, systemImage: choice.symbol)
+                            Spacer()
+                            if mode == choice { Image(systemName: "checkmark").foregroundStyle(.red) }
+                        }
+                        .beButton {
                             setMode(choice)
                             showOptions = false
-                        } label: {
-                            HStack {
-                                Label(choice.title, systemImage: choice.symbol)
-                                Spacer()
-                                if mode == choice { Image(systemName: "checkmark").foregroundStyle(.red) }
-                            }
                         }
                         .accessibilityIdentifier("calendar.mode.\(choice.rawValue)")
                     }
                 }
-                Button("选择日期", systemImage: "calendar") {
+                Label("选择日期", systemImage: "calendar").beButton {
                     showOptions = false
                     Task { @MainActor in
                         try? await Task.sleep(for: .milliseconds(350))
                         showDatePicker = true
                     }
                 }
-                Button("刷新", systemImage: "arrow.clockwise") {
+                Label("刷新", systemImage: "arrow.clockwise").beButton {
                     showOptions = false
                     Task { await store.refresh() }
                 }

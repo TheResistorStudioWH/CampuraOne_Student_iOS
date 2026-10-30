@@ -1,4 +1,5 @@
 import SwiftUI
+import PetaKitUIX
 import PetaToolKit
 
 enum DashboardNotificationPreference: String, CaseIterable, Identifiable {
@@ -107,33 +108,32 @@ struct DashboardNotificationSettingsView: View {
         List {
             Section {
                 ForEach(DashboardNotificationPreference.allCases) { option in
-                    Button {
+                    HStack(spacing: 12) {
+                        Image(systemName: option.symbol)
+                            .font(.title3)
+                            .frame(width: 28)
+                            .foregroundStyle(Color.accentColor)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(option.title).foregroundStyle(.primary)
+                            Text(option.subtitle)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+
+                        Spacer()
+                        if preference == option {
+                            Image(systemName: "checkmark")
+                                .font(.headline)
+                                .foregroundStyle(Color.accentColor)
+                        }
+                    }
+                    .beButton {
                         withAnimation(.smooth(duration: 0.2)) {
                             preference = option
                         }
                         settings.set(option)
-                        TapSoft()
-                    } label: {
-                        HStack(spacing: 12) {
-                            Image(systemName: option.symbol)
-                                .font(.title3)
-                                .frame(width: 28)
-                                .foregroundStyle(Color.accentColor)
-
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(option.title).foregroundStyle(.primary)
-                                Text(option.subtitle)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-
-                            Spacer()
-                            if preference == option {
-                                Image(systemName: "checkmark")
-                                    .font(.headline)
-                                    .foregroundStyle(Color.accentColor)
-                            }
-                        }
+                        Haptics.play(.soft)
                     }
                     .buttonStyle(.plain)
                 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PetaKitUIX
 import SwiftData
 
 #Preview("app - 已登录") {
@@ -64,7 +65,7 @@ struct AD_LargeBannerRemoteModule: View {
                         } else if viewModel.errorMessage != nil {
                             VStack(spacing: 6) {
                                 Text("广告加载失败").font(.caption)
-                                Button("重试") { Task { await viewModel.refresh() } }
+                                Text("重试").beButton { Task { await viewModel.refresh() } }
                             }
                         } else {
                             Label("暂无广告", systemImage: "photo")

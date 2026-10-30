@@ -52,7 +52,7 @@
       "location" : "https://github.com/PetaHertZ-Studio/PetaKitUIX.git",
       "state" : {
         "branch" : "main",
-        "revision" : "3acaa34c0b5cb452d368ff2e278d8ef4062f5ad7"
+        "revision" : "0ec57a73b21eb617c261a39518c7a218fe1e6184"
       }
     },
     {
@@ -61,7 +61,7 @@
       "location" : "https://github.com/PetaHertZ-Studio/PetaToolKit.git",
       "state" : {
         "branch" : "main",
-        "revision" : "95af40b25122ff5377d1d95249b8c852cb6da7ee"
+        "revision" : "ee0d854289cdb5bd5d74528bfbd29e49d8aac0f6"
       }
     },
     {

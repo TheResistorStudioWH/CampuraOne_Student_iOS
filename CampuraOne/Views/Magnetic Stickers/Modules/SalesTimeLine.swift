@@ -87,12 +87,12 @@ struct SalesTimelineTile: View {
                     .onTapGesture {
                         if mode == option {
                             refreshID += 1
-                            TapSucceed()
+                            Haptics.play(.success)
                         } else {
                             withAnimation(.snappy) {
                                 mode = option
                             }
-                            TapSoft()
+                            Haptics.play(.soft)
                         }
                     }
                     .accessibilityLabel(option.title)

@@ -1,5 +1,6 @@
 import SwiftData
 import SwiftUI
+import PetaKitUIX
 
 struct LoginView: View {
     @Environment(\.modelContext) private var modelContext
@@ -38,18 +39,17 @@ struct LoginView: View {
                     }
 
                     Section {
-                        Button {
-                            submit()
-                        } label: {
-                            HStack {
-                                Spacer()
-                                if isLoading {
-                                    ProgressView()
-                                } else {
-                                    Text("登录")
-                                }
-                                Spacer()
+                        HStack {
+                            Spacer()
+                            if isLoading {
+                                ProgressView()
+                            } else {
+                                Text("登录")
                             }
+                            Spacer()
+                        }
+                        .beButton {
+                            submit()
                         }
                         .disabled(isLoading || normalizedUserName.isEmpty || password.isEmpty)
                     }
@@ -66,7 +66,7 @@ struct LoginView: View {
             .disabled(isLoading)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("重新选择身份") { identity = nil }
+                    Text("重新选择身份").beButton { identity = nil }
                         .disabled(isLoading)
                 }
             }

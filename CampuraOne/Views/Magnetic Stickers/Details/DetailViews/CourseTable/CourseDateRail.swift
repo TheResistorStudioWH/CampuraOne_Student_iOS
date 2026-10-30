@@ -1,4 +1,5 @@
 import SwiftUI
+import PetaKitUIX
 import PetaToolKit
 
 
@@ -21,7 +22,8 @@ struct CourseDateRail: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Button { moveWeek(-1) } label: { Image(systemName: "chevron.up") }
+            Image(systemName: "chevron.up")
+                .beButton { moveWeek(-1) }
                 .frame(width: width, height: 44, alignment: .leading).accessibilityLabel("上一周")
             GeometryReader { geometry in
                 let inset = min(24, geometry.size.height * 0.08)
@@ -60,7 +62,8 @@ struct CourseDateRail: View {
                 let offset = direction == .increment ? 1 : -1
                 if let date = calendar.date(byAdding: .day, value: offset, to: selectedDate) { select(date) }
             }
-            Button { moveWeek(1) } label: { Image(systemName: "chevron.down") }
+            Image(systemName: "chevron.down")
+                .beButton { moveWeek(1) }
                 .frame(width: width, height: 44, alignment: .leading).accessibilityLabel("下一周")
         }
         .frame(width: width)
@@ -104,7 +107,7 @@ struct CourseDateRail: View {
     private func select(_ date: Date) {
         guard !calendar.isDate(date, inSameDayAs: selectedDate) else { return }
         selectedDate = date
-        TapSoft()
+        Haptics.play(.soft)
     }
 
     private func moveWeek(_ offset: Int) {

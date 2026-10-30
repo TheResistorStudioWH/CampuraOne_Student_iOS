@@ -349,7 +349,7 @@ struct SearchResultList: View {
         .contentShape(Capsule())
         .beButton {
             /// 后续使用 suggestion.info.kind 和 suggestion.info.targetID 打开详情。
-            TapSoft()
+            Haptics.play(.soft)
         }
         .buttonStyle(.plain)
     }
@@ -413,7 +413,7 @@ struct SearchResultList: View {
         )
         .beButton {
             /// 后续根据 item.kind 和 item.targetID 打开促销、商品或商户详情。
-            TapSoft()
+            Haptics.play(.soft)
         }
         .buttonStyle(.plain)
     }
@@ -497,7 +497,7 @@ struct SearchResultList: View {
         } description: {
             Text(message)
         } actions: {
-            Button("重新搜索") {
+            Text("重新搜索").beButton {
                 Task {
                     await viewModel.load()
                 }

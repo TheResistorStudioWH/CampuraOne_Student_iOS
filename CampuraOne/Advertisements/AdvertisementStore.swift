@@ -1,4 +1,5 @@
 import SwiftUI
+import PetaKitUIX
 import Combine
 import ImageIO
 #if DEBUG
@@ -255,10 +256,9 @@ struct AdvertisementImage: View {
                 Image(uiImage: image).resizable().aspectRatio(contentMode: contentMode)
                     .transition(.opacity)
             } else if store.imageFailed(for: advertisement) {
-                Button { store.retryImage(for: advertisement) } label: {
-                    Label("重新加载图片", systemImage: "arrow.clockwise")
-                        .font(.caption).foregroundStyle(.secondary)
-                }
+                Label("重新加载图片", systemImage: "arrow.clockwise")
+                    .font(.caption).foregroundStyle(.secondary)
+                    .beButton { store.retryImage(for: advertisement) }
             } else {
                 ProgressView()
             }

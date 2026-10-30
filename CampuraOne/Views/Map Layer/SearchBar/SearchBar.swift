@@ -289,7 +289,7 @@ struct SearchBar: View {
 
         saveToHistory(trimmedText)
 
-        TapSoft()
+        Haptics.play(.soft)
     }
 
     /// 点击实时建议后，把建议标题放回输入框并立即执行正式搜索。
@@ -310,7 +310,7 @@ struct SearchBar: View {
             inputSuggestionQuery = ""
             showResultList = false
         }
-        TapSoft()
+        Haptics.play(.soft)
     }
 
     private func saveToHistory(_ query: String) {
@@ -352,7 +352,7 @@ struct SearchBar: View {
             inputSuggestionQuery = ""
         }
         
-        TapSoft()
+        Haptics.play(.soft)
     }
     
     /// 搜索类型选择列表。
@@ -425,7 +425,7 @@ struct SearchBar: View {
                 submittedSearchText = ""
                 inputSuggestionQuery = ""
             }
-            TapSoft()
+            Haptics.play(.soft)
         }
     }
     
@@ -490,26 +490,24 @@ private struct SearchHistoryList: View {
 
             ForEach(items, id: \.self) { item in
                 HStack(spacing: 10) {
-                    Button {
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundStyle(.secondary)
+                        Text(item)
+                            .foregroundStyle(.primary)
+                            .lineLimit(1)
+                        Spacer()
+                    }
+                    .contentShape(Rectangle())
+                    .beButton {
                         onSelect(item)
-                    } label: {
-                        HStack {
-                            Image(systemName: "magnifyingglass")
-                                .foregroundStyle(.secondary)
-                            Text(item)
-                                .foregroundStyle(.primary)
-                                .lineLimit(1)
-                            Spacer()
-                        }
-                        .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
 
-                    Button {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.tertiary)
+                    .beButton {
                         onDelete(item)
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundStyle(.tertiary)
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel("删除历史搜索 \(item)")
@@ -567,32 +565,31 @@ private struct SearchInputSuggestionList: View {
                     }
 
                     ForEach(suggestions) { suggestion in
-                        Button {
-                            onSelect(suggestion)
-                        } label: {
-                            HStack(spacing: 10) {
-                                Image(systemName: "magnifyingglass")
-                                    .foregroundStyle(.secondary)
-                                    .frame(width: 20)
-
-                                Text(suggestion.title)
-                                    .font(.subheadline)
-                                    .foregroundStyle(.primary)
-                                    .lineLimit(1)
-
-                                Spacer(minLength: 8)
-
-                                Label(
-                                    suggestion.kind.title,
-                                    systemImage: suggestion.categoryIcon
-                                    ?? suggestion.kind.icon
-                                )
-                                .font(.caption)
+                        HStack(spacing: 10) {
+                            Image(systemName: "magnifyingglass")
                                 .foregroundStyle(.secondary)
-                            }
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 11)
-                            .contentShape(Rectangle())
+                                .frame(width: 20)
+
+                            Text(suggestion.title)
+                                .font(.subheadline)
+                                .foregroundStyle(.primary)
+                                .lineLimit(1)
+
+                            Spacer(minLength: 8)
+
+                            Label(
+                                suggestion.kind.title,
+                                systemImage: suggestion.categoryIcon
+                                ?? suggestion.kind.icon
+                            )
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        }
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 11)
+                        .contentShape(Rectangle())
+                        .beButton {
+                            onSelect(suggestion)
                         }
                         .buttonStyle(.plain)
 
@@ -700,7 +697,7 @@ struct SearchPicker: View {
                 withAnimation(.smooth) {
                     showPickerBar.toggle()
                 }
-                TapSoft()
+                Haptics.play(.soft)
             }
             .accessibilityLabel("搜索范围：\(selection.name)")
             .accessibilityHint("点击展开搜索范围选择")
@@ -869,7 +866,7 @@ struct SearchButton: View {
                     withAnimation(.smooth) {
                         showLargeBar = true
                     }
-                    TapSoft()
+                    Haptics.play(.soft)
                 }
             }
     }

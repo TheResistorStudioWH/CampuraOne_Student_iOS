@@ -1,4 +1,5 @@
 import SwiftUI
+import PetaKitUIX
 
 /// Presentation data only. A future weather provider can replace this snapshot
 /// without changing the header or requesting location access from this view.
@@ -37,26 +38,25 @@ struct HomeWeatherBadge: View {
     @State private var manuallySwitched = false
 
     var body: some View {
-        Button {
+        ZStack(alignment: .trailing) {
+            locationModule
+                .opacity(showsLocation ? 1 : 0)
+                .offset(y: reduceMotion || showsLocation ? 0 : -7)
+                .scaleEffect(reduceMotion || showsLocation ? 1 : 0.96, anchor: .trailing)
+            weatherModule
+                .opacity(showsLocation ? 0 : 1)
+                .offset(y: reduceMotion || !showsLocation ? 0 : 7)
+                .scaleEffect(reduceMotion || !showsLocation ? 1 : 0.96, anchor: .trailing)
+        }
+        .frame(width: 152, height: 44, alignment: .trailing)
+        .animation(
+            reduceMotion ? .easeInOut(duration: 0.18) : .smooth(duration: 0.3),
+            value: showsLocation
+        )
+        .contentShape(Rectangle())
+        .beButton {
             manuallySwitched = true
             showsLocation.toggle()
-        } label: {
-            ZStack(alignment: .trailing) {
-                locationModule
-                    .opacity(showsLocation ? 1 : 0)
-                    .offset(y: reduceMotion || showsLocation ? 0 : -7)
-                    .scaleEffect(reduceMotion || showsLocation ? 1 : 0.96, anchor: .trailing)
-                weatherModule
-                    .opacity(showsLocation ? 0 : 1)
-                    .offset(y: reduceMotion || !showsLocation ? 0 : 7)
-                    .scaleEffect(reduceMotion || !showsLocation ? 1 : 0.96, anchor: .trailing)
-            }
-            .frame(width: 152, height: 44, alignment: .trailing)
-            .animation(
-                reduceMotion ? .easeInOut(duration: 0.18) : .smooth(duration: 0.3),
-                value: showsLocation
-            )
-            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityLabel(showsLocation ? "地区，\(snapshot.locationText)" : "\(snapshot.temperatureText)，\(snapshot.condition.title)")

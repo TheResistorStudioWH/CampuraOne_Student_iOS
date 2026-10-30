@@ -49,7 +49,7 @@ struct CourseTableTile: View {
                     }
                     .onTapGesture {
                         selectedDay = day
-                        TapSoft()
+                        Haptics.play(.soft)
                     }
                     .animation(.smooth, value: selectedDay)
             }

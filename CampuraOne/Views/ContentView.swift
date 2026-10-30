@@ -232,13 +232,13 @@ struct ContentView: View {
     }
     
     private func tapBarAction(item: AppTab) {
-        TapLight()
+        Haptics.play(.light)
         
         withAnimation(.easeInOut(duration: 0.3)) {
             currentTab = item
         }
         
-        DispatchAfter(after: 0.1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             withAnimation(.easeInOut(duration: 0.2)) {
                 scaleValue = 0.75
             }
@@ -248,7 +248,7 @@ struct ContentView: View {
             }
         }
         
-        DispatchAfter(after: 0.3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             withAnimation(.smooth(duration: 0.2)) {
                 scaleValue = 1.11
             }
@@ -258,7 +258,7 @@ struct ContentView: View {
             }
         }
         
-        DispatchAfter(after: 0.6) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
             withAnimation(.easeInOut(duration: 0.3)) {
                 scaleValue = 1.0
             }

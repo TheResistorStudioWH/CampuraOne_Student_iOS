@@ -23,7 +23,7 @@ struct HomePageView: View {
     let userProfile: AppUser?
     var weatherSnapshot: HomeWeatherSnapshot = .demo
     
-    @State var nowTime = ClassNowTime().timeString
+    @State private var greetingDate = Date()
     
     let bgTransitionContainer: Namespace.ID
     let openDetail: (_ detail: SelectedDashboardDetail) -> Void
@@ -178,57 +178,23 @@ struct HomePageView: View {
     @ViewBuilder func greet(isPlaceholder: Bool = false) -> some View {
         VStack(alignment: .leading, spacing: 3) {
             VStack {
-                switch nowTime.prefix(2) {
-                    case "23":
-                        Text("深夜了，晚安")
-                    case "00":
-                        Text("深夜了，晚安")
-                    case "01":
-                        Text("深夜了，晚安")
-                    case "02":
-                        Text("深夜了，晚安")
-                    case "03":
-                        Text("深夜了，晚安")
-                    case "04":
-                        Text("清晨，早安")
-                    case "05":
-                        Text("清晨，早安")
-                    case "06":
-                        Text("清晨，早安")
-                    case "07":
-                        Text("早上好！")
-                    case "08":
-                        Text("早上好！")
-                    case "09":
-                        Text("早上好！")
-                    case "10":
-                        Text("上午好，")
-                    case "11":
-                        Text("上午好，")
-                    case "12":
-                        Text("中午好，")
-                    case "13":
-                        Text("中午好，")
-                    case "14":
-                        Text("中午好，")
-                    case "15":
-                        Text("下午好，")
-                    case "16":
-                        Text("下午好，")
-                    case "17":
-                        Text("下午好，")
-                    case "18":
-                        Text("下午好，")
-                    case "19":
-                        Text("晚上好，")
-                    case "20":
-                        Text("晚上好，")
-                    case "21":
-                        Text("晚上好，")
-                    case "22":
-                        Text("晚上好，")
-                    default:
-                        Text("你好，")
+                switch Calendar.current.component(.hour, from: greetingDate) {
+                case 23, 0...3:
+                    Text("深夜了，晚安")
+                case 4...6:
+                    Text("清晨，早安")
+                case 7...9:
+                    Text("早上好！")
+                case 10...11:
+                    Text("上午好，")
+                case 12...14:
+                    Text("中午好，")
+                case 15...18:
+                    Text("下午好，")
+                case 19...22:
+                    Text("晚上好，")
+                default:
+                    Text("你好，")
                 }
             }
             .font(.system(size: 39))

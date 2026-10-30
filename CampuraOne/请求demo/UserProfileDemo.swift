@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PetaKitUIX
 
 struct UserProfileDemo: View {
     @State private var user: AppUser?
@@ -16,12 +17,11 @@ struct UserProfileDemo: View {
         NavigationStack {
             List {
                 Section("测试操作") {
-                    Button {
+                    Label("加载当前登录用户信息", systemImage: "person.crop.circle.badge.checkmark")
+                    .beButton {
                         Task {
                             await loadUserProfile()
                         }
-                    } label: {
-                        Label("加载当前登录用户信息", systemImage: "person.crop.circle.badge.checkmark")
                     }
                     .disabled(isLoading)
                     
@@ -58,7 +58,7 @@ struct UserProfileDemo: View {
             .navigationTitle("用户信息 Demo")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("清空") {
+                    Text("清空").beButton {
                         user = nil
                         errorMessage = nil
                     }

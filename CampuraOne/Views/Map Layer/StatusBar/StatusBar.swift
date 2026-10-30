@@ -457,16 +457,15 @@ struct StatusBar: View {
     private func smartMealCapsule(
         _ course: StatusBarCourse
     ) -> some View {
-        Button {
+        Label(
+            "根据上课时间智能分配饮食",
+            systemImage: "sparkles"
+        )
+        .fixedSize(horizontal: true, vertical: false)
+        .font(.system(size: 12))
+        .statusBarCapsuleStyle(isHighlighted: true)
+        .beButton {
             onSmartMealPlan(course)
-        } label: {
-            Label(
-                "根据上课时间智能分配饮食",
-                systemImage: "sparkles"
-            )
-            .fixedSize(horizontal: true, vertical: false)
-            .font(.system(size: 12))
-            .statusBarCapsuleStyle(isHighlighted: true)
         }
         .buttonStyle(.plain)
     }
@@ -499,23 +498,22 @@ struct StatusBar: View {
     private func lastPurchaseCapsule(
         _ purchase: StatusBarPurchase
     ) -> some View {
-        Button {
-            onOpenLastPurchase(purchase)
-        } label: {
-            Label {
-                if let subtitle = purchase.subtitle,
-                   !subtitle.isEmpty {
-                    Text("上次购买：\(purchase.title) · \(subtitle)")
-                        .fixedSize(horizontal: true, vertical: false)
-                } else {
-                    Text("上次购买：\(purchase.title)")
-                        .fixedSize(horizontal: true, vertical: false)
-                }
-            } icon: {
-                Image(systemName: "clock.arrow.circlepath")
+        Label {
+            if let subtitle = purchase.subtitle,
+               !subtitle.isEmpty {
+                Text("上次购买：\(purchase.title) · \(subtitle)")
+                    .fixedSize(horizontal: true, vertical: false)
+            } else {
+                Text("上次购买：\(purchase.title)")
+                    .fixedSize(horizontal: true, vertical: false)
             }
-            .font(.system(size: 12))
-            .statusBarCapsuleStyle()
+        } icon: {
+            Image(systemName: "clock.arrow.circlepath")
+        }
+        .font(.system(size: 12))
+        .statusBarCapsuleStyle()
+        .beButton {
+            onOpenLastPurchase(purchase)
         }
         .buttonStyle(.plain)
     }
@@ -525,17 +523,16 @@ struct StatusBar: View {
     private func recentlyViewedCapsule(
         _ item: RecentlyViewedItem
     ) -> some View {
-        Button {
+        Label {
+            Text("你刚看过：\(item.title)")
+                .fixedSize(horizontal: true, vertical: false)
+        } icon: {
+            Image(systemName: item.icon)
+        }
+        .font(.system(size: 12))
+        .statusBarCapsuleStyle()
+        .beButton {
             onOpenRecentlyViewed(item)
-        } label: {
-            Label {
-                Text("你刚看过：\(item.title)")
-                    .fixedSize(horizontal: true, vertical: false)
-            } icon: {
-                Image(systemName: item.icon)
-            }
-            .font(.system(size: 12))
-            .statusBarCapsuleStyle()
         }
         .buttonStyle(.plain)
     }

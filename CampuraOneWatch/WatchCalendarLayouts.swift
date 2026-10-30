@@ -90,17 +90,16 @@ struct WatchMonthView: View {
                     let events = WatchCalendarData.events(on: date, kind: kind, entries: entries)
                     let today = Calendar.current.isDateInToday(date)
                     let selected = Calendar.current.isDate(date, inSameDayAs: selectedDate)
-                    Button { select(date) } label: {
-                        VStack(spacing: 1) {
-                            Text("\(Calendar.current.component(.day, from: date))")
-                                .font(.system(size: 13, weight: today || selected ? .bold : .regular, design: .rounded))
-                                .frame(maxWidth: .infinity, minHeight: days.count > 35 ? 17 : 20)
-                                .background {
-                                    Circle().fill(today ? Color.red : selected ? Color.white.opacity(0.18) : .clear)
-                                }
-                            Circle().fill(events.isEmpty ? Color.clear : kind.tint).frame(width: 3, height: 3)
-                        }
+                    VStack(spacing: 1) {
+                        Text("\(Calendar.current.component(.day, from: date))")
+                            .font(.system(size: 13, weight: today || selected ? .bold : .regular, design: .rounded))
+                            .frame(maxWidth: .infinity, minHeight: days.count > 35 ? 17 : 20)
+                            .background {
+                                Circle().fill(today ? Color.red : selected ? Color.white.opacity(0.18) : .clear)
+                            }
+                        Circle().fill(events.isEmpty ? Color.clear : kind.tint).frame(width: 3, height: 3)
                     }
+                    .beButton { select(date) }
                     .buttonStyle(.plain)
                     .foregroundStyle(.primary)
                     .accessibilityLabel("\(WatchDateText.string(date, "M月d日 EEEE"))，\(events.count)项安排")
@@ -216,24 +215,23 @@ struct WatchWeekView: View {
             Text("本周 \(events.reduce(0) { $0 + $1.count }) 节课")
                 .font(.caption).foregroundStyle(.secondary)
             ForEach(days.indices, id: \.self) { index in
-                Button { select(days[index]) } label: {
-                    HStack(alignment: .top, spacing: 8) {
-                        VStack(spacing: 2) {
-                            Text(WatchDateText.string(days[index], "EE")).font(.caption2)
-                            Text(WatchDateText.string(days[index], "d")).font(.title3.bold())
+                HStack(alignment: .top, spacing: 8) {
+                    VStack(spacing: 2) {
+                        Text(WatchDateText.string(days[index], "EE")).font(.caption2)
+                        Text(WatchDateText.string(days[index], "d")).font(.title3.bold())
+                    }
+                    .foregroundStyle(Calendar.current.isDateInToday(days[index]) ? .red : .primary)
+                    .frame(width: 34)
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(events[index].isEmpty ? "没有课程" : "\(events[index].count) 节课").font(.headline)
+                        if let first = events[index].first, let last = events[index].last {
+                            Text("\(WatchDateText.time(first.start))–\(WatchDateText.time(last.end))")
+                                .font(.caption2).foregroundStyle(.secondary)
                         }
-                        .foregroundStyle(Calendar.current.isDateInToday(days[index]) ? .red : .primary)
-                        .frame(width: 34)
-                        VStack(alignment: .leading, spacing: 3) {
-                            Text(events[index].isEmpty ? "没有课程" : "\(events[index].count) 节课").font(.headline)
-                            if let first = events[index].first, let last = events[index].last {
-                                Text("\(WatchDateText.time(first.start))–\(WatchDateText.time(last.end))")
-                                    .font(.caption2).foregroundStyle(.secondary)
-                            }
-                        }
-                        Spacer(minLength: 0)
-                    }.padding(.vertical, 4)
-                }
+                    }
+                    Spacer(minLength: 0)
+                }.padding(.vertical, 4)
+                .beButton { select(days[index]) }
                 .buttonStyle(.plain)
             }
         }
@@ -256,32 +254,31 @@ struct WatchWeekView: View {
             }
             .font(.system(size: 9)).foregroundStyle(.secondary).frame(width: 14, height: chartHeight + 29)
             ForEach(days.indices, id: \.self) { index in
-                Button { select(days[index]) } label: {
-                    VStack(spacing: 4) {
-                        VStack(spacing: 1) {
-                            Text(WatchDateText.string(days[index], "EE").replacingOccurrences(of: "周", with: ""))
-                                .font(.system(size: 9))
-                            Text(WatchDateText.string(days[index], "d"))
-                                .font(.system(size: 12, weight: .semibold))
-                        }
-                        .frame(height: 25)
-                        .foregroundStyle(Calendar.current.isDateInToday(days[index]) ? .red : .primary)
-                        GeometryReader { geometry in
-                            ZStack(alignment: .top) {
-                                RoundedRectangle(cornerRadius: 3).fill(.white.opacity(0.07))
-                                ForEach(events[index]) { event in
-                                    let start = Calendar.current.startOfDay(for: days[index])
-                                    let y = max(0, event.start.timeIntervalSince(start) / 3600 - Double(lower)) / Double(upper - lower) * chartHeight
-                                    let h = max(3, event.end.timeIntervalSince(event.start) / 3600 / Double(upper - lower) * chartHeight)
-                                    RoundedRectangle(cornerRadius: 2)
-                                        .fill(Color.cyan.opacity(0.85))
-                                        .frame(width: geometry.size.width, height: h)
-                                        .offset(y: y)
-                                }
-                            }
-                        }.frame(height: chartHeight)
+                VStack(spacing: 4) {
+                    VStack(spacing: 1) {
+                        Text(WatchDateText.string(days[index], "EE").replacingOccurrences(of: "周", with: ""))
+                            .font(.system(size: 9))
+                        Text(WatchDateText.string(days[index], "d"))
+                            .font(.system(size: 12, weight: .semibold))
                     }
+                    .frame(height: 25)
+                    .foregroundStyle(Calendar.current.isDateInToday(days[index]) ? .red : .primary)
+                    GeometryReader { geometry in
+                        ZStack(alignment: .top) {
+                            RoundedRectangle(cornerRadius: 3).fill(.white.opacity(0.07))
+                            ForEach(events[index]) { event in
+                                let start = Calendar.current.startOfDay(for: days[index])
+                                let y = max(0, event.start.timeIntervalSince(start) / 3600 - Double(lower)) / Double(upper - lower) * chartHeight
+                                let h = max(3, event.end.timeIntervalSince(event.start) / 3600 / Double(upper - lower) * chartHeight)
+                                RoundedRectangle(cornerRadius: 2)
+                                    .fill(Color.cyan.opacity(0.85))
+                                    .frame(width: geometry.size.width, height: h)
+                                    .offset(y: y)
+                            }
+                        }
+                    }.frame(height: chartHeight)
                 }
+                .beButton { select(days[index]) }
                 .buttonStyle(.plain)
                 .accessibilityLabel("\(WatchDateText.string(days[index], "M月d日 EEEE"))，\(events[index].count)节课")
             }
