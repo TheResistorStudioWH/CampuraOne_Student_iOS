@@ -60,10 +60,16 @@ struct Advertisement: Codable, Identifiable, Hashable {
     
     var id: Int { adID }
     
-    /// 广告图片 URL。
-    /// 后台测试数据为空或格式不对时会返回 nil，View 层可以再使用 debug 图片兜底。
+    /// 兼容迁移前广告记录中的旧服务器地址；其他图片地址保持原样。
     var imageURL: URL? {
-        URL(string: img)
+        guard var components = URLComponents(string: img) else { return nil }
+        if components.host == "129.211.189.35",
+           components.path.hasPrefix("/uploads/ads/imgs/") {
+            components.scheme = "https"
+            components.host = URL(string: APIConfig.baseURL)?.host
+            components.port = nil
+        }
+        return components.url
     }
     
     /// 给 RemoteImageView 使用的固定缓存坑位。
