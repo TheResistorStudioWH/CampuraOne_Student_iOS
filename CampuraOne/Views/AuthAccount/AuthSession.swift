@@ -156,6 +156,11 @@ struct AppRootView: View {
         .task {
             await authSession.restore(from: savedUsers, modelContext: modelContext)
         }
+        .onChange(of: authSession.currentUser?.userID, initial: true) { _, userID in
+            NavigationPreferencesStore.shared.bind(userID: userID)
+            CampusMapStore.shared.bind(userID: userID)
+            StudentNavigationStore.shared.bind(userID: userID)
+        }
         .task(id: advertisementLifecycle) {
             guard !Task.isCancelled else { return }
             guard let user = authSession.currentUser else {

@@ -159,6 +159,11 @@ extension MapLocationManager: CLLocationManagerDelegate {
 }
 
 struct MapView: View {
+    @EnvironmentObject private var authSession: AuthSession
+    @Environment(\.scenePhase) private var scenePhase
+    @ObservedObject private var campusMap = CampusMapStore.shared
+    @ObservedObject private var navigation = StudentNavigationStore.shared
+    @State private var searchBarHeight: CGFloat = 0
     @StateObject private var locationManager = MapLocationManager()
     @State private var cameraPosition: MapCameraPosition = .automatic
     @State private var hasCenteredOnUser = false
@@ -169,25 +174,22 @@ struct MapView: View {
     var body: some View {
         ZStack(alignment: .top) {
             ZStack(alignment: .bottom) {
-                Map(position: $cameraPosition) {
-                    UserAnnotation()
-                }
-                .ignoresSafeArea(.keyboard)
-                .mapStyle(.standard(elevation: .realistic))
-                .mapControls {
-                    MapCompass()
-                    MapScaleView()
-                    MapPitchToggle()
-                }
+                CampusMapSurface(cameraPosition: $cameraPosition,
+                                 location: locationManager.location,
+                                 controlsTopInset: searchBarHeight,
+                                 controlsHidden: isToolDrawExpand)
                 VStack {
-                    StatusBar(
-                        schoolID: 1,
-                        compoundID: 1,
-                        departmentID: 1,
-                        classID: 301,
-                        currentLocation: locationManager.location
-                    )
-                    
+                    VStack(alignment: .leading, spacing: 0) {
+                        CampusMapStatusRow()
+                        StatusBar(
+                            schoolID: 1,
+                            compoundID: 1,
+                            departmentID: 1,
+                            classID: 301,
+                            currentLocation: locationManager.location
+                        )
+                    }
+
                     HStack(alignment: .center) {
                         ToolDrawerButton(isExpand: $isToolDrawExpand)
                             .anchorPreference(key: ToolDrawerAnchorKey.self, value: .bounds) { $0 }
@@ -203,6 +205,7 @@ struct MapView: View {
             }
             .accessibilityHidden(isToolDrawExpand)
             SearchBar()
+                .readSize { searchBarHeight = $0.height }
                 .accessibilityHidden(isToolDrawExpand)
         }
         // Resolve the trigger's bounds here so the drawer floats above all map
@@ -222,9 +225,23 @@ struct MapView: View {
             .allowsHitTesting(isToolDrawExpand)
         }
         
+        .task(id: authSession.currentUser?.userID) {
+            guard let userID = authSession.currentUser?.userID else { return }
+            await campusMap.load(userID: userID)
+        }
+        .onChange(of: scenePhase) { _, phase in
+            navigation.setPaused(phase != .active)
+            if phase == .active, let userID = authSession.currentUser?.userID {
+                Task {
+                    await campusMap.load(userID: userID, force: true)
+                    if navigation.plan != nil { await navigation.replan() }
+                }
+            }
+        }
         .onAppear {
             Task {
                 ///主动申请定位权限并开始持续更新位置
+                navigation.setPaused(false)
                 locationManager.requestAuthorizationAndStart()
                 if let location = locationManager.location {
                     centerMap(on: location, animated: true)
@@ -236,14 +253,15 @@ struct MapView: View {
         
         .onDisappear {
             locationManager.stopUpdatingLocation()
+            navigation.setPaused(true)
         }
         
         .onChange(of: locationManager.location) { _, newLocation in
             guard let newLocation else {
                 return
             }
-            
-            if !hasCenteredOnUser {
+
+            if !hasCenteredOnUser, campusMap.snapshot == nil {
                 ///首次定位后自动移动到当前位置
                 centerMap(on: newLocation, animated: true)
                 hasCenteredOnUser = true

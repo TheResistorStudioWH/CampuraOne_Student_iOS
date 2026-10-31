@@ -89,6 +89,15 @@
 		CA1029000000000000000108 /* PetaKitUIX in Frameworks */ = {isa = PBXBuildFile; productRef = CA1029000000000000000104 /* PetaKitUIX */; };
 		CA1029000000000000000109 /* PetaToolKit in Frameworks */ = {isa = PBXBuildFile; productRef = CA1029000000000000000105 /* PetaToolKit */; };
 		CA102900000000000000010A /* PetaKitWatchUIX in Frameworks */ = {isa = PBXBuildFile; productRef = CA1029000000000000000106 /* PetaKitWatchUIX */; };
+		005CA666C2FB77AF326E141D /* NavigationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69568C66AB135A8DAE4C600 /* NavigationService.swift */; };
+		253424F2453426B91F754333 /* PreviewNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70580B9C7BF2286B0644F8D3 /* PreviewNavigation.swift */; };
+		3F1FB9D6D1B3D9D6EEA6C40A /* Data-Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03FFDA34A73A95A5C7401AE /* Data-Navigation.swift */; };
+		84C424524EC2E5ADD882FBBB /* NavigationHistorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72919449A22A5719E331BE21 /* NavigationHistorySection.swift */; };
+		2B5A6F7BBCF09D3887915495 /* NavigationPreferencesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C968856456A914F8A3C12BE /* NavigationPreferencesStore.swift */; };
+		0B59BC843D3640579835388E /* CampusMapStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676DE9245404476115682AF0 /* CampusMapStore.swift */; };
+		30AEE7AB57D42A86568F8DA9 /* StudentNavigationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203D188AF8ECF50558DFBB81 /* StudentNavigationStore.swift */; };
+		98A95A1E6CAC8259CBA45545 /* APIClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72F5F132C9EF0C00C198DD9 /* APIClientError.swift */; };
+		D5449F41454B8EF3D04013A1 /* AIModelSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D210807B171D227B8E0A34 /* AIModelSettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -190,6 +199,15 @@
 		CA1028000000000000000010 /* SchoolCalendarCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolCalendarCore.swift; sourceTree = "<group>"; };
 		CA1028000000000000000021 /* ImportantAnnouncementsDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportantAnnouncementsDetail.swift; sourceTree = "<group>"; };
 		CA1029000000000000000002 /* WatchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WatchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E69568C66AB135A8DAE4C600 /* NavigationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NavigationService.swift"; sourceTree = "<group>"; };
+		70580B9C7BF2286B0644F8D3 /* PreviewNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreviewNavigation.swift"; sourceTree = "<group>"; };
+		B03FFDA34A73A95A5C7401AE /* Data-Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data-Navigation.swift"; sourceTree = "<group>"; };
+		72919449A22A5719E331BE21 /* NavigationHistorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NavigationHistorySection.swift"; sourceTree = "<group>"; };
+		2C968856456A914F8A3C12BE /* NavigationPreferencesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NavigationPreferencesStore.swift"; sourceTree = "<group>"; };
+		676DE9245404476115682AF0 /* CampusMapStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CampusMapStore.swift"; sourceTree = "<group>"; };
+		203D188AF8ECF50558DFBB81 /* StudentNavigationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StudentNavigationStore.swift"; sourceTree = "<group>"; };
+		F72F5F132C9EF0C00C198DD9 /* APIClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClientError.swift; sourceTree = "<group>"; };
+		57D210807B171D227B8E0A34 /* AIModelSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIModelSettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -310,7 +328,10 @@
 		0B8302E82FDF0D7300B5269A /* API */ = {
 			isa = PBXGroup;
 			children = (
+				70580B9C7BF2286B0644F8D3 /* PreviewNavigation.swift */,
+				E69568C66AB135A8DAE4C600 /* NavigationService.swift */,
 				0B8302E32FDF0D7300B5269A /* APIClient.swift */,
+				F72F5F132C9EF0C00C198DD9 /* APIClientError.swift */,
 				4CAAC00FB6114B70BAF27D9C /* PreviewAPI.swift */,
 				0B8302E42FDF0D7300B5269A /* APIConfig.swift */,
 				CA1022000000000000000001 /* APIDate.swift */,
@@ -334,6 +355,7 @@
 		0B8302F32FDF0D7300B5269A /* DataStructure */ = {
 			isa = PBXGroup;
 			children = (
+				B03FFDA34A73A95A5C7401AE /* Data-Navigation.swift */,
 				0B8302ED2FDF0D7300B5269A /* Data-ADs&Sales.swift */,
 				0B8302EE2FDF0D7300B5269A /* Data-Announce.swift */,
 				0B8302EF2FDF0D7300B5269A /* Data-School.swift */,
@@ -388,6 +410,7 @@
 		0B8303032FDF0D7300B5269A /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				21432E88D3C8EB87DCAE4625 /* Navigation */,
 				0B8303012FDF0D7300B5269A /* AnnounceModels */,
 				0B8303022FDF0D7300B5269A /* LoadableListViewModel.swift */,
 			);
@@ -405,9 +428,11 @@
 		0B8303082FDF0D7300B5269A /* AccountManager */ = {
 			isa = PBXGroup;
 			children = (
+				72919449A22A5719E331BE21 /* NavigationHistorySection.swift */,
 				0B8303052FDF0D7300B5269A /* Avatar */,
 				0B8303062FDF0D7300B5269A /* AccountManagerView.swift */,
 				0B8303072FDF0D7300B5269A /* AccountSheet.swift */,
+				57D210807B171D227B8E0A34 /* AIModelSettingsView.swift */,
 			);
 			path = AccountManager;
 			sourceTree = "<group>";
@@ -537,6 +562,16 @@
 				CA1027000000000000000010 /* SchoolCalendarDateWindow.swift */,
 			);
 			path = SchoolCalendar;
+			sourceTree = "<group>";
+		};
+		21432E88D3C8EB87DCAE4625 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				2C968856456A914F8A3C12BE /* NavigationPreferencesStore.swift */,
+				676DE9245404476115682AF0 /* CampusMapStore.swift */,
+				203D188AF8ECF50558DFBB81 /* StudentNavigationStore.swift */,
+			);
+			path = Navigation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -706,6 +741,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5449F41454B8EF3D04013A1 /* AIModelSettingsView.swift in Sources */,
+				98A95A1E6CAC8259CBA45545 /* APIClientError.swift in Sources */,
+				30AEE7AB57D42A86568F8DA9 /* StudentNavigationStore.swift in Sources */,
+				0B59BC843D3640579835388E /* CampusMapStore.swift in Sources */,
+				2B5A6F7BBCF09D3887915495 /* NavigationPreferencesStore.swift in Sources */,
+				84C424524EC2E5ADD882FBBB /* NavigationHistorySection.swift in Sources */,
+				3F1FB9D6D1B3D9D6EEA6C40A /* Data-Navigation.swift in Sources */,
+				253424F2453426B91F754333 /* PreviewNavigation.swift in Sources */,
+				005CA666C2FB77AF326E141D /* NavigationService.swift in Sources */,
 				CA1028000000000000000011 /* SchoolCalendarCore.swift in Sources */,
 				CA102800000000000000000F /* CourseScheduleResolver.swift in Sources */,
 				B486BAAD46714B68AF7AC71D /* PreviewAPI.swift in Sources */,

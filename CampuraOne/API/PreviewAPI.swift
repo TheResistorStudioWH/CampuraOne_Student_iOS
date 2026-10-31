@@ -46,9 +46,12 @@ enum PreviewAPI {
         ISO8601DateFormatter().string(from: date)
     }
 
-    static func response(url: String, parameters: [String: Any]?) throws -> JSON {
+    static func response(url: String, parameters: [String: Any]?, method: String = "GET") throws -> JSON {
         let path = URL(string: url)?.lastPathComponent ?? url
         let parameters = parameters ?? [:]
+        if ["campus_map.php", "preferences.php", "feedback.php", "plan.php"].contains(path) {
+            return try PreviewNavigation.response(path: path, method: method, parameters: parameters)
+        }
         let data: Any
         switch path {
         case "login.php": data = ["token": token, "user": user]
@@ -83,9 +86,12 @@ enum PreviewAPI {
             let messages = ["演示 · 图书馆东门施工，请从南门通行。", "演示 · 今晚生活区暂停供水，请提前准备。",
                             "# 演示 · 校园运动会\n\n本周开展校园运动会。\n\n- 地点：田径场\n- 请携带学生证", "# 演示 · 选课提醒\n\n请在本周内完成下学期选课。"]
             data = messages.enumerated().map { index, message -> [String: Any] in
-                ["announceID": index + 1, "schoolID": 1, "content": message, "type": min(index, 2),
+                ["announceID": index + 1, "schoolID": 1, "version": 1, "content": message, "type": min(index, 2),
                  "target": ["allSchool": true], "startTime": iso(day(-1)), "endTime": iso(day(7)), "createdAt": iso(day(-1))]
-            }.filter { parameters["type"] == nil || $0["type"] as? Int == parameters["type"] as? Int }
+            }.filter {
+                (parameters["type"] == nil || $0["type"] as? Int == parameters["type"] as? Int)
+                && (parameters["announceID"] == nil || $0["announceID"] as? Int == parameters["announceID"] as? Int)
+            }
         case "announcement_summary.php":
             data = ["summary": "演示：今晚生活区停水；图书馆请走南门。另有2条通知。", "sourceIDs": [1, 2, 3, 4], "isAI": true]
         case "search.php":

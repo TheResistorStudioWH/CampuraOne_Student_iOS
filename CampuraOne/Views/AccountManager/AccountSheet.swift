@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import PetaKitUIX
 
 #Preview("app - 已登录") {
     PreviewAppView()
@@ -28,6 +29,12 @@ struct AccountSheet: View {
                 if let user = authSession.currentUser {
                     Section("当前账号") {
                         LabeledContent("用户名", value: user.userName)
+                    }
+                    NavigationHistorySection(userID: user.userID)
+
+                    Section("AI") {
+                        Label("AI 模型", systemImage: "sparkles")
+                            .naviLink(to: AIModelSettingsView(userID: user.userID))
                     }
                 }
 

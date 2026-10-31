@@ -28,6 +28,16 @@ enum APIConfig {
         baseURL + "/api/OnlyAI" + path
     }
 
+    static func api_navigation(_ path: String) -> String {
+        baseURL + "/api/navigation" + path
+    }
+
+    enum NavigationPath {
+        static let plan = "/plan.php"
+        static let preferences = "/preferences.php"
+        static let feedback = "/feedback.php"
+    }
+
     enum AIPath {
         static let announcementSummary = "/announcement_summary.php"
     }
@@ -38,6 +48,7 @@ enum APIConfig {
         
         static let school = "/school_profile.php"
         static let campuses = "/campuses.php"
+        static let campusMap = "/campus_map.php"
         static let schoolCalendar = "/school_calendar.php"
         
         static let courseTable = "/course_table.php"

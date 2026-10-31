@@ -565,8 +565,8 @@ struct StatusBar: View {
 
 // MARK: - 胶囊统一样式
 
-private extension View {
-    /// 所有状态栏项目都使用同一套外观。
+extension View {
+    /// 状态栏与上方地图提示共用同一套外观。
     /// 以后想统一改高度、间距或材质，只需要改这里。
     func statusBarCapsuleStyle(
         isHighlighted: Bool = false,

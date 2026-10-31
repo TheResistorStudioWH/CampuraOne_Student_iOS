@@ -1,12 +1,3 @@
-//
-//  APIClient.swift
-//  CampuraOne
-//
-//  Created by LShayc1own on 25/05/2026.
-//
-
-
-
 import Foundation
 import Alamofire
 import SwiftyJSON
@@ -15,162 +6,84 @@ extension Notification.Name {
     static let authenticationRequired = Notification.Name("authenticationRequired")
 }
 
-enum APIClientError: LocalizedError {
-    case invalidResponse
-    case invalidPayload(String)
-    case server(statusCode: Int, code: Int, message: String)
 
-    var isUnauthorized: Bool {
-        if case .server(let statusCode, _, _) = self {
-            return statusCode == 401
-        }
-        return false
-    }
-
-    var errorDescription: String? {
-        switch self {
-        case .invalidResponse:
-            return "服务器返回了无法识别的响应"
-        case .invalidPayload(let message):
-            return message
-        case .server(_, _, let message):
-            return message
-        }
-    }
+struct APIHTTPResponse {
+    let json: JSON
+    let statusCode: Int
+    let etag: String?
 }
 
 final class APIClient {
-    
     static let shared = APIClient()
     private var authToken: String?
-    
     private init() { }
-    
+
     func setToken(_ token: String?) {
-        let normalizedToken = token?.trimmingCharacters(in: .whitespacesAndNewlines)
-        self.authToken = normalizedToken?.isEmpty == false ? normalizedToken : nil
+        let token = token?.trimmingCharacters(in: .whitespacesAndNewlines)
+        authToken = token?.isEmpty == false ? token : nil
+    }
+    func clearToken() { authToken = nil }
+
+    func get(url: String, parameters: Parameters? = nil,
+             cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) async throws -> JSON {
+        try await request(url: url, method: .get, parameters: parameters, cachePolicy: cachePolicy).json
     }
 
-    func clearToken() {
-        authToken = nil
+    func post(url: String, parameters: Parameters? = nil) async throws -> JSON {
+        try await request(url: url, method: .post, parameters: parameters).json
     }
-    /// 通用 GET 请求
-    func get(
-        url: String,
-        parameters: Parameters? = nil,
-        cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
-    ) async throws -> JSON {
+
+    /// Shared transport for navigation PATCH/DELETE and conditional map reads.
+    /// No automatic mutation retries: a timeout can occur after a server commit.
+    func request(url: String, method: HTTPMethod, parameters: Parameters? = nil,
+                 cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy,
+                 timeout: TimeInterval = 60, etag: String? = nil) async throws -> APIHTTPResponse {
+        try Task.checkCancellation()
         #if DEBUG
         if PreviewAPI.isEnabled {
-            return try PreviewAPI.response(url: url, parameters: parameters)
+            let json = try PreviewAPI.response(url: url, parameters: parameters, method: method.rawValue)
+            return APIHTTPResponse(json: json, statusCode: 200,
+                                   etag: URL(string: url)?.lastPathComponent == "campus_map.php" ? PreviewNavigation.mapETag : nil)
         }
         #endif
-        return try await withCheckedThrowingContinuation { continuation in
-            var headers: HTTPHeaders = []
-            if let token = authToken {
-                headers.add(name: "Authorization", value: "Bearer \(token)")
-            }
-#if DEBUG
-            print("➡️ GET \(url)")
-#endif
-            
-            AF.request(
-                url,
-                method: .get,
-                parameters: parameters,
-                encoding: URLEncoding.default,
-                headers: headers,
-                requestModifier: { $0.cachePolicy = cachePolicy }
-            )
-            .responseData { response in
-#if DEBUG
-                print("⬅️ Status:", response.response?.statusCode ?? -1)
-#endif
-                switch response.result {
-                    case .success(let data):
-                        let json = JSON(data)
-                        guard let statusCode = response.response?.statusCode else {
-                            continuation.resume(throwing: APIClientError.invalidResponse)
-                            return
-                        }
-
-                        guard (200..<300).contains(statusCode) else {
-                            if statusCode == 401 {
-                                NotificationCenter.default.post(name: .authenticationRequired, object: nil)
-                            }
-                            continuation.resume(throwing: APIClientError.server(
-                                statusCode: statusCode,
-                                code: json["code"].int ?? statusCode,
-                                message: json["message"].string ?? "请求失败（HTTP \(statusCode)）"
-                            ))
-                            return
-                        }
-
-                        continuation.resume(returning: json)
-                        
-                    case .failure(let error):
-                        continuation.resume(throwing: error)
-                }
-            }
-        }
-    }
-    
-    /// 通用 POST 请求，之后登录、提交数据时会用到
-    func post(
-        url: String,
-        parameters: Parameters? = nil
-    ) async throws -> JSON {
+        let requestToken = authToken
+        var headers: HTTPHeaders = ["Accept": "application/json"]
+        if let requestToken { headers.add(name: "Authorization", value: "Bearer \(requestToken)") }
+        if let etag { headers.add(name: "If-None-Match", value: etag) }
         #if DEBUG
-        if PreviewAPI.isEnabled {
-            return try PreviewAPI.response(url: url, parameters: parameters)
-        }
+        print("➡️ \(method.rawValue) \(url)")
         #endif
-        return try await withCheckedThrowingContinuation { continuation in
-            var headers: HTTPHeaders = []
-            if let token = authToken {
-                headers.add(name: "Authorization", value: "Bearer \(token)")
-            }
-#if DEBUG
-            print("➡️ POST \(url)")
-#endif
-            
-            AF.request(
-                url,
-                method: .post,
-                parameters: parameters,
-                encoding: JSONEncoding.default,
-                headers: headers
-            )
-            .responseData { response in
-#if DEBUG
-                print("⬅️ Status:", response.response?.statusCode ?? -1)
-#endif
-                switch response.result {
-                    case .success(let data):
-                        let json = JSON(data)
-                        guard let statusCode = response.response?.statusCode else {
-                            continuation.resume(throwing: APIClientError.invalidResponse)
-                            return
-                        }
-
-                        guard (200..<300).contains(statusCode) else {
-                            if statusCode == 401 {
-                                NotificationCenter.default.post(name: .authenticationRequired, object: nil)
-                            }
-                            continuation.resume(throwing: APIClientError.server(
-                                statusCode: statusCode,
-                                code: json["code"].int ?? statusCode,
-                                message: json["message"].string ?? "请求失败（HTTP \(statusCode)）"
-                            ))
-                            return
-                        }
-
-                        continuation.resume(returning: json)
-                        
-                    case .failure(let error):
-                        continuation.resume(throwing: error)
-                }
-            }
+        let request = AF.request(url, method: method, parameters: parameters,
+                                 encoding: method == .get ? URLEncoding.default : JSONEncoding.default,
+                                 headers: headers, requestModifier: {
+            $0.cachePolicy = cachePolicy
+            $0.timeoutInterval = timeout
+        })
+        let response = await request.serializingData(automaticallyCancelling: true).response
+        try Task.checkCancellation()
+        guard let http = response.response else {
+            throw response.error ?? AFError.responseValidationFailed(reason: .dataFileNil)
         }
+        #if DEBUG
+        print("⬅️ Status:", http.statusCode)
+        #endif
+        if http.statusCode == 304 {
+            return APIHTTPResponse(json: .null, statusCode: 304, etag: http.value(forHTTPHeaderField: "ETag"))
+        }
+        if http.statusCode == 401, requestToken == authToken {
+            NotificationCenter.default.post(name: .authenticationRequired, object: nil)
+        }
+        let data = try response.result.get()
+        guard data.count <= 22 * 1024 * 1024 else { throw APIClientError.invalidResponse }
+        let json = JSON(data)
+        guard (200..<300).contains(http.statusCode) else {
+            throw APIClientError.server(statusCode: http.statusCode,
+                                        code: json["code"].int ?? http.statusCode,
+                                        message: json["message"].string ?? "请求失败（HTTP \(http.statusCode)）",
+                                        details: try? json["data"].rawData())
+        }
+        // In particular, reject PHP warnings/HTML that arrive with HTTP 200.
+        guard json.dictionary != nil, json["code"].int != nil else { throw APIClientError.invalidResponse }
+        return APIHTTPResponse(json: json, statusCode: http.statusCode, etag: http.value(forHTTPHeaderField: "ETag"))
     }
 }

@@ -1,0 +1,729 @@
+{
+  "description": "隔离演示 API 实际返回；全部虚构，模拟模型，无凭据；会话已结束，运行时使用新 ID。",
+  "authorization": "Student Bearer JWT required; intentionally omitted.",
+  "examples": [
+    {
+      "name": "关闭主动推荐开始规划，仍应用学校通知",
+      "method": "POST",
+      "path": "/api/navigation/plan.php",
+      "request": {
+        "action": "start",
+        "origin": {
+          "nodeID": "10000000-0000-4000-8000-000000000002",
+          "frameId": "10000000-0000-4000-8000-000000000001"
+        },
+        "destination": "10000000-0000-4000-8000-000000000022",
+        "arrivalTime": "2026-10-29T21:55:02+08:00",
+        "recommendationsEnabled": false
+      },
+      "response": {
+        "code": 200,
+        "message": "success",
+        "data": {
+          "sessionID": "26cc8622-2801-47da-a70b-7b8fb2f805ea",
+          "contextVersion": 1,
+          "mapRevision": 1,
+          "mapHash": "387dd5a796a72a3b4871d688bc316c5642751be8f1b7be614277939104baab03",
+          "planID": "53d23e85-98b5-484f-82aa-b4e2b388df30",
+          "route": {
+            "legs": [
+              {
+                "nodes": [
+                  "10000000-0000-4000-8000-000000000002",
+                  "10000000-0000-4000-8000-000000000006",
+                  "10000000-0000-4000-8000-000000000007",
+                  "10000000-0000-4000-8000-000000000005"
+                ],
+                "edges": [
+                  "10000000-0000-4000-8000-000000000033",
+                  "10000000-0000-4000-8000-000000000034",
+                  "10000000-0000-4000-8000-000000000035"
+                ],
+                "frameId": "10000000-0000-4000-8000-000000000001",
+                "polyline": [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    -70
+                  ],
+                  [
+                    200,
+                    -70
+                  ],
+                  [
+                    200,
+                    10
+                  ]
+                ],
+                "distanceMeters": 350.0,
+                "cost": 350.0
+              }
+            ],
+            "distanceMeters": 350.0,
+            "origin": {
+              "frameId": "10000000-0000-4000-8000-000000000001",
+              "position": [
+                0,
+                0
+              ]
+            },
+            "frameId": "10000000-0000-4000-8000-000000000001",
+            "polyline": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                -70
+              ],
+              [
+                200,
+                -70
+              ],
+              [
+                200,
+                10
+              ]
+            ],
+            "edges": [
+              "10000000-0000-4000-8000-000000000033",
+              "10000000-0000-4000-8000-000000000034",
+              "10000000-0000-4000-8000-000000000035"
+            ]
+          },
+          "timing": {
+            "departureTime": "2026-10-29T21:10:02+08:00",
+            "walkingSeconds": 292,
+            "dwellSeconds": 0,
+            "totalSeconds": 292,
+            "estimatedArrival": "2026-10-29T21:14:54+08:00",
+            "arrivalRange": [
+              "2026-10-29T21:14:13+08:00",
+              "2026-10-29T21:15:52+08:00"
+            ],
+            "conservativeArrival": "2026-10-29T21:15:52+08:00",
+            "latestArrival": "2026-10-29T21:50:02+08:00",
+            "remainingSeconds": 2050,
+            "late": false,
+            "isEstimate": true
+          },
+          "waypoints": [],
+          "suggestions": [],
+          "decisions": [],
+          "overlays": [
+            {
+              "targetID": "10000000-0000-4000-8000-000000000020",
+              "name": "图书馆",
+              "frameId": "10000000-0000-4000-8000-000000000001",
+              "geometry": {
+                "type": "polygon",
+                "coordinates": [
+                  [
+                    80,
+                    10
+                  ],
+                  [
+                    120,
+                    10
+                  ],
+                  [
+                    120,
+                    50
+                  ],
+                  [
+                    80,
+                    50
+                  ]
+                ]
+              },
+              "kind": "construction",
+              "nature": "advice",
+              "sourceID": 2,
+              "sourceVersion": 1,
+              "evidence": "图书馆于2026-10-29 00:00至2026-10-30 23:59施工，请绕行。",
+              "endUnknown": false,
+              "affectedEdgeIDs": [
+                "10000000-0000-4000-8000-000000000030",
+                "10000000-0000-4000-8000-000000000031",
+                "10000000-0000-4000-8000-000000000032",
+                "10000000-0000-4000-8000-000000000038"
+              ],
+              "avoidanceStatus": "avoided"
+            }
+          ],
+          "sources": [
+            {
+              "announceID": 2,
+              "version": 1,
+              "title": "【演示】图书馆施工安排",
+              "publishedAt": "2026-10-29 00:00:00",
+              "excerpt": "图书馆于2026-10-29 00:00至2026-10-30 23:59施工，请绕行。"
+            }
+          ],
+          "warnings": [],
+          "aiStatus": "disabled",
+          "modelDisplayName": "通义千问（qwen3.7-plus）",
+          "recommendationsEnabled": false,
+          "schedule": null,
+          "destination": {
+            "placeID": "10000000-0000-4000-8000-000000000022",
+            "name": "教学楼",
+            "kind": "building",
+            "category": "other"
+          },
+          "status": "ready"
+        }
+      }
+    },
+    {
+      "name": "单次请求咖啡候选，保持主动推荐关闭",
+      "method": "POST",
+      "path": "/api/navigation/plan.php",
+      "request": {
+        "action": "evaluate_optional_stop",
+        "sessionID": "26cc8622-2801-47da-a70b-7b8fb2f805ea",
+        "expectedContextVersion": 1,
+        "request": "顺路买咖啡"
+      },
+      "response": {
+        "code": 200,
+        "message": "success",
+        "data": {
+          "sessionID": "26cc8622-2801-47da-a70b-7b8fb2f805ea",
+          "contextVersion": 2,
+          "mapRevision": 1,
+          "mapHash": "387dd5a796a72a3b4871d688bc316c5642751be8f1b7be614277939104baab03",
+          "planID": "654c31f6-72c5-4bf8-a5b3-612e555f6ceb",
+          "route": {
+            "legs": [
+              {
+                "nodes": [
+                  "10000000-0000-4000-8000-000000000002",
+                  "10000000-0000-4000-8000-000000000006",
+                  "10000000-0000-4000-8000-000000000007",
+                  "10000000-0000-4000-8000-000000000005"
+                ],
+                "edges": [
+                  "10000000-0000-4000-8000-000000000033",
+                  "10000000-0000-4000-8000-000000000034",
+                  "10000000-0000-4000-8000-000000000035"
+                ],
+                "frameId": "10000000-0000-4000-8000-000000000001",
+                "polyline": [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    -70
+                  ],
+                  [
+                    200,
+                    -70
+                  ],
+                  [
+                    200,
+                    10
+                  ]
+                ],
+                "distanceMeters": 350.0,
+                "cost": 350.0
+              }
+            ],
+            "distanceMeters": 350.0,
+            "origin": {
+              "frameId": "10000000-0000-4000-8000-000000000001",
+              "position": [
+                0,
+                0
+              ]
+            },
+            "frameId": "10000000-0000-4000-8000-000000000001",
+            "polyline": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                -70
+              ],
+              [
+                200,
+                -70
+              ],
+              [
+                200,
+                10
+              ]
+            ],
+            "edges": [
+              "10000000-0000-4000-8000-000000000033",
+              "10000000-0000-4000-8000-000000000034",
+              "10000000-0000-4000-8000-000000000035"
+            ]
+          },
+          "timing": {
+            "departureTime": "2026-10-29T21:10:02+08:00",
+            "walkingSeconds": 292,
+            "dwellSeconds": 0,
+            "totalSeconds": 292,
+            "estimatedArrival": "2026-10-29T21:14:54+08:00",
+            "arrivalRange": [
+              "2026-10-29T21:14:13+08:00",
+              "2026-10-29T21:15:52+08:00"
+            ],
+            "conservativeArrival": "2026-10-29T21:15:52+08:00",
+            "latestArrival": "2026-10-29T21:50:02+08:00",
+            "remainingSeconds": 2050,
+            "late": false,
+            "isEstimate": true
+          },
+          "waypoints": [],
+          "suggestions": [
+            {
+              "suggestionID": "952bae99-fa41-4a96-a755-00ffb1659740",
+              "planID": "cc1240ab-c3b5-410f-a127-29f3ec51ee39",
+              "contextVersion": 2,
+              "placeID": "10000000-0000-4000-8000-000000000024",
+              "name": "书香咖啡",
+              "category": "coffee",
+              "reasonCode": "fits_schedule",
+              "source": "requested",
+              "extraSeconds": 489,
+              "timing": {
+                "departureTime": "2026-10-29T21:10:02+08:00",
+                "walkingSeconds": 301,
+                "dwellSeconds": 480,
+                "totalSeconds": 781,
+                "estimatedArrival": "2026-10-29T21:23:03+08:00",
+                "arrivalRange": [
+                  "2026-10-29T21:19:20+08:00",
+                  "2026-10-29T21:28:03+08:00"
+                ],
+                "conservativeArrival": "2026-10-29T21:28:03+08:00",
+                "latestArrival": "2026-10-29T21:50:02+08:00",
+                "remainingSeconds": 1319,
+                "late": false,
+                "isEstimate": true
+              },
+              "route": {
+                "legs": [
+                  {
+                    "nodes": [
+                      "10000000-0000-4000-8000-000000000002",
+                      "10000000-0000-4000-8000-000000000008"
+                    ],
+                    "edges": [
+                      "10000000-0000-4000-8000-000000000036"
+                    ],
+                    "frameId": "10000000-0000-4000-8000-000000000001",
+                    "polyline": [
+                      [
+                        0,
+                        0
+                      ],
+                      [
+                        20,
+                        -30
+                      ]
+                    ],
+                    "distanceMeters": 36.05551275463989,
+                    "cost": 36.05551275463989
+                  },
+                  {
+                    "nodes": [
+                      "10000000-0000-4000-8000-000000000008",
+                      "10000000-0000-4000-8000-000000000006",
+                      "10000000-0000-4000-8000-000000000007",
+                      "10000000-0000-4000-8000-000000000005"
+                    ],
+                    "edges": [
+                      "10000000-0000-4000-8000-000000000037",
+                      "10000000-0000-4000-8000-000000000034",
+                      "10000000-0000-4000-8000-000000000035"
+                    ],
+                    "frameId": "10000000-0000-4000-8000-000000000001",
+                    "polyline": [
+                      [
+                        20,
+                        -30
+                      ],
+                      [
+                        0,
+                        -70
+                      ],
+                      [
+                        200,
+                        -70
+                      ],
+                      [
+                        200,
+                        10
+                      ]
+                    ],
+                    "distanceMeters": 324.7213595499958,
+                    "cost": 324.7213595499958
+                  }
+                ],
+                "distanceMeters": 360.78,
+                "origin": {
+                  "frameId": "10000000-0000-4000-8000-000000000001",
+                  "position": [
+                    0,
+                    0
+                  ]
+                },
+                "frameId": "10000000-0000-4000-8000-000000000001",
+                "polyline": [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    20,
+                    -30
+                  ],
+                  [
+                    20,
+                    -30
+                  ],
+                  [
+                    0,
+                    -70
+                  ],
+                  [
+                    200,
+                    -70
+                  ],
+                  [
+                    200,
+                    10
+                  ]
+                ],
+                "edges": [
+                  "10000000-0000-4000-8000-000000000036",
+                  "10000000-0000-4000-8000-000000000037",
+                  "10000000-0000-4000-8000-000000000034",
+                  "10000000-0000-4000-8000-000000000035"
+                ]
+              },
+              "openingStatus": "unknown",
+              "dwellSeconds": 480,
+              "expiresAt": "2026-10-29T21:20:02+08:00"
+            }
+          ],
+          "decisions": [],
+          "overlays": [
+            {
+              "targetID": "10000000-0000-4000-8000-000000000020",
+              "name": "图书馆",
+              "frameId": "10000000-0000-4000-8000-000000000001",
+              "geometry": {
+                "type": "polygon",
+                "coordinates": [
+                  [
+                    80,
+                    10
+                  ],
+                  [
+                    120,
+                    10
+                  ],
+                  [
+                    120,
+                    50
+                  ],
+                  [
+                    80,
+                    50
+                  ]
+                ]
+              },
+              "kind": "construction",
+              "nature": "advice",
+              "sourceID": 2,
+              "sourceVersion": 1,
+              "evidence": "图书馆于2026-10-29 00:00至2026-10-30 23:59施工，请绕行。",
+              "endUnknown": false,
+              "affectedEdgeIDs": [
+                "10000000-0000-4000-8000-000000000030",
+                "10000000-0000-4000-8000-000000000031",
+                "10000000-0000-4000-8000-000000000032",
+                "10000000-0000-4000-8000-000000000038"
+              ],
+              "avoidanceStatus": "avoided"
+            }
+          ],
+          "sources": [
+            {
+              "announceID": 2,
+              "version": 1,
+              "title": "【演示】图书馆施工安排",
+              "publishedAt": "2026-10-29 00:00:00",
+              "excerpt": "图书馆于2026-10-29 00:00至2026-10-30 23:59施工，请绕行。"
+            }
+          ],
+          "warnings": [],
+          "aiStatus": "ready",
+          "modelDisplayName": "通义千问（qwen3.7-plus）",
+          "recommendationsEnabled": false,
+          "schedule": null,
+          "destination": {
+            "placeID": "10000000-0000-4000-8000-000000000022",
+            "name": "教学楼",
+            "kind": "building",
+            "category": "other"
+          },
+          "status": "ready",
+          "aiMetrics": {
+            "modelCalls": 2,
+            "inputTokens": 260,
+            "outputTokens": 50,
+            "latencyMs": 1,
+            "invalidResults": 0
+          }
+        }
+      }
+    },
+    {
+      "name": "接受候选后加入固定途经点并重新算路",
+      "method": "POST",
+      "path": "/api/navigation/plan.php",
+      "request": {
+        "action": "accept_suggestion",
+        "sessionID": "26cc8622-2801-47da-a70b-7b8fb2f805ea",
+        "expectedContextVersion": 2,
+        "suggestionID": "952bae99-fa41-4a96-a755-00ffb1659740"
+      },
+      "response": {
+        "code": 200,
+        "message": "success",
+        "data": {
+          "sessionID": "26cc8622-2801-47da-a70b-7b8fb2f805ea",
+          "contextVersion": 3,
+          "mapRevision": 1,
+          "mapHash": "387dd5a796a72a3b4871d688bc316c5642751be8f1b7be614277939104baab03",
+          "planID": "a3042ad1-1fac-423b-9f91-29258f25090f",
+          "route": {
+            "legs": [
+              {
+                "nodes": [
+                  "10000000-0000-4000-8000-000000000002",
+                  "10000000-0000-4000-8000-000000000008"
+                ],
+                "edges": [
+                  "10000000-0000-4000-8000-000000000036"
+                ],
+                "frameId": "10000000-0000-4000-8000-000000000001",
+                "polyline": [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    20,
+                    -30
+                  ]
+                ],
+                "distanceMeters": 36.05551275463989,
+                "cost": 36.05551275463989
+              },
+              {
+                "nodes": [
+                  "10000000-0000-4000-8000-000000000008",
+                  "10000000-0000-4000-8000-000000000006",
+                  "10000000-0000-4000-8000-000000000007",
+                  "10000000-0000-4000-8000-000000000005"
+                ],
+                "edges": [
+                  "10000000-0000-4000-8000-000000000037",
+                  "10000000-0000-4000-8000-000000000034",
+                  "10000000-0000-4000-8000-000000000035"
+                ],
+                "frameId": "10000000-0000-4000-8000-000000000001",
+                "polyline": [
+                  [
+                    20,
+                    -30
+                  ],
+                  [
+                    0,
+                    -70
+                  ],
+                  [
+                    200,
+                    -70
+                  ],
+                  [
+                    200,
+                    10
+                  ]
+                ],
+                "distanceMeters": 324.7213595499958,
+                "cost": 324.7213595499958
+              }
+            ],
+            "distanceMeters": 360.78,
+            "origin": {
+              "frameId": "10000000-0000-4000-8000-000000000001",
+              "position": [
+                0,
+                0
+              ]
+            },
+            "frameId": "10000000-0000-4000-8000-000000000001",
+            "polyline": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ],
+              [
+                20,
+                -30
+              ],
+              [
+                20,
+                -30
+              ],
+              [
+                0,
+                -70
+              ],
+              [
+                200,
+                -70
+              ],
+              [
+                200,
+                10
+              ]
+            ],
+            "edges": [
+              "10000000-0000-4000-8000-000000000036",
+              "10000000-0000-4000-8000-000000000037",
+              "10000000-0000-4000-8000-000000000034",
+              "10000000-0000-4000-8000-000000000035"
+            ]
+          },
+          "timing": {
+            "departureTime": "2026-10-29T21:10:02+08:00",
+            "walkingSeconds": 301,
+            "dwellSeconds": 480,
+            "totalSeconds": 781,
+            "estimatedArrival": "2026-10-29T21:23:03+08:00",
+            "arrivalRange": [
+              "2026-10-29T21:19:20+08:00",
+              "2026-10-29T21:28:03+08:00"
+            ],
+            "conservativeArrival": "2026-10-29T21:28:03+08:00",
+            "latestArrival": "2026-10-29T21:50:02+08:00",
+            "remainingSeconds": 1319,
+            "late": false,
+            "isEstimate": true
+          },
+          "waypoints": [
+            {
+              "placeID": "10000000-0000-4000-8000-000000000024",
+              "name": "书香咖啡",
+              "kind": "merchant",
+              "category": "coffee",
+              "dwellSeconds": 480,
+              "dwellRangeSeconds": [
+                300,
+                720
+              ],
+              "stopID": "6ef703db-d926-4985-914a-c96fad3de65d",
+              "source": "accepted"
+            }
+          ],
+          "suggestions": [],
+          "decisions": [],
+          "overlays": [
+            {
+              "targetID": "10000000-0000-4000-8000-000000000020",
+              "name": "图书馆",
+              "frameId": "10000000-0000-4000-8000-000000000001",
+              "geometry": {
+                "type": "polygon",
+                "coordinates": [
+                  [
+                    80,
+                    10
+                  ],
+                  [
+                    120,
+                    10
+                  ],
+                  [
+                    120,
+                    50
+                  ],
+                  [
+                    80,
+                    50
+                  ]
+                ]
+              },
+              "kind": "construction",
+              "nature": "advice",
+              "sourceID": 2,
+              "sourceVersion": 1,
+              "evidence": "图书馆于2026-10-29 00:00至2026-10-30 23:59施工，请绕行。",
+              "endUnknown": false,
+              "affectedEdgeIDs": [
+                "10000000-0000-4000-8000-000000000030",
+                "10000000-0000-4000-8000-000000000031",
+                "10000000-0000-4000-8000-000000000032",
+                "10000000-0000-4000-8000-000000000038"
+              ],
+              "avoidanceStatus": "avoided"
+            }
+          ],
+          "sources": [
+            {
+              "announceID": 2,
+              "version": 1,
+              "title": "【演示】图书馆施工安排",
+              "publishedAt": "2026-10-29 00:00:00",
+              "excerpt": "图书馆于2026-10-29 00:00至2026-10-30 23:59施工，请绕行。"
+            }
+          ],
+          "warnings": [],
+          "aiStatus": "disabled",
+          "modelDisplayName": "通义千问（qwen3.7-plus）",
+          "recommendationsEnabled": false,
+          "schedule": null,
+          "destination": {
+            "placeID": "10000000-0000-4000-8000-000000000022",
+            "name": "教学楼",
+            "kind": "building",
+            "category": "other"
+          },
+          "status": "ready"
+        }
+      }
+    }
+  ]
+}
