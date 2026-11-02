@@ -98,6 +98,10 @@
 		30AEE7AB57D42A86568F8DA9 /* StudentNavigationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203D188AF8ECF50558DFBB81 /* StudentNavigationStore.swift */; };
 		98A95A1E6CAC8259CBA45545 /* APIClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72F5F132C9EF0C00C198DD9 /* APIClientError.swift */; };
 		D5449F41454B8EF3D04013A1 /* AIModelSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D210807B171D227B8E0A34 /* AIModelSettingsView.swift */; };
+		CA1102000000000000000002 /* Data-ContentPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1102000000000000000001 /* Data-ContentPreview.swift */; };
+		CA1102000000000000000004 /* ContentPreviewService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1102000000000000000003 /* ContentPreviewService.swift */; };
+		CA1102000000000000000006 /* RoutePreviewStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1102000000000000000005 /* RoutePreviewStore.swift */; };
+		CA1102000000000000000023 /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = CA1102000000000000000022 /* BottomSheet */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -208,6 +212,9 @@
 		203D188AF8ECF50558DFBB81 /* StudentNavigationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StudentNavigationStore.swift"; sourceTree = "<group>"; };
 		F72F5F132C9EF0C00C198DD9 /* APIClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClientError.swift; sourceTree = "<group>"; };
 		57D210807B171D227B8E0A34 /* AIModelSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIModelSettingsView.swift; sourceTree = "<group>"; };
+		CA1102000000000000000001 /* Data-ContentPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data-ContentPreview.swift"; sourceTree = "<group>"; };
+		CA1102000000000000000003 /* ContentPreviewService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentPreviewService.swift"; sourceTree = "<group>"; };
+		CA1102000000000000000005 /* RoutePreviewStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RoutePreviewStore.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -241,6 +248,8 @@
 			path = WatchUITests;
 			sourceTree = "<group>";
 		};
+		CA1102000000000000000011 /* ContentPreview */ = {isa = PBXFileSystemSynchronizedRootGroup; path = ContentPreview; sourceTree = "<group>"; };
+		CA1102000000000000000012 /* ContentPreview */ = {isa = PBXFileSystemSynchronizedRootGroup; path = ContentPreview; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -248,6 +257,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA1102000000000000000023 /* BottomSheet in Frameworks */,
 				0BC584C72FCFC34C0005B84E /* MarkdownUI in Frameworks */,
 				0B6FF15F2FC45C360002559F /* SwiftyJSON in Frameworks */,
 				0B6FF1622FC45C820002559F /* Alamofire in Frameworks */,
@@ -328,6 +338,7 @@
 		0B8302E82FDF0D7300B5269A /* API */ = {
 			isa = PBXGroup;
 			children = (
+				CA1102000000000000000003 /* ContentPreviewService.swift */,
 				70580B9C7BF2286B0644F8D3 /* PreviewNavigation.swift */,
 				E69568C66AB135A8DAE4C600 /* NavigationService.swift */,
 				0B8302E32FDF0D7300B5269A /* APIClient.swift */,
@@ -355,6 +366,7 @@
 		0B8302F32FDF0D7300B5269A /* DataStructure */ = {
 			isa = PBXGroup;
 			children = (
+				CA1102000000000000000001 /* Data-ContentPreview.swift */,
 				B03FFDA34A73A95A5C7401AE /* Data-Navigation.swift */,
 				0B8302ED2FDF0D7300B5269A /* Data-ADs&Sales.swift */,
 				0B8302EE2FDF0D7300B5269A /* Data-Announce.swift */,
@@ -410,6 +422,7 @@
 		0B8303032FDF0D7300B5269A /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				CA1102000000000000000011 /* ContentPreview */,
 				21432E88D3C8EB87DCAE4625 /* Navigation */,
 				0B8303012FDF0D7300B5269A /* AnnounceModels */,
 				0B8303022FDF0D7300B5269A /* LoadableListViewModel.swift */,
@@ -495,6 +508,7 @@
 		0B8303202FDF0D7300B5269A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				CA1102000000000000000012 /* ContentPreview */,
 				CA0922000000000000000001 /* Components */,
 				0BD38C3430133A18005DB96D /* Startup */,
 				0B9F190F2FFBBBF300C84458 /* AuthAccount */,
@@ -567,6 +581,7 @@
 		21432E88D3C8EB87DCAE4625 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
+				CA1102000000000000000005 /* RoutePreviewStore.swift */,
 				2C968856456A914F8A3C12BE /* NavigationPreferencesStore.swift */,
 				676DE9245404476115682AF0 /* CampusMapStore.swift */,
 				203D188AF8ECF50558DFBB81 /* StudentNavigationStore.swift */,
@@ -592,6 +607,8 @@
 				CA102800000000000000000D /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
+				CA1102000000000000000012 /* ContentPreview */,
+				CA1102000000000000000011 /* ContentPreview */,
 				0B4CA4F92FE01365008B3B2D /* Map Layer */,
 				0B9F190F2FFBBBF300C84458 /* AuthAccount */,
 				CA0922000000000000000001 /* Components */,
@@ -599,6 +616,7 @@
 			);
 			name = CampuraOne;
 			packageProductDependencies = (
+				CA1102000000000000000022 /* BottomSheet */,
 				0B6FF15E2FC45C360002559F /* SwiftyJSON */,
 				0B6FF1612FC45C820002559F /* Alamofire */,
 				0BC584C62FCFC34C0005B84E /* MarkdownUI */,
@@ -689,6 +707,7 @@
 			mainGroup = 0B3F59302FC3380E00980B94;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				CA1102000000000000000021 /* XCRemoteSwiftPackageReference "BottomSheet" */,
 				0B6FF15D2FC45C360002559F /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				0B6FF1602FC45C820002559F /* XCRemoteSwiftPackageReference "Alamofire" */,
 				0BC584C52FCFC34C0005B84E /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
@@ -741,6 +760,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA1102000000000000000006 /* RoutePreviewStore.swift in Sources */,
+				CA1102000000000000000004 /* ContentPreviewService.swift in Sources */,
+				CA1102000000000000000002 /* Data-ContentPreview.swift in Sources */,
 				D5449F41454B8EF3D04013A1 /* AIModelSettingsView.swift in Sources */,
 				98A95A1E6CAC8259CBA45545 /* APIClientError.swift in Sources */,
 				30AEE7AB57D42A86568F8DA9 /* StudentNavigationStore.swift in Sources */,
@@ -1246,6 +1268,7 @@
 				minimumVersion = 0.1.1;
 			};
 		};
+		CA1102000000000000000021 /* XCRemoteSwiftPackageReference "BottomSheet" */ = {isa = XCRemoteSwiftPackageReference; repositoryURL = "https://github.com/lucaszischka/BottomSheet.git"; requirement = {kind = exactVersion; version = 3.1.1; }; };
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1283,6 +1306,7 @@
 		CA1029000000000000000104 /* PetaKitUIX */ = {isa = XCSwiftPackageProductDependency; package = CA1029000000000000000102 /* XCRemoteSwiftPackageReference "PetaKitUIX" */; productName = PetaKitUIX; };
 		CA1029000000000000000105 /* PetaToolKit */ = {isa = XCSwiftPackageProductDependency; package = CA1029000000000000000101 /* XCRemoteSwiftPackageReference "PetaToolKit" */; productName = PetaToolKit; };
 		CA1029000000000000000106 /* PetaKitWatchUIX */ = {isa = XCSwiftPackageProductDependency; package = CA1029000000000000000102 /* XCRemoteSwiftPackageReference "PetaKitUIX" */; productName = PetaKitWatchUIX; };
+		CA1102000000000000000022 /* BottomSheet */ = {isa = XCSwiftPackageProductDependency; package = CA1102000000000000000021 /* XCRemoteSwiftPackageReference "BottomSheet" */; productName = BottomSheet; };
 /* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0B3F59312FC3380E00980B94 /* Project object */;

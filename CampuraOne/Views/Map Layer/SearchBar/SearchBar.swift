@@ -73,6 +73,8 @@ enum SearchPickerItem: CaseIterable, Identifiable, Hashable {
 }
 
 struct SearchBar: View {
+    @ObservedObject private var contentBrowser = ContentBrowserStore.shared
+    @ObservedObject private var routePreview = RoutePreviewStore.shared
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Namespace var SearchBarTransitionContainer
     
@@ -239,6 +241,8 @@ struct SearchBar: View {
             await listenForSearchInput()
         }
         
+        .opacity(contentBrowser.isPresented || routePreview.isPresented ? 0 : 1)
+        .allowsHitTesting(!contentBrowser.isPresented && !routePreview.isPresented)
     }
     
     /// 监听输入变化。用户停止输入 350 毫秒后，才更新建议查询词。

@@ -64,7 +64,7 @@ struct SalesTimelineTile: View {
         DashboardTile(
             descriptor: SalesTimeLineDetailView.tileDescriptor,
             context: context,
-            onOpen: { context.open(SalesTimeLineDetailView()) }
+            titleAction: { context.open(SalesTimeLineDetailView()) }
         ) {
             SalesTimeLineModule(mode: $mode, refreshID: refreshID)
         } toolBar: {
@@ -331,6 +331,9 @@ private struct SalesTimelineCompactRow: View {
             }
             
         }
+        .contentShape(Rectangle())
+        .beButton { ContentBrowserStore.shared.open(.promotion(event.saleID)) }
+        .buttonStyle(.plain)
         .task {
             guard event.productID != nil,
                   productViewModel.items.isEmpty,

@@ -53,7 +53,8 @@ enum AppTab: String, CaseIterable, Identifiable {
         openDetail: @escaping (_ detail: SelectedDashboardDetail) -> Void,
         isOpened: Binding<Bool>,
         scrollOffset: Binding<CGFloat>,
-        userProfile: AppUser?
+        userProfile: AppUser?,
+        isActive: Bool = true
     ) -> some View {
         switch self {
         case .dashboard:
@@ -65,7 +66,7 @@ enum AppTab: String, CaseIterable, Identifiable {
                 scrollOffset: scrollOffset
             )
         case .map:
-            MapView()
+            MapView(isActive: isActive)
         }
     }
 }
@@ -77,6 +78,9 @@ struct ContentView: View {
     let userProfile: AppUser?
 
     @StateObject private var announcementStore = AnnouncementStore()
+    @ObservedObject private var contentBrowser = ContentBrowserStore.shared
+    @ObservedObject private var routePreview = RoutePreviewStore.shared
+    @State private var routeReturnTab: AppTab?
 
     private var announcementLifecycle: String {
         "\(userProfile?.studentID ?? -1)-\(scenePhase == .active)"
@@ -132,17 +136,25 @@ struct ContentView: View {
         ZStack {
             
             NavigationStack {
-                currentTab.content(
-                    namespace: bgTransitionContainer,
-                    openDetail: openDetail,
-                    isOpened: $isOpenedDetail,
-                    scrollOffset: $scrollOffset,
-                    userProfile: userProfile
-                )
+                ZStack {
+                    ForEach(tabBarList) { tab in
+                        tab.content(
+                            namespace: bgTransitionContainer,
+                            openDetail: openDetail,
+                            isOpened: $isOpenedDetail,
+                            scrollOffset: $scrollOffset,
+                            userProfile: userProfile,
+                            isActive: currentTab == tab
+                        )
+                        .opacity(currentTab == tab ? 1 : 0)
+                        .allowsHitTesting(currentTab == tab)
+                        .accessibilityHidden(currentTab != tab)
+                    }
+                }
             }
             .ignoresSafeArea(.keyboard, edges: .bottom)
             
-            if selectedDetail == nil {
+            if selectedDetail == nil, !contentBrowser.isPresented, !routePreview.isPresented {
                 
                 VStack {
                     Spacer()
@@ -187,14 +199,53 @@ struct ContentView: View {
                     onClose: closeDetail
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .opacity(routePreview.isPresented ? 0 : 1)
+                .allowsHitTesting(!routePreview.isPresented && !contentBrowser.isPresented)
+                .accessibilityHidden(routePreview.isPresented || contentBrowser.isPresented)
                 .zIndex(1000)
             }
             
+        }
+        .overlay {
+            ContentPreviewHost(browser: contentBrowser, route: routePreview,
+                               openRoute: { routePreview.open($0) },
+                               returnFromRoute: { routePreview.close() })
         }
         .environmentObject(announcementStore)
         .environment(\.announcementGeometryNamespace, bgTransitionContainer)
         .environment(\.announcementToolbarVisible, showTopToolbar)
         .ignoresSafeArea()
+        .onChange(of: userProfile?.userID, initial: true) { _, userID in
+            contentBrowser.bind(userID: userID)
+            routePreview.bind(userID: userID)
+            #if DEBUG
+            if userID != nil, PreviewAPI.isEnabled,
+               let index = ProcessInfo.processInfo.arguments.firstIndex(of: "--campura-preview-content"),
+               ProcessInfo.processInfo.arguments.indices.contains(index + 1) {
+                switch ProcessInfo.processInfo.arguments[index + 1] {
+                case "shop": contentBrowser.open(.mainShop(1))
+                case "subshop": contentBrowser.open(.subShop(1, mainShopID: 1))
+                case "product": contentBrowser.open(.product(1))
+                case "promotion": contentBrowser.open(.promotion(1))
+                case "route": routePreview.open(.nextCourse)
+                default: break
+                }
+            }
+            #endif
+        }
+        .onChange(of: contentBrowser.isPresented) { _, shown in
+            if shown { UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) }
+        }
+        .onChange(of: routePreview.isPresented) { _, shown in
+            if shown {
+                routeReturnTab = currentTab
+                currentTab = .map
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            } else if let previous = routeReturnTab {
+                currentTab = previous
+                routeReturnTab = nil
+            }
+        }
         .task(id: announcementLifecycle) {
             guard scenePhase == .active else {
                 announcementStore.pause()

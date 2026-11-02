@@ -3,7 +3,7 @@ import PetaToolKit
 import PetaKitUIX
 
 /// A Messages-style pile shared by the small tile and the wide banner.
-/// Swiping browses the pile in place; tapping opens the full-screen photo browser.
+/// Swiping browses the pile in place; tapping opens the promotion preview.
 struct AdvertisementPhotoStack: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let advertisements: [Advertisement]
@@ -13,7 +13,6 @@ struct AdvertisementPhotoStack: View {
     @State private var dragOffset: CGFloat = 0
     @State private var isBrowsing = false
     @State private var isHorizontalDrag = false
-    @State private var showingViewer = false
     @State private var departingID: Int?
     @State private var departingOffset: CGFloat = 0
     @State private var isReturningCard = false
@@ -64,25 +63,23 @@ struct AdvertisementPhotoStack: View {
             .contentShape(Rectangle())
             .onTapGesture {
                 guard turnToken == nil else { return }
-                showingViewer = true
+                if let ad = advertisements.first(where: { $0.adID == deck.ids.first }) {
+                    ContentBrowserStore.shared.open(.promotion(ad.saleID), advertisement: ad)
+                }
             }
             .simultaneousGesture(swipeGesture(width: size.width))
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("广告图片叠放")
             .accessibilityValue("第 \(selectedIndex + 1) 张，共 \(advertisements.count) 张")
-            .accessibilityHint("左右轻扫预览，轻点查看全部图片")
+            .accessibilityHint("左右轻扫预览，轻点查看促销详情")
             .accessibilityAddTraits(.isButton)
             .accessibilityAction(named: "下一张") { advance(by: 1) }
             .accessibilityAction(named: "上一张") { advance(by: -1) }
         }
         .aspectRatio(aspectRatio, contentMode: .fit)
-        .fullScreenCover(isPresented: $showingViewer) {
-            AdvertisementPhotoViewer(advertisements: advertisements, initialID: deck.ids.first ?? ids.first)
-        }
         .onChange(of: ids, initial: true) { _, newIDs in
             resetMotion()
             deck.synchronize(with: newIDs)
-            if newIDs.isEmpty { showingViewer = false }
         }
         .onDisappear { resetMotion() }
         .sensoryFeedback(.selection, trigger: deck.ids.first)
@@ -182,90 +179,6 @@ struct AdvertisementPhotoStack: View {
             isReturningCard = false
             isBrowsing = false
             isHorizontalDrag = false
-        }
-    }
-}
-
-private struct AdvertisementPhotoViewer: View {
-    @Environment(\.dismiss) private var dismiss
-    let advertisements: [Advertisement]
-    let initialID: Int?
-
-    @State private var selectedID: Int?
-    @State private var showsGrid = false
-
-    private var ids: [Int] { advertisements.map(\.adID) }
-    private var currentID: Int? {
-        guard let selectedID, ids.contains(selectedID) else { return ids.first }
-        return selectedID
-    }
-
-    var body: some View {
-        ZStack {
-            Color.black.ignoresSafeArea()
-
-            if showsGrid {
-                ScrollView {
-                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
-                        ForEach(advertisements) { advertisement in
-                            AdvertisementImage(advertisement: advertisement, contentMode: .fill)
-                                .aspectRatio(1, contentMode: .fit)
-                                .clipped()
-                                .modifier(AdvertisementPhotoShadow())
-                                .onTapGesture {
-                                    selectedID = advertisement.adID
-                                    showsGrid = false
-                                }
-                        }
-                    }
-                    .padding()
-                }
-                .padding(.top, 52)
-            } else {
-                TabView(selection: Binding(
-                    get: { currentID },
-                    set: { selectedID = $0 }
-                )) {
-                    ForEach(advertisements) { advertisement in
-                        AdvertisementImage(advertisement: advertisement, contentMode: .fit)
-                            .modifier(AdvertisementPhotoShadow())
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .tag(Optional(advertisement.adID))
-                    }
-                }
-                .tabViewStyle(.page(indexDisplayMode: .never))
-            }
-        }
-        .safeAreaInset(edge: .top) {
-            HStack {
-                Image(systemName: showsGrid ? "rectangle.stack" : "square.grid.2x2")
-                    .beButton { showsGrid.toggle() }
-                Spacer()
-                Text("\(ids.count) 张图片")
-                    .font(.subheadline.weight(.semibold))
-                Spacer()
-                Text("完成").beButton { dismiss() }
-            }
-            .tint(.white)
-            .foregroundStyle(.white)
-            .padding(.horizontal, 20)
-            .padding(.vertical, 12)
-            .background(.black.opacity(0.88))
-        }
-        .safeAreaInset(edge: .bottom) {
-            if !showsGrid, let currentID, let index = ids.firstIndex(of: currentID) {
-                Text("\(index + 1) / \(ids.count)")
-                    .font(.caption.monospacedDigit())
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
-                    .background(.black.opacity(0.88))
-            }
-        }
-        .onAppear { selectedID = initialID }
-        .onChange(of: ids) { _, newIDs in
-            if newIDs.isEmpty { dismiss() }
-            else if !newIDs.contains(selectedID ?? -1) { selectedID = newIDs.first }
         }
     }
 }

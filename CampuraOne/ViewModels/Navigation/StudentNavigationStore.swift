@@ -4,6 +4,9 @@ import Combine
 /// Session/data integration only. The route-panel design will be discussed separately.
 @MainActor
 final class StudentNavigationStore: ObservableObject {
+    enum PresentationMode { case none, preview, guidance }
+    @Published private(set) var presentationMode: PresentationMode = .none
+    var isGuiding: Bool { presentationMode == .guidance }
     struct Client {
         var send: (NavigationCommand) async throws -> NavigationResult
         var feedback: (NavigationFeedback) async throws -> NavigationFeedbackResult
@@ -36,6 +39,7 @@ final class StudentNavigationStore: ObservableObject {
     func bind(userID: Int?) {
         guard self.userID != userID else { return }
         self.userID = userID
+        presentationMode = .none
         generation = UUID()
         for task in queuedTasks.values { task.cancel() }
         queuedTasks = [:]
@@ -61,7 +65,42 @@ final class StudentNavigationStore: ObservableObject {
 
     func previewSuggestion(_ id: String?) { previewSuggestionID = plan?.suggestion(id, at: Date())?.id }
     func setPaused(_ paused: Bool) { isPaused = paused }
+
+    func startPreview(origin: NavigationOrigin, destination: String?) async {
+        presentationMode = .preview
+        await start(origin: origin, destination: destination, recommendationsEnabled: false)
+    }
+
+    /// Closing the UI must not wait for a network mutation, or allow an old
+    /// planning response to repopulate the map. Server cleanup is best effort.
+    func discardPreview() {
+        guard presentationMode == .preview else { return }
+        let previous = plan
+        let knownVersion = reportedContextVersion ?? previous?.contextVersion
+        let account = userID
+        generation = UUID()
+        queuedTasks.values.forEach { $0.cancel() }
+        queuedTasks = [:]; tail = nil
+        plan = nil; lastOrigin = nil; destinationQuery = nil
+        isWorking = false; requiresReplan = false; requiresRestart = false
+        previewSuggestionID = nil; sourceNotice = nil; sourceError = nil; errorMessage = nil
+        reportedContextVersion = nil; sourceRequest = UUID()
+        presentationMode = .none
+        if let previous {
+            Task {
+                guard self.userID == account else { return }
+                var command = NavigationCommand(action: .end)
+                command.sessionID = previous.sessionID
+                command.expectedContextVersion = knownVersion
+                _ = try? await self.client.send(command)
+            }
+        }
+    }
     func preferencesChanged() {
+        invalidateContext()
+    }
+
+    func invalidateContext() {
         guard plan != nil else { return }
         requiresReplan = true
         previewSuggestionID = nil
@@ -93,7 +132,11 @@ final class StudentNavigationStore: ObservableObject {
         await send(command)
     }
 
-    func replan() async { await send(NavigationCommand(action: .replan)) }
+    func replan(origin: NavigationOrigin? = nil, destination: String? = nil) async {
+        var command = NavigationCommand(action: .replan)
+        command.origin = origin; command.destination = destination
+        await send(command)
+    }
     func end() async { await send(NavigationCommand(action: .end)) }
     func evaluateStop(_ request: String) async {
         var command = NavigationCommand(action: .evaluateOptionalStop)
@@ -130,7 +173,7 @@ final class StudentNavigationStore: ObservableObject {
 
     /// Called only for reliable GPS projected through a real MapKit binding.
     func updateLocation(_ origin: NavigationOrigin, at now: Date = Date()) async {
-        guard !isPaused, isCurrent, plan != nil,
+        guard !isPaused, presentationMode != .preview, isCurrent, plan != nil,
               now.timeIntervalSince(lastLocationUpdate ?? .distantPast) >= 15,
               origin != lastOrigin else { return }
         lastLocationUpdate = now
@@ -141,6 +184,7 @@ final class StudentNavigationStore: ObservableObject {
     private func send(_ input: NavigationCommand) async {
         guard userID != nil else { return }
         let ticket = generation
+        let account = userID
         let previous = tail
         let id = UUID()
         let task = Task { [weak self] in
@@ -167,6 +211,14 @@ final class StudentNavigationStore: ObservableObject {
             defer { if ticket == self.generation { self.isWorking = false } }
             do {
                 let result = try await self.client.send(command)
+                if ticket != self.generation, command.action == .start, self.userID == account,
+                   case .plan(let abandoned) = result {
+                    var cleanup = NavigationCommand(action: .end)
+                    cleanup.sessionID = abandoned.sessionID
+                    cleanup.expectedContextVersion = abandoned.contextVersion
+                    _ = try? await self.client.send(cleanup)
+                    return
+                }
                 try Task.checkCancellation()
                 guard ticket == self.generation else { return }
                 switch result {
@@ -252,7 +304,10 @@ final class StudentNavigationStore: ObservableObject {
                     return
                 }
                 sourceNotice = result.notice
-            } else { sourceError = "该通知已撤回或当前不可查看" }
+            } else {
+                sourceError = "该通知已撤回或当前不可查看，请重新规划"
+                requiresReplan = true
+            }
         } catch is CancellationError { }
         catch {
             guard ticket == generation, sourceRequest == request else { return }

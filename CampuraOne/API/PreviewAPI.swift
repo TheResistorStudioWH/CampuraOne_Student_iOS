@@ -101,9 +101,10 @@ enum PreviewAPI {
                 ["type": "promotion", "targetID": 1, "title": "咖啡第二杯半价（演示）", "subtitle": "校园咖啡 · 本周有效", "imageURL": imageURL],
                 ["type": "product", "targetID": 1, "title": "校园拿铁（演示）", "subtitle": "咖啡 · ¥12", "category": category, "imageURL": imageURL],
                 ["type": "product", "targetID": 2, "title": "手作三明治（演示）", "subtitle": "轻食 · ¥9.9", "category": category, "imageURL": imageURL],
-                ["type": "shop", "targetID": 1, "title": "校园咖啡（演示）", "subtitle": "生活区 · 饮品与轻食", "imageURL": imageURL]
+                ["id": "main-shop-1", "type": "shop", "targetID": 1, "title": "校园咖啡（演示）", "subtitle": "生活区 · 饮品与轻食", "imageURL": imageURL]
             ]
-            let matches = rows.filter { row in
+            let rowsWithSubShop = rows + [["id": "sub-shop-1", "type": "shop", "targetID": 1, "title": "生活区咖啡窗口（演示）", "subtitle": "校园咖啡 · 档口", "imageURL": imageURL]]
+            let matches = rowsWithSubShop.filter { row in
                 (mode == "all" || mode == "smart" || row["type"] as? String == mode)
                 && (query.isEmpty || "\(row["title"] ?? "") \(row["subtitle"] ?? "")".localizedCaseInsensitiveContains(query))
             }

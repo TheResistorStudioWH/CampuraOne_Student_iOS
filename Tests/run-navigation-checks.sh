@@ -12,9 +12,23 @@ cd "$CAMPURA_IOS_ROOT"
 swiftc -parse-as-library -module-cache-path "$CAMPURA_CHECK_DIR/cache" \
   -I "$CAMPURA_CHECK_DIR" -L "$CAMPURA_CHECK_DIR" -lCamapKit \
   -Xlinker -rpath -Xlinker "$CAMPURA_CHECK_DIR" \
-  CampuraOne/API/APIClientError.swift CampuraOne/API/APIDate.swift \
+  CampuraOne/API/APIClientError.swift CampuraOne/API/APIDate.swift CampuraOne/API/APIConfig.swift \
   CampuraOne/DataStructure/Data-Navigation.swift CampuraOne/DataStructure/Data-Announce.swift \
+  CampuraOne/DataStructure/Data-ContentPreview.swift CampuraOne/DataStructure/Data-Shop.swift \
+  'CampuraOne/DataStructure/Data-ADs&Sales.swift' \
   'CampuraOne/Views/Map Layer/CampusMap/CampusMapGeometry.swift' \
   CampuraOne/ViewModels/Navigation/*.swift Tests/NavigationChecks.swift \
   -o "$CAMPURA_CHECK_DIR/checks"
 "$CAMPURA_CHECK_DIR/checks" "$CAMPURA_IOS_ROOT/Tests/Fixtures/navigation-examples.json"
+swiftc -parse-as-library -module-cache-path "$CAMPURA_CHECK_DIR/cache" \
+  -I "$CAMPURA_CHECK_DIR" -L "$CAMPURA_CHECK_DIR" -lCamapKit \
+  -Xlinker -rpath -Xlinker "$CAMPURA_CHECK_DIR" \
+  CampuraOne/API/APIClientError.swift CampuraOne/API/APIDate.swift CampuraOne/API/APIConfig.swift \
+  CampuraOne/DataStructure/Data-Navigation.swift CampuraOne/DataStructure/Data-Announce.swift \
+  CampuraOne/DataStructure/Data-ContentPreview.swift CampuraOne/DataStructure/Data-Shop.swift \
+  'CampuraOne/DataStructure/Data-ADs&Sales.swift' \
+  CampuraOne/ViewModels/LoadableListViewModel.swift CampuraOne/ViewModels/ContentPreview/*.swift \
+  'CampuraOne/Views/Map Layer/CampusMap/CampusMapGeometry.swift' \
+  CampuraOne/ViewModels/Navigation/*.swift Tests/ContentPreviewChecks.swift \
+  -o "$CAMPURA_CHECK_DIR/content-checks"
+"$CAMPURA_CHECK_DIR/content-checks" "$CAMPURA_IOS_ROOT/Tests/Fixtures/navigation-examples.json"

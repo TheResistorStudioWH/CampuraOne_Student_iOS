@@ -143,9 +143,10 @@ private enum CheckError: Error { case unavailable }
         check(store.sourceNotice != nil, "Navigation sources are not filtered by old display expiry")
         fixture.noticesAvailable = false
         await store.loadSource(source)
-        check(store.sourceNotice == nil && store.sourceError != nil, "Invisible source removes old text")
+        check(store.sourceNotice == nil && store.sourceError != nil && store.requiresReplan, "Invisible source removes old text and invalidates the explanation")
 
         fixture.noticesAvailable = true
+        await store.replan()
         fixture.noticeVersion = 2
         await store.loadSource(source)
         check(store.requiresReplan && store.sourceNotice == nil, "Changed source version invalidates the old route explanation")

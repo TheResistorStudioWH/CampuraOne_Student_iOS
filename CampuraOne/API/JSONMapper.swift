@@ -251,9 +251,14 @@ enum JSONMapper {
 
         let targetID = json["targetID"].intValue
 
-        guard let matchedResult = results.first(where: {
-            $0.kind == kind && $0.targetID == targetID
-        }) else {
+        let matches = results.filter { $0.kind == kind && $0.targetID == targetID }
+        let matchedResult: SearchResultItem?
+        if let id = json["id"].string {
+            matchedResult = matches.first { $0.id == id }
+        } else {
+            matchedResult = matches.count == 1 ? matches.first : nil
+        }
+        guard let matchedResult else {
             return nil
         }
 

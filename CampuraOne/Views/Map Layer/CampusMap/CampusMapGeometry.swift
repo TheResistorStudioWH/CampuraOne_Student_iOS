@@ -21,6 +21,25 @@ enum CampusMapDisplayMode: String, CaseIterable, Identifiable {
     }
 }
 
+/// Navigation camera preference is independent of the campus basemap mode.
+enum NavigationCameraMode: String {
+    case northUp, forward
+
+    var title: String {
+        switch self {
+        case .northUp: return "正北朝上"
+        case .forward: return "前进方向"
+        }
+    }
+
+    var symbol: String {
+        switch self {
+        case .northUp: return "location.north.line.fill"
+        case .forward: return "location.north.fill"
+        }
+    }
+}
+
 /// A visual placement is never a real calibration and never becomes a GPS origin.
 nonisolated struct TemporaryCampusPlacement: Equatable, Sendable {
     var longitude: Double

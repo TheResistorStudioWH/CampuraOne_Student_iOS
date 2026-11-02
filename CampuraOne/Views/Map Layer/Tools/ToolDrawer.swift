@@ -14,57 +14,6 @@ import SwiftData
     PreviewAppView()
 }
 
-// MARK: - “你刚看过”的数据类型
-
-/// 最近浏览的内容有两种可能：
-/// 1. 一个商品
-/// 2. 一个促销事件
-///
-/// enum 的 case 可以携带不同类型的数据，这种写法叫“关联值”
-/// 我之前居然还没用过这个带括号的语法,都傻愣愣的写返回类型然后在那对id…
-/// 这样就不需要为了商品和促销分别再保存两个可选变量
-enum RecentlyViewedItem: Identifiable {
-    case product(Product)
-    case sale(SaleEvent)
-    
-    
-    var id: String {
-        switch self {
-        case .product(let product):
-            return "product-\(product.productID)"
-        case .sale(let sale):
-            return "sale-\(sale.saleID)"
-        }
-    }
-    
-    var title: String {
-        switch self {
-        case .product(let product):
-            return product.productName
-        case .sale(let sale):
-            return sale.saleRule ?? "促销活动"
-        }
-    }
-    
-    var description: String {
-        switch self {
-        case .product(let product):
-            return product.category?.categoryName ?? "商品"
-        case .sale:
-            return "促销事件"
-        }
-    }
-    
-    var icon: String {
-        switch self {
-        case .product(let product):
-            return product.category?.categoryIcon ?? "shippingbox.fill"
-        case .sale:
-            return "tag.fill"
-        }
-    }
-}
-
 // MARK: - 常驻工具的数据结构
 
 /// 工具箱里一直存在的按钮。

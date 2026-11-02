@@ -348,10 +348,15 @@ struct SearchResultList: View {
         .padding(.vertical, 5)
         .contentShape(Capsule())
         .beButton {
-            /// 后续使用 suggestion.info.kind 和 suggestion.info.targetID 打开详情。
+            openPreview(suggestion.info)
             Haptics.play(.soft)
         }
         .buttonStyle(.plain)
+    }
+
+    private func openPreview(_ item: SearchResultItem) {
+        guard let reference = CampusContentReference.search(kind: item.kind.rawValue, id: item.id, targetID: item.targetID) else { return }
+        ContentBrowserStore.shared.open(reference)
     }
 
     // MARK: 单条结果
@@ -412,7 +417,7 @@ struct SearchResultList: View {
             RoundedRectangle(cornerRadius: 16, style: .continuous)
         )
         .beButton {
-            /// 后续根据 item.kind 和 item.targetID 打开促销、商品或商户详情。
+            openPreview(item)
             Haptics.play(.soft)
         }
         .buttonStyle(.plain)

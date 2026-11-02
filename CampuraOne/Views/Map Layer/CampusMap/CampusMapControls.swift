@@ -11,6 +11,9 @@ struct CampusMapControls: View {
     let isEditing: Bool
     let toggleEditing: () -> Void
     let resetPlacement: () -> Void
+    let navigationCameraMode: NavigationCameraMode
+    let navigationCameraAvailable: Bool
+    let toggleNavigationCamera: () -> Void
 
     var body: some View {
         VStack(alignment: .trailing, spacing: 8) {
@@ -35,6 +38,19 @@ struct CampusMapControls: View {
             .accessibilityLabel("地图显示方式")
             .accessibilityValue(mode.title)
             .accessibilityIdentifier("campus.map.mode")
+
+            if navigationCameraAvailable {
+                Image(systemName: navigationCameraMode.symbol)
+                    .font(.subheadline.weight(.medium))
+                    .frame(width: 18, height: 18)
+                    .padding(12)
+                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+                    .beButton(toggleNavigationCamera)
+                    .accessibilityLabel("切换导航视角")
+                    .accessibilityValue(navigationCameraMode.title)
+                    .accessibilityHint("在正北朝上与前进方向之间切换")
+                    .accessibilityIdentifier("campus.map.navigation-camera")
+            }
 
             if isUncalibrated, mode != .original {
                 HStack(spacing: 12) {

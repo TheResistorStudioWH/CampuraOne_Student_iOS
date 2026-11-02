@@ -302,6 +302,9 @@ struct SalesTimelineDetailRow: View {
             )
             .fill(.quaternary)
         }
+        .contentShape(Rectangle())
+        .beButton { ContentBrowserStore.shared.open(.promotion(event.saleID)) }
+        .buttonStyle(.plain)
         .task {
             guard event.productID != nil,
                   productViewModel.items.isEmpty,

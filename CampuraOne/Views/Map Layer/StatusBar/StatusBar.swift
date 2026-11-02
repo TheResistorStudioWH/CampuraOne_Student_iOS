@@ -111,8 +111,6 @@ struct StatusBar: View {
     /// 点击“最近看过”时，由父视图处理跳转。
     let onOpenRecentlyViewed: (RecentlyViewedItem) -> Void
     
-    /// 控制上课地点气泡是否显示。
-    @State private var isShowingLocation = false
     
     /// 已经从服务器课程表中解析出的“下一节课”。
     /// 单独放进 State 后，课程表加载完成时可以明确更新 UI。
@@ -429,29 +427,12 @@ struct StatusBar: View {
             .font(.system(size: 12))
             .statusBarCapsuleStyle()
             .beButton {
-                isShowingLocation.toggle()
+                RoutePreviewStore.shared.open(.nextCourse)
             }
         .buttonStyle(.plain)
-        .popover(
-            isPresented: $isShowingLocation,
-            attachmentAnchor: .rect(.bounds),
-            arrowEdge: .bottom
-        ) {
-            VStack(alignment: .leading, spacing: 8) {
-                Label("上课地点", systemImage: "mappin.and.ellipse")
-                    .font(.headline)
-                
-                Text(course.location.isEmpty ? "暂未填写上课地点" : course.location)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .padding(16)
-            .frame(idealWidth: 240, alignment: .leading)
-            .presentationCompactAdaptation(.popover)
-        }
     }
     
+
     // MARK: 智能饮食
     
     private func smartMealCapsule(

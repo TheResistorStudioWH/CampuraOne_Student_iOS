@@ -160,6 +160,8 @@ struct AppRootView: View {
             NavigationPreferencesStore.shared.bind(userID: userID)
             CampusMapStore.shared.bind(userID: userID)
             StudentNavigationStore.shared.bind(userID: userID)
+            ContentBrowserStore.shared.bind(userID: userID)
+            RoutePreviewStore.shared.bind(userID: userID)
         }
         .task(id: advertisementLifecycle) {
             guard !Task.isCancelled else { return }

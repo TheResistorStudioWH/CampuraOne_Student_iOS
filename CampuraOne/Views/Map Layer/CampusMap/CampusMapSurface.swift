@@ -8,8 +8,13 @@ struct CampusMapSurface: View {
     let location: CLLocation?
     let controlsTopInset: CGFloat
     let controlsHidden: Bool
+    let navigationCameraMode: NavigationCameraMode
+    let navigationCameraAvailable: Bool
+    let toggleNavigationCamera: () -> Void
     @ObservedObject private var map = CampusMapStore.shared
     @ObservedObject private var navigation = StudentNavigationStore.shared
+    @ObservedObject private var routePreview = RoutePreviewStore.shared
+    @State private var surfaceSize: CGSize = .zero
     @State private var isEditing = false
     @State private var dragAnchor: CGPoint?
     @State private var rotationAnchor: Double?
@@ -27,6 +32,10 @@ struct CampusMapSurface: View {
               map.snapshot?.hash == plan.mapHash else { return nil }
         return plan
     }
+    private var renderedPlan: NavigationPlan? {
+        if map.displayMode == .original, isUncalibrated { return nil }
+        return matchingPlan
+    }
 
     var body: some View {
         MapReader { proxy in
@@ -41,7 +50,7 @@ struct CampusMapSurface: View {
                 .overlay {
                     CampusMapDrawing(document: map.snapshot?.document, frameID: map.selectedFrameID,
                                      mode: map.displayMode, selectedFeatureID: selectedFeatureID,
-                                     plan: matchingPlan, suggestion: matchingPlan == nil ? nil : navigation.preview,
+                                     plan: renderedPlan, suggestion: renderedPlan == nil ? nil : navigation.preview,
                                      location: location,
                                      projectionRevision: cameraRevision,
                                      screenPoint: { point, frameID in
@@ -50,7 +59,13 @@ struct CampusMapSurface: View {
                 }
                 .simultaneousGesture(SpatialTapGesture().onEnded { value in
                     guard !isEditing, map.displayMode != .original else { return }
-                    selectFeature(at: value.location, proxy: proxy)
+                    if routePreview.isSelectingOrigin {
+                        selectOrigin(at: value.location, proxy: proxy)
+                    } else if routePreview.isPresented {
+                        selectNotice(at: value.location, proxy: proxy)
+                    } else {
+                        selectFeature(at: value.location, proxy: proxy)
+                    }
                 })
                 .overlay {
                     if isEditing {
@@ -72,7 +87,10 @@ struct CampusMapSurface: View {
                             frames: map.snapshot?.document.frames.map { .init(id: $0.id, name: $0.name) } ?? [],
                             isUncalibrated: isUncalibrated, isEditing: isEditing,
                             toggleEditing: { isEditing.toggle() },
-                            resetPlacement: { resetPlacement(); fitCampus() }
+                            resetPlacement: { resetPlacement(); fitCampus() },
+                            navigationCameraMode: navigationCameraMode,
+                            navigationCameraAvailable: navigationCameraAvailable,
+                            toggleNavigationCamera: toggleNavigationCamera
                         )
                         .frame(maxWidth: min(220, geometry.size.width * 0.45), alignment: .trailing)
                         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -83,8 +101,17 @@ struct CampusMapSurface: View {
                     .allowsHitTesting(!controlsHidden)
                 }
         }
+        .onGeometryChange(for: CGSize.self) { $0.size } action: { surfaceSize = $0 }
+        .onChange(of: routePreview.fitRequest) { _, _ in fitPreviewRoute() }
+        .task(id: Int(routePreview.panelHeight / 4)) {
+            guard routePreview.isPresented else { return }
+            try? await Task.sleep(for: .milliseconds(180))
+            guard !Task.isCancelled else { return }
+            fitPreviewRoute()
+        }
         .onAppear { prepareMap() }
         .onChange(of: map.revision) { _, _ in
+            if let plan = navigation.plan, map.snapshot?.hash != plan.mapHash { navigation.invalidateContext() }
             isEditing = false
             selectedFeatureID = nil
             prepareMap()
@@ -96,7 +123,10 @@ struct CampusMapSurface: View {
             rotationAnchor = nil
             prepareMap()
         }
-        .onChange(of: map.displayMode) { _, mode in if mode == .original { isEditing = false } }
+        .onChange(of: map.displayMode) { old, mode in
+            if mode == .original { isEditing = false }
+            if old == .original, mode != .original, isUncalibrated, routePreview.isPresented { fitPreviewRoute() }
+        }
         .onChange(of: navigation.plan?.planID) { _, _ in
             if let routeFrame = navigation.plan?.route?.frameId { map.selectedFrameID = routeFrame }
         }
@@ -104,7 +134,7 @@ struct CampusMapSurface: View {
             guard let location, let frame,
                   let origin = CampusMapGeometry.gpsOrigin(location, frame: frame),
                   lastSentLocation.map({ location.distance(from: $0) >= 20 }) ?? true else { return }
-            guard navigation.plan != nil, !navigation.isWorking else { return }
+            guard navigation.isGuiding, navigation.plan != nil, !navigation.isWorking else { return }
             lastSentLocation = location
             Task { await navigation.updateLocation(origin) }
         }
@@ -119,7 +149,10 @@ struct CampusMapSurface: View {
         guard let document = map.snapshot?.document else { return }
         if frame == nil { map.selectedFrameID = document.frames.first?.id; return }
         if isUncalibrated, let frame, map.placements[frame.id] == nil { resetPlacement() }
-        fitCampus()
+        if matchingPlan?.hasRoute != true || frame?.bindings["mapkit"] == nil
+            || matchingPlan?.route?.frameId != map.selectedFrameID {
+            fitCampus()
+        }
     }
 
     private func resetPlacement() {
@@ -143,6 +176,48 @@ struct CampusMapSurface: View {
                                    longitudeDelta: max(0.0015, (maxLon - minLon) * 1.6)))
         guard CLLocationCoordinate2DIsValid(first) else { return }
         cameraPosition = .region(region)
+    }
+
+    private func fitPreviewRoute() {
+        guard routePreview.isPresented, let route = renderedPlan?.route, surfaceSize.height > 0 else { return }
+        let points = route.polyline.compactMap { coordinate($0, frameID: route.frameId) }.map(MKMapPoint.init)
+        guard let first = points.first else { return }
+        let minX = points.map(\.x).min() ?? first.x, maxX = points.map(\.x).max() ?? first.x
+        let minY = points.map(\.y).min() ?? first.y, maxY = points.map(\.y).max() ?? first.y
+        let metersPerPoint = MKMetersPerMapPointAtLatitude(first.coordinate.latitude)
+        let visibleHeight = max(surfaceSize.height * 0.2, surfaceSize.height - routePreview.panelHeight)
+        let extent = max((maxY - minY) * metersPerPoint,
+                         (maxX - minX) * metersPerPoint * visibleHeight / max(surfaceSize.width, 1), 60)
+        let center = MKMapPoint(x: (minX + maxX) / 2,
+                                y: (minY + maxY) / 2 + extent / metersPerPoint * routePreview.panelHeight / (2 * visibleHeight))
+        cameraPosition = .camera(MapCamera(centerCoordinate: center.coordinate,
+            distance: extent * 2.2 * surfaceSize.height / visibleHeight, heading: 0, pitch: 0))
+    }
+
+    private func selectOrigin(at point: CGPoint, proxy: MapProxy) {
+        guard let document = map.snapshot?.document else { return }
+        let options = Dictionary(uniqueKeysWithValues: routePreview.originOptions.map { ($0.id, $0) })
+        let option = document.nodes.compactMap { node -> (RoutePreviewStore.OriginOption, CGFloat)? in
+            guard let option = options[node.id],
+                  let coordinate = coordinate(node.position, frameID: node.frameId),
+                  let screen = proxy.convert(coordinate, to: .local) else { return nil }
+            let distance = hypot(screen.x - point.x, screen.y - point.y)
+            return distance <= 35 ? (option, distance) : nil
+        }.min { $0.1 < $1.1 }?.0
+        if let option { Task { await routePreview.selectOrigin(option) } }
+    }
+
+    private func selectNotice(at point: CGPoint, proxy: MapProxy) {
+        guard let plan = matchingPlan else { return }
+        let overlay = plan.overlays.first { overlay in
+            guard let coordinate = coordinate(CampusMapGeometry.center(of: overlay.geometry.points), frameID: overlay.frameId),
+                  let screen = proxy.convert(coordinate, to: .local) else { return false }
+            return hypot(screen.x - point.x, screen.y - point.y) <= 40
+        }
+        if let overlay, let source = plan.sources.first(where: { $0.announceID == overlay.sourceID && $0.version == overlay.sourceVersion }) {
+            routePreview.selectedSource = source
+            Task { await navigation.loadSource(source) }
+        }
     }
 
     private func moveDrawing(_ value: DragGesture.Value, proxy: MapProxy) {
@@ -174,6 +249,7 @@ struct CampusMapSurface: View {
                 let distance = hypot(p.x - point.x, p.y - point.y)
                 return distance < 35 ? (feature.id, distance) : nil
             }.min(by: { $0.1 < $1.1 })?.0
+        if let selectedFeatureID { ContentBrowserStore.shared.open(.place(selectedFeatureID)) }
     }
 
 }

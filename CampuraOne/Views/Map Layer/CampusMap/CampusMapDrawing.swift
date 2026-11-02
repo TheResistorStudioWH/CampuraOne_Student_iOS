@@ -78,6 +78,16 @@ struct CampusMapDrawing: View {
             }
             drawRoute(plan?.route, dashed: false, context: &context, bounds: bounds)
             drawRoute(suggestion?.route, dashed: true, context: &context, bounds: bounds)
+            if let route = plan?.route, let first = route.polyline.first, let last = route.polyline.last {
+                for (local, title, color) in [(first, "起点", Color.blue), (last, plan?.destination?.name ?? "终点", Color.orange)] {
+                    if let point = screenPoint(local, route.frameId), bounds.contains(point) {
+                        let circle = Path(ellipseIn: CGRect(x: point.x - 6, y: point.y - 6, width: 12, height: 12))
+                        context.fill(circle, with: .color(color))
+                        context.stroke(circle, with: .color(.white), lineWidth: 2)
+                        context.draw(Text(title).font(.caption.bold()).foregroundStyle(color), at: CGPoint(x: point.x, y: point.y - 18))
+                    }
+                }
+            }
             if mode == .drawing, let location, let document,
                document.frames.first(where: { $0.id == frameID })?.bindings["mapkit"] != nil,
                let point = locationPoint(location.coordinate), bounds.contains(point) {
