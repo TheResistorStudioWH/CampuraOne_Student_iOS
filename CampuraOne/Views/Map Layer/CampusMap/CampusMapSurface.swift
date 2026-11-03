@@ -186,12 +186,14 @@ struct CampusMapSurface: View {
         let minY = points.map(\.y).min() ?? first.y, maxY = points.map(\.y).max() ?? first.y
         let metersPerPoint = MKMetersPerMapPointAtLatitude(first.coordinate.latitude)
         let visibleHeight = max(surfaceSize.height * 0.2, surfaceSize.height - routePreview.panelHeight)
-        let extent = max((maxY - minY) * metersPerPoint,
-                         (maxX - minX) * metersPerPoint * visibleHeight / max(surfaceSize.width, 1), 60)
-        let center = MKMapPoint(x: (minX + maxX) / 2,
-                                y: (minY + maxY) / 2 + extent / metersPerPoint * routePreview.panelHeight / (2 * visibleHeight))
-        cameraPosition = .camera(MapCamera(centerCoordinate: center.coordinate,
-            distance: extent * 2.2 * surfaceSize.height / visibleHeight, heading: 0, pitch: 0))
+        let scale = max((maxX - minX) * 1.4 / max(surfaceSize.width, 1),
+                        (maxY - minY) * 1.4 / visibleHeight,
+                        80 / metersPerPoint / visibleHeight)
+        let width = scale * surfaceSize.width
+        let height = scale * surfaceSize.height
+        let centerY = (minY + maxY) / 2 + scale * routePreview.panelHeight / 2
+        cameraPosition = .rect(MKMapRect(x: (minX + maxX) / 2 - width / 2,
+                                        y: centerY - height / 2, width: width, height: height))
     }
 
     private func selectOrigin(at point: CGPoint, proxy: MapProxy) {
