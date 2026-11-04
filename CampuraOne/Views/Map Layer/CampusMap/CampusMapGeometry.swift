@@ -55,6 +55,20 @@ nonisolated struct TemporaryCampusPlacement: Equatable, Sendable {
 }
 
 nonisolated enum CampusMapGeometry {
+    /// Seed an uncalibrated drawing near its campus, rather than the arbitrary
+    /// initial MapKit viewport. The SDK conversion is approximate: this remains
+    /// a session-only visual placement, never a real MapKit binding or GPS origin.
+    static func initialPlacement(frame: SpatialFrame, points: [Point],
+                                 fallbackCenter: CLLocationCoordinate2D) -> TemporaryCampusPlacement {
+        if let binding = frame.bindings["amap"],
+           let origin = try? CoordinateConversion.gcj02ToWGS84(Point(binding.longitude, binding.latitude)) {
+            return TemporaryCampusPlacement(longitude: origin.x, latitude: origin.y,
+                                            rotation: binding.rotation, localAnchor: Point(0, 0))
+        }
+        return TemporaryCampusPlacement(longitude: fallbackCenter.longitude, latitude: fallbackCenter.latitude,
+                                        localAnchor: center(of: points))
+    }
+
     static func points(in document: CamapDocument, frameID: String) -> [Point] {
         document.features.filter { $0.frameId == frameID }.flatMap(\.geometry.points)
         + document.nodes.filter { $0.frameId == frameID }.map(\.position)

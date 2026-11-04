@@ -239,6 +239,30 @@ private enum CheckError: Error { case unavailable }
         let location = CLLocation(coordinate: .init(latitude: 30, longitude: 114), altitude: 0,
                                   horizontalAccuracy: 5, verticalAccuracy: 5, timestamp: Date())
         check(CampusMapGeometry.gpsOrigin(location, frame: frame) == nil, "Missing real binding never uses visual placement for GPS")
+        let lanzhou = CLLocationCoordinate2D(latitude: 36.0611, longitude: 103.8343)
+        let localPoints = [Point(-282.5, -56.66), Point(41.4, 370.7)]
+        let unbound = CampusMapGeometry.initialPlacement(frame: frame, points: localPoints, fallbackCenter: lanzhou)
+        let unboundCenter = unbound.project(CampusMapGeometry.center(of: localPoints))
+        check(abs(unboundCenter.latitude - lanzhou.latitude) < 1e-8
+              && abs(unboundCenter.longitude - lanzhou.longitude) < 1e-8,
+              "Fully unbound drawing retains visual placement at selected viewport")
+        frame.bindings["amap"] = CamapKit.Binding(longitude: 114.398994, latitude: 30.370608, rotation: 27)
+        let estimated = CampusMapGeometry.initialPlacement(frame: frame, points: localPoints, fallbackCenter: lanzhou)
+        check(abs(estimated.longitude - 114.398994) < 0.01 && abs(estimated.latitude - 30.370608) < 0.01,
+              "AMap-only Wuhan map initializes near Wuhan despite Lanzhou viewport")
+        check(abs(estimated.longitude - 114.398994) > 0.001,
+              "AMap coordinates are converted rather than copied as WGS-84")
+        check(estimated.localAnchor == Point(0, 0) && estimated.rotation == 27,
+              "Estimated placement preserves local origin and frame rotation")
+        check(CampusMapGeometry.gpsOrigin(location, frame: frame) == nil,
+              "AMap estimate never authorizes GPS navigation")
+        var unsupported = frame
+        unsupported.bindings["amap"] = CamapKit.Binding(longitude: -0.1276, latitude: 51.5072)
+        let fallback = CampusMapGeometry.initialPlacement(frame: unsupported, points: localPoints, fallbackCenter: lanzhou)
+        check(fallback == unbound, "Unsupported conversion safely retains uncalibrated visual fallback")
+        let estimatedPoint = CampusMapGeometry.coordinate(Point(25, 50), frame: frame, temporary: estimated)!
+        check(abs(estimatedPoint.longitude - estimated.project(Point(25, 50)).longitude) < 1e-8,
+              "Uncalibrated rendering uses the converted session placement")
         frame.bindings["mapkit"] = CamapKit.Binding(longitude: 114, latitude: 30, rotation: 15)
         check(CampusMapGeometry.gpsOrigin(location, frame: frame) != nil, "Good GPS accepts real MapKit binding")
         let imprecise = CLLocation(coordinate: location.coordinate, altitude: 0, horizontalAccuracy: 31, verticalAccuracy: 0, timestamp: Date())
@@ -250,7 +274,8 @@ private enum CheckError: Error { case unavailable }
         check(abs(anchor.latitude - 30) < 1e-8 && abs(anchor.longitude - 114) < 1e-8, "Temporary placement respects local center")
         let projected = CampusMapGeometry.coordinate(Point(25, 50), frame: frame, temporary: placement)!
         let sdk = frame.bindings["mapkit"]!.project(Point(25, 50))
-        check(abs(projected.latitude - sdk.y) < 1e-8, "Real binding takes priority over temporary data")
+        check(abs(projected.latitude - sdk.y) < 1e-8 && abs(projected.longitude - sdk.x) < 1e-8,
+              "Real binding takes priority over AMap and temporary data without swapping axes")
         store.bind(userID: nil)
         check(store.snapshot == nil && store.placements.isEmpty, "Logout clears maps and temporary placements")
     }

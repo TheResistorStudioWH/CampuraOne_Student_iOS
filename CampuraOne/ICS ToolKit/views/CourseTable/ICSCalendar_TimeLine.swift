@@ -310,6 +310,7 @@ private struct CalendarTimeLineEventBlock: View {
     let event: ICSEventItem
     
     var body: some View {
+        GeometryReader { geometry in
         HStack(alignment: .top, spacing: 6) {
             RoundedRectangle(cornerRadius: 2, style: .continuous)
                 .fill(event.accentColor)
@@ -318,7 +319,8 @@ private struct CalendarTimeLineEventBlock: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(event.title)
                     .font(.system(.caption2, design: .rounded, weight: .bold))
-                    .lineLimit(1)
+                    .lineLimit(geometry.size.height >= 44 ? 2 : 1)
+                    .fixedSize(horizontal: false, vertical: true)
                 
                 // 时间显示预留：之后你可以在这里设计第几节 / 星期几 / 开始时间等。
                 EmptyView()
@@ -336,10 +338,12 @@ private struct CalendarTimeLineEventBlock: View {
         .foregroundStyle(event.accentColor)
         .padding(.horizontal, 6)
         .padding(.vertical, 6)
-        .frame(maxWidth: .infinity, alignment: .topLeading)
+        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .topLeading)
         .background {
             RoundedRectangle(cornerRadius: 6, style: .continuous)
                 .fill(event.accentColor.opacity(0.2))
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
         }
     }
 }

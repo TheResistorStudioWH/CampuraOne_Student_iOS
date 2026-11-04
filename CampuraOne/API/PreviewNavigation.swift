@@ -7,7 +7,17 @@ import CryptoKit
 /// In-memory Canvas data. Never used as a fallback for a real account/server error.
 @MainActor
 enum PreviewNavigation {
+    #if DEMO
+    private static let bundledDocument: Result<CamapDocument, Error> = Result {
+        guard let url = Bundle.main.url(forResource: "school-1-v2", withExtension: "camap") else {
+            throw APIClientError.invalidPayload("未找到本地校园地图")
+        }
+        return try Camap.read(from: url)
+    }
+    static var frameID: String { (try? bundledDocument.get().frames.first?.id) ?? "" }
+    #else
     static let frameID = "10000000-0000-4000-8000-000000000001"
+    #endif
     static let merchantID = "10000000-0000-4000-8000-000000000024"
     private static var previewOriginID = "10000000-0000-4000-8000-000000000002"
     private static var previewDestinationID = "10000000-0000-4000-8000-000000000022"
@@ -19,6 +29,10 @@ enum PreviewNavigation {
     private static var contextVersion = 0
 
     static var document: CamapDocument {
+        #if DEMO
+        // Loading failures are surfaced by response(), never replaced with the old map.
+        return (try? bundledDocument.get()) ?? CamapDocument(title: "校园地图")
+        #else
         let uncalibrated = ProcessInfo.processInfo.arguments.contains("--campura-preview-uncalibrated")
         let frame = SpatialFrame(id: frameID, name: "校园", bindings: uncalibrated ? [:] : [
             "mapkit": CamapKit.Binding(longitude: 114.4, latitude: 30.4)
@@ -33,19 +47,30 @@ enum PreviewNavigation {
             Feature(id: "10000000-0000-4000-8000-000000000026", frameId: frameID, kind: "door", name: "咖啡窗口室外入口",
                     geometry: .point(Point(80, -40)), exterior: true),
             Feature(id: "10000000-0000-4000-8000-000000000025", frameId: frameID, kind: "building", name: "宿舍楼17栋",
-                    geometry: .polygon([Point(-50, -100), Point(20, -100), Point(20, -50), Point(-50, -50)]))
+                    geometry: .polygon([Point(-50, -100), Point(20, -100), Point(20, -50), Point(-50, -50)])),
+            Feature(id: "10000000-0000-4000-8000-000000000027", frameId: frameID, kind: "building", name: "学生活动中心",
+                    geometry: .polygon([Point(-60, 100), Point(-10, 100), Point(-10, 150), Point(-60, 150)])),
+            Feature(id: "10000000-0000-4000-8000-000000000028", frameId: frameID, kind: "building", name: "操场",
+                    geometry: .polygon([Point(-140, -20), Point(-70, -20), Point(-70, 70), Point(-140, 70)]))
         ], nodes: [
             RouteNode(id: "10000000-0000-4000-8000-000000000006", frameId: frameID, position: Point(80, -40), name: "咖啡窗口入口", entranceId: "10000000-0000-4000-8000-000000000026"),
             RouteNode(id: startID, frameId: frameID, position: Point(0, 0), name: "生活区路口"),
             RouteNode(id: "10000000-0000-4000-8000-000000000003", frameId: frameID, position: Point(140, 0), name: "教学路口"),
-            RouteNode(id: "10000000-0000-4000-8000-000000000004", frameId: frameID, position: Point(140, 120), name: "教学楼前")
+            RouteNode(id: "10000000-0000-4000-8000-000000000004", frameId: frameID, position: Point(140, 120), name: "教学楼前"),
+            RouteNode(id: "10000000-0000-4000-8000-000000000027", frameId: frameID, position: Point(-35, 100), name: "学生活动中心"),
+            RouteNode(id: "10000000-0000-4000-8000-000000000028", frameId: frameID, position: Point(-70, 20), name: "操场")
         ], edges: [
             RouteEdge(id: "10000000-0000-4000-8000-000000000032", frameId: frameID, from: startID, to: "10000000-0000-4000-8000-000000000006", name: "咖啡步道"),
             RouteEdge(id: "10000000-0000-4000-8000-000000000030", frameId: frameID,
                       from: startID, to: "10000000-0000-4000-8000-000000000003", name: "校园路"),
             RouteEdge(id: "10000000-0000-4000-8000-000000000031", frameId: frameID,
-                      from: "10000000-0000-4000-8000-000000000003", to: "10000000-0000-4000-8000-000000000004", name: "教学路")
+                      from: "10000000-0000-4000-8000-000000000003", to: "10000000-0000-4000-8000-000000000004", name: "教学路"),
+            RouteEdge(id: "10000000-0000-4000-8000-000000000033", frameId: frameID,
+                      from: startID, to: "10000000-0000-4000-8000-000000000027", name: "活动中心步道"),
+            RouteEdge(id: "10000000-0000-4000-8000-000000000034", frameId: frameID,
+                      from: startID, to: "10000000-0000-4000-8000-000000000028", name: "操场步道")
         ])
+        #endif
     }
 
     static var mapETag: String {
@@ -56,6 +81,12 @@ enum PreviewNavigation {
     }
 
     static func response(path: String, method: String, parameters: [String: Any]) throws -> JSON {
+        #if DEMO
+        _ = try bundledDocument.get()
+        if path == "plan.php", parameters["action"] as? String != "end", document.nodes.isEmpty || document.edges.isEmpty {
+            throw APIClientError.invalidPayload("本地校园地图尚未包含可通行路网，暂时无法规划路线。")
+        }
+        #endif
         let data: Any
         switch path {
         case "campus_map.php": data = try object(document)
@@ -132,10 +163,10 @@ enum PreviewNavigation {
             "legs": [["frameId": frameID, "nodes": Array(chain.reversed()), "edges": Array(edges.reversed()),
                       "polyline": coordinates, "distanceMeters": distance]]]
         let feature = doc.features.first { $0.id == previewDestinationID }
-        let overlay: [String: Any] = ["targetID": "10000000-0000-4000-8000-000000000020", "name": "图书馆东侧施工",
-            "frameId": frameID, "geometry": ["type": "polygon", "coordinates": [[35, 35], [105, 35], [105, 100], [35, 100]]],
+        let overlay: [String: Any] = ["targetID": destinationID, "name": "教学楼施工区域",
+            "frameId": frameID, "geometry": ["type": "polygon", "coordinates": [[120, 120], [210, 120], [210, 180], [120, 180]]],
             "kind": "construction", "nature": "advice", "avoidanceStatus": reachable ? "avoided" : "route_unavailable",
-            "sourceID": 1, "sourceVersion": 1, "evidence": "图书馆东门施工，请从南门通行。", "endUnknown": true, "affectedEdgeIDs": []]
+            "sourceID": 3, "sourceVersion": 1, "evidence": "教学楼附近正在施工，请绕行围挡区域。", "endUnknown": true, "affectedEdgeIDs": []]
         return ["sessionID": sessionID, "contextVersion": contextVersion, "planID": UUID().uuidString,
             "mapRevision": 1, "mapHash": mapETag.trimmingCharacters(in: CharacterSet(charactersIn: "\"")),
             "status": reachable ? "ready" : "unreachable", "route": reachable ? route : NSNull(),
@@ -144,8 +175,8 @@ enum PreviewNavigation {
             "schedule": usesCourse ? ["uid": "preview-course", "title": "下一节课", "location": "教学楼", "startAt": now.addingTimeInterval(3600).timeIntervalSince1970,
                                       "endAt": now.addingTimeInterval(7200).timeIntervalSince1970, "tableID": 1, "tableVersion": 1] : NSNull(),
             "waypoints": [], "suggestions": [], "overlays": [overlay],
-            "sources": [["announceID": 1, "version": 1, "title": "图书馆东门施工通知", "publishedAt": iso(now.addingTimeInterval(-86400)),
-                         "excerpt": "图书馆东门施工，请从南门通行。"]],
+            "sources": [["announceID": 3, "version": 1, "title": "教学楼施工安全提醒", "publishedAt": iso(now.addingTimeInterval(-86400)),
+                         "excerpt": "教学楼附近正在施工，请绕行围挡区域。"]],
             "decisions": [], "warnings": [], "aiStatus": "disabled", "modelDisplayName": "通义千问", "recommendationsEnabled": false]
     }
 

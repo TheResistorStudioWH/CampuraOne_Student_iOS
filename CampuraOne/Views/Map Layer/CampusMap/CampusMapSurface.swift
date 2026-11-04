@@ -158,9 +158,9 @@ struct CampusMapSurface: View {
     private func resetPlacement() {
         guard let frame, let document = map.snapshot?.document else { return }
         let center = visibleRegion?.center ?? location?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0)
-        map.setPlacement(.init(longitude: center.longitude, latitude: center.latitude,
-                               localAnchor: CampusMapGeometry.center(of: CampusMapGeometry.points(in: document, frameID: frame.id))),
-                         frameID: frame.id)
+        map.setPlacement(CampusMapGeometry.initialPlacement(
+            frame: frame, points: CampusMapGeometry.points(in: document, frameID: frame.id),
+            fallbackCenter: center), frameID: frame.id)
     }
 
     private func fitCampus() {

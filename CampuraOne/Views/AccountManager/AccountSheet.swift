@@ -38,6 +38,7 @@ struct AccountSheet: View {
                     }
                 }
 
+                #if !DEMO
                 Section {
                     Button("退出登录", role: .destructive) {
                         authSession.signOut(
@@ -47,6 +48,7 @@ struct AccountSheet: View {
                         dismiss()
                     }
                 }
+                #endif
             }
             .navigationTitle("账号")
         }

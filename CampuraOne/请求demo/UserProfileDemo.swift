@@ -55,7 +55,7 @@ struct UserProfileDemo: View {
                     }
                 }
             }
-            .navigationTitle("用户信息 Demo")
+            .navigationTitle("用户信息")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Text("清空").beButton {

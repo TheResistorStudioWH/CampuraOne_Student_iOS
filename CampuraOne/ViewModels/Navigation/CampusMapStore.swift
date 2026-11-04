@@ -20,7 +20,9 @@ final class CampusMapStore: ObservableObject {
     private var generation = UUID()
     private let client: Client
 
-    init(client: Client) { self.client = client }
+    init(client: Client) {
+        self.client = client
+    }
 
     func bind(userID: Int?) {
         guard self.userID != userID else { return }

@@ -30,6 +30,7 @@ struct CourseScheduleTags: View {
                  + Text("\(insights.napMinutes % 60)").foregroundColor(.pink)
                  + Text("分钟").foregroundColor(.primary))
                     .font(.caption.weight(.medium))
+                    .fixedSize(horizontal: false, vertical: true)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 7)
                     .background(.pink.opacity(0.12), in: RoundedRectangle(cornerRadius: 9))
@@ -41,6 +42,7 @@ struct CourseScheduleTags: View {
         Text(title)
             .font(.caption.weight(.semibold))
             .foregroundStyle(color)
+            .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal, 10)
             .padding(.vertical, 7)
             .background(color.opacity(0.12), in: RoundedRectangle(cornerRadius: 9))
@@ -50,23 +52,26 @@ struct CourseScheduleTags: View {
 private struct CourseTagLayout: Layout {
     var spacing: CGFloat
 
-    private func arrangement(width: CGFloat, subviews: Subviews) -> (positions: [CGPoint], height: CGFloat) {
+    private func arrangement(width: CGFloat, subviews: Subviews) -> (positions: [CGPoint], sizes: [CGSize], height: CGFloat) {
         var positions: [CGPoint] = []
+        var sizes: [CGSize] = []
         var x: CGFloat = 0
         var y: CGFloat = 0
         var rowHeight: CGFloat = 0
         for subview in subviews {
-            let size = subview.sizeThatFits(.unspecified)
+            let ideal = subview.sizeThatFits(.unspecified)
+            let size = subview.sizeThatFits(ProposedViewSize(width: min(ideal.width, max(1, width)), height: nil))
             if x > 0, x + size.width > width {
                 x = 0
                 y += rowHeight + spacing
                 rowHeight = 0
             }
             positions.append(CGPoint(x: x, y: y))
+            sizes.append(size)
             x += size.width + spacing
             rowHeight = max(rowHeight, size.height)
         }
-        return (positions, y + rowHeight)
+        return (positions, sizes, y + rowHeight)
     }
 
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
@@ -75,10 +80,10 @@ private struct CourseTagLayout: Layout {
     }
 
     func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
-        let positions = arrangement(width: bounds.width, subviews: subviews).positions
+        let layout = arrangement(width: bounds.width, subviews: subviews)
         for (index, subview) in subviews.enumerated() {
-            subview.place(at: CGPoint(x: bounds.minX + positions[index].x, y: bounds.minY + positions[index].y),
-                          anchor: .topLeading, proposal: .unspecified)
+            subview.place(at: CGPoint(x: bounds.minX + layout.positions[index].x, y: bounds.minY + layout.positions[index].y),
+                          anchor: .topLeading, proposal: ProposedViewSize(layout.sizes[index]))
         }
     }
 }
@@ -89,7 +94,7 @@ struct CourseWeekGrid: View {
     let events: [[ICSEventItem]]
     @Binding var selectedDate: Date
     private let calendar = Calendar.current
-    @ScaledMetric(relativeTo: .caption) private var rowHeight: CGFloat = 74
+    @ScaledMetric(relativeTo: .caption) private var rowHeight: CGFloat = 100
     private let headerHeight: CGFloat = 60
 
     private var slots: [Int] {
@@ -167,8 +172,10 @@ struct CourseWeekGrid: View {
                             Text(event.title)
                                 .font(.system(size: 11, weight: .medium))
                                 .lineLimit(courses.count > 1 ? 1 : 3)
+                                .fixedSize(horizontal: false, vertical: true)
                             if courses.count == 1, let location = event.location, !location.isEmpty {
-                                Text(location).font(.system(size: 9)).foregroundStyle(.secondary).lineLimit(1)
+                                Text(location).font(.system(size: 9)).foregroundStyle(.secondary)
+                                    .lineLimit(2).fixedSize(horizontal: false, vertical: true)
                             }
                         }
                         Spacer(minLength: 0)
@@ -290,7 +297,9 @@ private struct CourseTimelineCard: View {
                 RoundedRectangle(cornerRadius: 2).fill(color).frame(width: 3)
                 VStack(alignment: .leading, spacing: 3) {
                     HStack(alignment: .top, spacing: 3) {
-                        Text(event.title).font(.subheadline.bold()).lineLimit(2)
+                        Text(event.title).font(.subheadline.bold())
+                            .lineLimit(geometry.size.height > 58 ? 2 : 1)
+                            .fixedSize(horizontal: false, vertical: true)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         Image(systemName: "calendar.badge.plus").font(.caption)
                             .beButton(onAdd)
@@ -302,7 +311,9 @@ private struct CourseTimelineCard: View {
                             .font(.caption2).lineLimit(1)
                     }
                     if geometry.size.height > 80, let location = event.location, !location.isEmpty {
-                        Text(location).font(.caption2).lineLimit(1)
+                        Text(location).font(.caption2)
+                            .lineLimit(geometry.size.height > 105 ? 2 : 1)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                 }
             }

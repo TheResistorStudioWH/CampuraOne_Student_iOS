@@ -60,7 +60,7 @@ struct HomeWeatherBadge: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(showsLocation ? "地区，\(snapshot.locationText)" : "\(snapshot.temperatureText)，\(snapshot.condition.title)")
-        .accessibilityValue(snapshot.isDemo ? "演示数据，非实时定位或天气" : "")
+        .accessibilityValue(snapshot.isDemo ? "非实时定位或天气" : "")
         .accessibilityHint(showsLocation ? "轻点切换天气" : "轻点切换地区")
         .task {
             guard isPresentationActive else { return }

@@ -33,7 +33,7 @@ enum PreviewContainer {
             
             let demoUser = AppUser(
                 userID: 1,
-                userName: "演示",
+                userName: "林同学",
                 token: "preview.local.only",
                 shopIDs: [],
                 studentID: 20260001
@@ -41,7 +41,7 @@ enum PreviewContainer {
             
             let demoStudent = Student(
                 studentID: 20260001,
-                studentName: "演示",
+                studentName: "林同学",
                 gender: "男",
                 schoolID: 1,
                 compoundID: 1,
