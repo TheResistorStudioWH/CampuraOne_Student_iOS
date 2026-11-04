@@ -3,7 +3,7 @@ import Foundation
 import SwiftyJSON
 import UIKit
 
-/// 仅 Xcode Canvas 启用。未知接口直接报错，绝不回退到生产服务器。
+/// Canvas 与独立离线构建使用；未知接口报错，不回退生产服务器。
 @MainActor
 enum PreviewAPI {
     static var isEnabled: Bool {
@@ -20,24 +20,39 @@ enum PreviewAPI {
         "studentID": 20260001, "studentName": "林同学", "schoolID": 1,
         "compoundID": 1, "departmentID": 2, "classID": 3
     ]
-    private static let imageURL = "https://preview.invalid/campus.png"
-    private static let category: [String: Any] = [
-        "categoryID": 1, "categoryName": "餐饮", "categoryIcon": "cup.and.saucer.fill", "categoryColor": "#ED9237"
-    ]
-    private static let products: [[String: Any]] = [
-        ["productID": 1, "productName": "校园拿铁", "price": 12.0,
-         "categoryID": 1, "category": category, "productImg": imageURL,
-         "productIntro": "课间的一杯咖啡。", "mainShopID": 1, "subShopID": 1],
-        ["productID": 2, "productName": "手作三明治", "price": 9.9,
-         "categoryID": 1, "category": category, "productImg": imageURL,
-         "productIntro": "新鲜制作的课间轻食。", "mainShopID": 1, "subShopID": 1]
-    ]
-    private static let shop: [String: Any] = [
-        "shopID": 1, "shopName": "校园咖啡", "shopSlogan": "课间休息一下",
-        "shopAddress": ["湖北省", "武汉市", "江夏区", "校园生活区"],
-        "shopLogo": imageURL, "shopImg": imageURL, "schoolID": 1,
-        "areaID": 1, "accountID": 1, "productsList": [1, 2], "subShopsList": [1], "saleIDs": [1, 2]
-    ]
+    private static let marketing: [String: Any] = {
+        guard let url = Bundle.main.url(forResource: "catalog", withExtension: "json", subdirectory: "Marketing"),
+              let data = try? Data(contentsOf: url),
+              let value = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return [:] }
+        return value
+    }()
+
+    private static func marketingRows(_ key: String) -> [[String: Any]] {
+        (marketing[key] as? [[String: Any]] ?? []).map { row in
+            var row = row
+            for key in ["productName", "saleRule"] {
+                if let text = row[key] as? String {
+                    row[key] = text.replacingOccurrences(of: "【演示】", with: "")
+                        .replacingOccurrences(of: "；仅供项目展示，非商户真实优惠。", with: "")
+                }
+            }
+            if (row["productIntro"] as? String)?.hasPrefix("【演示】") == true { row["productIntro"] = "" }
+            if (row["shopSlogan"] as? String)?.hasPrefix("演示商户资料") == true { row["shopSlogan"] = "" }
+            if let address = row["shopAddress"] as? [String] {
+                row["shopAddress"] = address.map { $0.replacingOccurrences(of: "（演示）", with: "") }
+            }
+            return row
+        }
+    }
+
+    static func localImage(url: String?) -> UIImage? {
+        guard let url, let filename = (marketing["images"] as? [String: String])?[url],
+              let path = Bundle.main.url(forResource: filename, withExtension: nil, subdirectory: "Marketing") else { return nil }
+        if let image = images[url] { return image }
+        guard let image = UIImage(contentsOfFile: path.path) else { return nil }
+        images[url] = image
+        return image
+    }
 
     private static func day(_ offset: Int) -> Date {
         Calendar.current.date(byAdding: .day, value: offset, to: Calendar.current.startOfDay(for: .now))!
@@ -74,18 +89,24 @@ enum PreviewAPI {
         case "course_table.php":
             data = ["tableID": 1, "schoolID": 1, "compoundID": 1, "departmentID": 2, "classID": 3, "content": courseICS]
         case "school_calendar.php": data = ["calendarID": 1, "content": calendarICS]
-        case "main_shops.php": data = [shop]
-        case "sub_shops.php":
-            data = [["shopID": 1, "mainShopID": 1, "accountID": 1, "shopName": "生活区咖啡窗口",
-                     "shopImg": imageURL, "productsList": [1, 2], "saleList": [1, 2]]]
-        case "product_categories.php": data = parameters["categoryID"] == nil ? [category] as Any : category
+        case "main_shops.php": data = marketingRows("shops")
+        case "sub_shops.php": data = [] as [[String: Any]]
+        case "product_categories.php":
+            let categories = marketingRows("categories")
+            if let id = parameters["categoryID"] as? Int {
+                data = categories.first { $0["categoryID"] as? Int == id } ?? [:]
+            } else { data = categories }
         case "products.php":
-            data = products.filter { parameters["productID"] == nil || $0["productID"] as? Int == parameters["productID"] as? Int }
+            data = marketingRows("products").filter { row in
+                ["productID", "mainShopID", "subShopID", "categoryID"].allSatisfy { key in
+                    parameters[key] == nil || row[key] as? Int == parameters[key] as? Int
+                }
+            }
         case "promotions.php":
-            data = (1...2).map { id -> [String: Any] in
-                ["saleID": id, "productID": id, "saleRule": id == 1 ? "咖啡第二杯半价" : "课间轻食八五折",
-                 "startTime": iso(day(-1)), "endTime": iso(day(7))]
-            }.filter { parameters["productID"] == nil || $0["productID"] as? Int == parameters["productID"] as? Int }
+            data = marketingRows("promotions").filter { row in
+                (parameters["productID"] == nil || row["productID"] as? Int == parameters["productID"] as? Int)
+                && (parameters["onlyActive"] as? Int != 1 || JSONMapper.makePromotionEvent(from: JSON(row)).isActive())
+            }
         case "advertisements.php":
             data = advertisementRows.filter {
                 (parameters["type"] == nil || $0["type"] as? String == parameters["type"] as? String)
@@ -99,7 +120,7 @@ enum PreviewAPI {
                 "本周校园活动征集志愿者，协助现场引导与秩序维护。有意参加的同学请联系班委报名。"
             ]
             data = messages.enumerated().map { index, message -> [String: Any] in
-                ["announceID": index + 1, "schoolID": 1, "version": 1, "content": message, "type": 0,
+                ["announceID": index + 1, "schoolID": 1, "version": 1, "content": message, "type": index < 2 ? 1 : 0,
                  "target": ["allSchool": true], "startTime": iso(day(-1)), "endTime": iso(day(7)),
                  "createdAt": iso(day(-1).addingTimeInterval(Double(index) * 60))]
             }.filter {
@@ -111,13 +132,22 @@ enum PreviewAPI {
         case "search.php":
             let query = (parameters["q"] as? String ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
             let mode = parameters["mode"] as? String ?? "all"
-            let rows: [[String: Any]] = [
-                ["type": "promotion", "targetID": 1, "title": "咖啡第二杯半价", "subtitle": "校园咖啡 · 本周有效", "imageURL": imageURL],
-                ["type": "product", "targetID": 1, "title": "校园拿铁", "subtitle": "咖啡 · ¥12", "category": category, "imageURL": imageURL],
-                ["type": "product", "targetID": 2, "title": "手作三明治", "subtitle": "轻食 · ¥9.9", "category": category, "imageURL": imageURL],
-                ["id": "main-shop-1", "type": "shop", "targetID": 1, "title": "校园咖啡", "subtitle": "生活区 · 饮品与轻食", "imageURL": imageURL]
-            ]
-            let rowsWithSubShop = rows + [["id": "sub-shop-1", "type": "shop", "targetID": 1, "title": "生活区咖啡窗口", "subtitle": "校园咖啡 · 档口", "imageURL": imageURL]]
+            let products = marketingRows("products")
+            let shops = marketingRows("shops")
+            let productRows: [[String: Any]] = products.map { product in
+                ["type": "product", "targetID": product["productID"]!, "title": product["productName"]!,
+                 "subtitle": "¥\(product["price"] ?? "")", "imageURL": product["productImg"] ?? ""]
+            }
+            let promotionRows: [[String: Any]] = marketingRows("promotions").map { sale in
+                let product = products.first { $0["productID"] as? Int == sale["productID"] as? Int }
+                return ["type": "promotion", "targetID": sale["saleID"]!, "title": sale["saleRule"]!,
+                        "subtitle": product?["productName"] ?? "", "imageURL": product?["productImg"] ?? ""]
+            }
+            let shopRows: [[String: Any]] = shops.map { shop in
+                ["id": "main-shop-\(shop["shopID"]!)", "type": "shop", "targetID": shop["shopID"]!,
+                 "title": shop["shopName"]!, "subtitle": (shop["shopAddress"] as? [String] ?? []).joined(separator: " · ")]
+            }
+            let rowsWithSubShop = promotionRows + productRows + shopRows
             let matches = rowsWithSubShop.filter { row in
                 (mode == "all" || mode == "smart" || row["type"] as? String == mode)
                 && (query.isEmpty || "\(row["title"] ?? "") \(row["subtitle"] ?? "")".localizedCaseInsensitiveContains(query))
@@ -131,11 +161,7 @@ enum PreviewAPI {
     }
 
     static var advertisementRows: [[String: Any]] {
-        (1...6).map { id in
-            ["adID": id, "saleID": id % 2 + 1, "type": id <= 3 ? "L" : "S",
-             "img": "https://preview.invalid/ad-\(id).png", "updatedAt": "preview-1",
-             "startTime": iso(day(-1)), "endTime": iso(day(7))]
-        }
+        marketingRows("advertisements").filter { JSONMapper.makeAdvertisement(from: JSON($0)).isActive() }
     }
 
     static var courseICS: String {
@@ -181,27 +207,7 @@ enum PreviewAPI {
                 "LOCATION:\(location)", "DESCRIPTION:校园日程", "END:VEVENT"].joined(separator: "\r\n")
     }
 
-    /// 直接在内存绘制占位图，不下载图片、不写入正式图片缓存。
+    /// Bundled images are decoded once per app process; no network/cache fallback.
     private static var images: [String: UIImage] = [:]
-
-    static func image(index: Int = 0, banner: Bool = false) -> UIImage {
-        let key = "\(index)-\(banner)"
-        if let image = images[key] { return image }
-        let size = CGSize(width: 600, height: banner ? 200 : 600)
-        let image = UIGraphicsImageRenderer(size: size).image { context in
-            let colors: [UIColor] = [.systemOrange, .systemTeal, .systemIndigo]
-            colors[abs(index) % colors.count].setFill()
-            context.fill(CGRect(origin: .zero, size: size))
-            let symbol = UIImage(systemName: ["cup.and.saucer.fill", "fork.knife", "book.fill"][abs(index) % 3])?
-                .withTintColor(.white, renderingMode: .alwaysOriginal)
-            let side = size.height * 0.32
-            symbol?.draw(in: CGRect(x: (size.width - side) / 2, y: size.height * 0.16, width: side, height: side))
-            let text = ["课间来杯咖啡", "今天吃点好的", "校园阅读时光"][abs(index) % 3]
-            (text as NSString).draw(in: CGRect(x: 32, y: size.height * 0.62, width: size.width - 64, height: 70),
-                                   withAttributes: [.font: UIFont.systemFont(ofSize: banner ? 27 : 34, weight: .semibold), .foregroundColor: UIColor.white])
-        }
-        images[key] = image
-        return image
-    }
 }
 #endif

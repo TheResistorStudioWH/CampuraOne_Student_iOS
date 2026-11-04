@@ -20,6 +20,10 @@ final class LoadableListViewModel<Item>: ObservableObject {
     init(loader: @escaping () async throws -> [Item]) {
         self.loader = loader
     }
+
+    // No actor-bound cleanup is required. Explicit isolation avoids the Swift
+    // 6.2.4 Release optimizer crash in this generic class's synthesized deinit.
+    nonisolated deinit {}
     
     func load() async {
         guard !isLoading else { return }

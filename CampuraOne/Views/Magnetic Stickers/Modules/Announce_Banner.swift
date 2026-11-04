@@ -436,18 +436,17 @@ private struct ShortAnnouncementCard: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .firstTextBaseline) {
                 VStack(alignment: .leading, spacing: 3) {
-                    HStack {
-                        Text(announce.typeTitle)
-                            .font(.headline)
-                        Text("·")
-                        
+                    Text(announce.typeTitle)
+                        .font(.headline)
+
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
                         typeLabel(type: announce.type)
-                    }
-                    
-                    if isExpanded {
-                        Text(announce.dateRangeText)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                        if isExpanded {
+                            Text(announce.dateRangeText)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
                     }
                     
                 }
@@ -498,7 +497,8 @@ private struct ShortAnnouncementCard: View {
     
     @ViewBuilder func typeLabel(type: AnnouncementType) -> some View {
         Text(type == .emergencyShort ? "紧急" : "普通")
-            .font(.caption)
+            .font(.caption2)
+            .fixedSize()
             .padding(3)
             .background(alignment: .center) {
                 RoundedRectangle(cornerRadius: 15, style: .continuous)

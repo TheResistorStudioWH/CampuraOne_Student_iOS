@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA1104000000000000000003 /* Marketing in Resources */ = {isa = PBXBuildFile; fileRef = DA1104000000000000000004 /* Marketing */; };
 		DA1104000000000000000001 /* school-1-v2.camap in Resources */ = {isa = PBXBuildFile; fileRef = DA1104000000000000000002 /* school-1-v2.camap */; };
 		0B05CA57308F732700C604AE /* CamapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0B05CA56308F732700C604AE /* CamapKit */; };
 		0B12AC872FDFC72500ECFC94 /* SalesLineDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B12AC862FDFC71C00ECFC94 /* SalesLineDetail.swift */; };
@@ -137,6 +138,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DA1104000000000000000004 /* Marketing */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "CampuraOne/OfflineResources/Marketing"; sourceTree = SOURCE_ROOT; };
 		DA1104000000000000000002 /* school-1-v2.camap */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CampuraOne/OfflineResources/school-1-v2.camap"; sourceTree = SOURCE_ROOT; };
 		0B12AC862FDFC71C00ECFC94 /* SalesLineDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalesLineDetail.swift; sourceTree = "<group>"; };
 		0B3F59392FC3380E00980B94 /* CampuraOne.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CampuraOne.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -347,6 +349,7 @@
 				F72F5F132C9EF0C00C198DD9 /* APIClientError.swift */,
 				4CAAC00FB6114B70BAF27D9C /* PreviewAPI.swift */,
 				DA1104000000000000000002 /* school-1-v2.camap */,
+				DA1104000000000000000004 /* Marketing */,
 				0B8302E42FDF0D7300B5269A /* APIConfig.swift */,
 				CA1022000000000000000001 /* APIDate.swift */,
 				0B8302E52FDF0D7300B5269A /* APIResponse.swift */,
@@ -738,6 +741,7 @@
 			files = (
 				0B8303262FDF0D7300B5269A /* Assets.xcassets in Resources */,
 				DA1104000000000000000001 /* school-1-v2.camap in Resources */,
+				DA1104000000000000000003 /* Marketing in Resources */,
 				CA1029000000000000000201 /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

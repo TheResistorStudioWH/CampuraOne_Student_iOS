@@ -60,6 +60,12 @@ nonisolated enum CampusMapGeometry {
     /// a session-only visual placement, never a real MapKit binding or GPS origin.
     static func initialPlacement(frame: SpatialFrame, points: [Point],
                                  fallbackCenter: CLLocationCoordinate2D) -> TemporaryCampusPlacement {
+        // Calibration exports already contain Apple-observed coordinates. Never
+        // apply the AMap conversion again, even when resetting the viewport.
+        if let binding = frame.bindings["mapkit"] {
+            return TemporaryCampusPlacement(longitude: binding.longitude, latitude: binding.latitude,
+                                            rotation: binding.rotation, localAnchor: Point(0, 0))
+        }
         if let binding = frame.bindings["amap"],
            let origin = try? CoordinateConversion.gcj02ToWGS84(Point(binding.longitude, binding.latitude)) {
             return TemporaryCampusPlacement(longitude: origin.x, latitude: origin.y,
@@ -87,11 +93,16 @@ nonisolated enum CampusMapGeometry {
 
     static func coordinate(_ point: Point, frame: SpatialFrame,
                            temporary: TemporaryCampusPlacement?) -> CLLocationCoordinate2D? {
+        guard point.x.isFinite, point.y.isFinite else { return nil }
+        let coordinate: CLLocationCoordinate2D?
         if let binding = frame.bindings["mapkit"] {
             let p = binding.project(point)
-            return CLLocationCoordinate2D(latitude: p.y, longitude: p.x)
+            coordinate = CLLocationCoordinate2D(latitude: p.y, longitude: p.x)
+        } else {
+            coordinate = temporary?.project(point)
         }
-        return temporary?.project(point)
+        guard let coordinate, CLLocationCoordinate2DIsValid(coordinate) else { return nil }
+        return coordinate
     }
 
     static func gpsOrigin(_ location: CLLocation, frame: SpatialFrame, now: Date = Date()) -> NavigationOrigin? {

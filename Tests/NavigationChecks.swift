@@ -276,6 +276,30 @@ private enum CheckError: Error { case unavailable }
         let sdk = frame.bindings["mapkit"]!.project(Point(25, 50))
         check(abs(projected.latitude - sdk.y) < 1e-8 && abs(projected.longitude - sdk.x) < 1e-8,
               "Real binding takes priority over AMap and temporary data without swapping axes")
+        // Exercise the new SDK calibration output through the actual iOS renderer.
+        let candidate = frame.bindings["mapkit"]!
+        let calibrated = CamapKit.Binding(longitude: 114.0003, latitude: 30.0002, rotation: 15)
+        let points = [Point(80, 40), Point(240, 40), Point(80, 220)]
+        let landmarks = points.enumerated().map { index, point in
+            CalibrationLandmark(featureID: "landmark-\(index)", name: "地标\(index)",
+                                localPoint: point, mapCoordinate: calibrated.project(point))
+        }
+        let fitted = try TranslationCalibration.fit(candidate: candidate, anchor: landmarks[0])
+        let report = try TranslationCalibration.validate(binding: fitted, anchor: landmarks[0],
+                                                         checks: Array(landmarks.dropFirst()))
+        check(report.accepted, "New SDK accepts dispersed independently supplied check coordinates")
+        frame.bindings["mapkit"] = fitted
+        let calibratedPlacement = CampusMapGeometry.initialPlacement(frame: frame, points: points, fallbackCenter: lanzhou)
+        check(calibratedPlacement.longitude == fitted.longitude && calibratedPlacement.latitude == fitted.latitude
+              && calibratedPlacement.rotation == 15 && calibratedPlacement.localAnchor == Point(0, 0),
+              "Reset preserves the calibrated binding instead of reusing AMap or the viewport")
+        for landmark in landmarks {
+            let rendered = CampusMapGeometry.coordinate(landmark.localPoint, frame: frame, temporary: estimated)!
+            check(TranslationCalibration.distanceMeters(Point(rendered.longitude, rendered.latitude), landmark.mapCoordinate) < 0.01,
+                  "Calibrated landmarks render directly without double conversion or stale placement")
+        }
+        check(CampusMapGeometry.coordinate(Point(.nan, 0), frame: frame, temporary: nil) == nil,
+              "Invalid geometry cannot reach MapKit projection")
         store.bind(userID: nil)
         check(store.snapshot == nil && store.placements.isEmpty, "Logout clears maps and temporary placements")
     }

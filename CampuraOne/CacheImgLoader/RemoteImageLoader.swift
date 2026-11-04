@@ -28,9 +28,9 @@ final class RemoteImageLoader: ObservableObject {
     func load() {
         #if DEBUG
         if PreviewAPI.isEnabled {
-            image = Image(uiImage: PreviewAPI.image())
+            image = PreviewAPI.localImage(url: url?.absoluteString).map { Image(uiImage: $0) }
             isLoading = false
-            loadFailed = false
+            loadFailed = image == nil
             return
         }
         #endif

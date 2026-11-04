@@ -180,7 +180,7 @@ final class AdvertisementStore: ObservableObject {
     func image(for ad: Advertisement) -> UIImage? {
         #if DEBUG
         if PreviewAPI.isEnabled {
-            return PreviewAPI.image(index: ad.adID, banner: ad.type == "L")
+            return PreviewAPI.localImage(url: ad.img)
         }
         #endif
         guard items.contains(ad), ad.isActive(), let key = descriptors[ad.adID] else { return nil }

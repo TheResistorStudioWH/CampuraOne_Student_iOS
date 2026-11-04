@@ -1,0 +1,520 @@
+{
+  "advertisements": [
+    {
+      "adID": 12,
+      "saleID": 16,
+      "startTime": "2026-11-04 00:00:00",
+      "endTime": "2027-10-31 23:59:59",
+      "type": "L",
+      "img": "https://campura.one/uploads/ads/imgs/06-water-L.png",
+      "createdAt": "2026-11-04 20:31:51",
+      "updatedAt": "2026-11-04 20:31:51"
+    },
+    {
+      "adID": 11,
+      "saleID": 15,
+      "startTime": "2026-11-04 00:00:00",
+      "endTime": "2027-10-31 23:59:59",
+      "type": "S",
+      "img": "https://campura.one/uploads/ads/imgs/05-water-S.png",
+      "createdAt": "2026-11-04 20:31:51",
+      "updatedAt": "2026-11-04 20:31:51"
+    },
+    {
+      "adID": 10,
+      "saleID": 14,
+      "startTime": "2026-11-04 00:00:00",
+      "endTime": "2027-10-31 23:59:59",
+      "type": "S",
+      "img": "https://campura.one/uploads/ads/imgs/04-sausage-S.png",
+      "createdAt": "2026-11-04 20:31:51",
+      "updatedAt": "2026-11-04 20:31:51"
+    },
+    {
+      "adID": 9,
+      "saleID": 13,
+      "startTime": "2026-11-04 00:00:00",
+      "endTime": "2027-10-31 23:59:59",
+      "type": "L",
+      "img": "https://campura.one/uploads/ads/imgs/03-latte-L.png",
+      "createdAt": "2026-11-04 20:31:51",
+      "updatedAt": "2026-11-04 20:31:51"
+    },
+    {
+      "adID": 8,
+      "saleID": 12,
+      "startTime": "2026-11-04 00:00:00",
+      "endTime": "2027-10-31 23:59:59",
+      "type": "L",
+      "img": "https://campura.one/uploads/ads/imgs/02-breakfast-L.png",
+      "createdAt": "2026-11-04 20:31:51",
+      "updatedAt": "2026-11-04 20:31:51"
+    },
+    {
+      "adID": 7,
+      "saleID": 11,
+      "startTime": "2026-11-04 00:00:00",
+      "endTime": "2027-10-31 23:59:59",
+      "type": "S",
+      "img": "https://campura.one/uploads/ads/imgs/01-americano-S.png",
+      "createdAt": "2026-11-04 20:31:51",
+      "updatedAt": "2026-11-04 20:31:51"
+    }
+  ],
+  "promotions": [
+    {
+      "saleID": 16,
+      "productID": 10,
+      "saleRule": "【演示】课间元气拼单：元气柠檬茶两杯立减3元，两杯13元；仅供项目展示，非商户真实优惠。",
+      "startTime": "2026-11-04 00:00:00",
+      "endTime": "2027-10-31 23:59:59",
+      "createdAt": "2026-11-04 20:31:51",
+      "updatedAt": "2026-11-04 20:31:51"
+    },
+    {
+      "saleID": 15,
+      "productID": 9,
+      "saleRule": "【演示】校园特调上新：草莓清爽果茶尝鲜价8元/杯；仅供项目展示，非商户真实优惠。",
+      "startTime": "2026-11-04 00:00:00",
+      "endTime": "2027-10-31 23:59:59",
+      "createdAt": "2026-11-04 20:31:51",
+      "updatedAt": "2026-11-04 20:31:51"
+    },
+    {
+      "saleID": 14,
+      "productID": 8,
+      "saleRule": "【演示】课间加餐：烤肠满30元减5元，五根25元；仅供项目展示，非商户真实优惠。",
+      "startTime": "2026-11-04 00:00:00",
+      "endTime": "2027-10-31 23:59:59",
+      "createdAt": "2026-11-04 20:31:51",
+      "updatedAt": "2026-11-04 20:31:51"
+    },
+    {
+      "saleID": 13,
+      "productID": 7,
+      "saleRule": "【演示】课间约一杯：经典拿铁第二杯半价，同规格两杯24元；仅供项目展示，非商户真实优惠。",
+      "startTime": "2026-11-04 00:00:00",
+      "endTime": "2027-10-31 23:59:59",
+      "createdAt": "2026-11-04 20:31:51",
+      "updatedAt": "2026-11-04 20:31:51"
+    },
+    {
+      "saleID": 12,
+      "productID": 6,
+      "saleRule": "【演示】早八早餐组合：三明治搭配任意饮品立减3元；仅供项目展示，非商户真实优惠。",
+      "startTime": "2026-11-04 00:00:00",
+      "endTime": "2027-10-31 23:59:59",
+      "createdAt": "2026-11-04 20:31:51",
+      "updatedAt": "2026-11-04 20:31:51"
+    },
+    {
+      "saleID": 11,
+      "productID": 5,
+      "saleRule": "【演示】咖啡日特惠：冰美式9.9元/杯；仅供项目展示，非商户真实优惠。",
+      "startTime": "2026-11-04 00:00:00",
+      "endTime": "2027-10-31 23:59:59",
+      "createdAt": "2026-11-04 20:31:51",
+      "updatedAt": "2026-11-04 20:31:51"
+    }
+  ],
+  "products": [
+    {
+      "productID": 5,
+      "productName": "【演示】冰美式",
+      "price": 12.0,
+      "productImg": "https://campura.one/uploads/ads/imgs/01-americano-S.png",
+      "productIntro": "【演示】虚构商品与价格，用于广告、促销和地图商户联调；不代表真实商户销售内容。",
+      "mainShopID": 6,
+      "subShopID": null,
+      "categoryID": 1,
+      "createdAt": "2026-11-04 20:31:51",
+      "updatedAt": "2026-11-04 20:31:51",
+      "categoryName": "咖啡",
+      "categoryIcon": "cup.and.saucer.fill",
+      "categoryColor": "brown"
+    },
+    {
+      "productID": 6,
+      "productName": "【演示】芝士鸡蛋三明治",
+      "price": 15.0,
+      "productImg": "https://campura.one/uploads/ads/imgs/02-breakfast-L.png",
+      "productIntro": "【演示】虚构商品与价格，用于广告、促销和地图商户联调；不代表真实商户销售内容。",
+      "mainShopID": 77,
+      "subShopID": null,
+      "categoryID": 4,
+      "createdAt": "2026-11-04 20:31:51",
+      "updatedAt": "2026-11-04 20:31:51",
+      "categoryName": "烘焙甜点",
+      "categoryIcon": "birthday.cake.fill",
+      "categoryColor": "pink"
+    },
+    {
+      "productID": 7,
+      "productName": "【演示】经典拿铁",
+      "price": 16.0,
+      "productImg": "https://campura.one/uploads/ads/imgs/03-latte-L.png",
+      "productIntro": "【演示】虚构商品与价格，用于广告、促销和地图商户联调；不代表真实商户销售内容。",
+      "mainShopID": 97,
+      "subShopID": null,
+      "categoryID": 1,
+      "createdAt": "2026-11-04 20:31:51",
+      "updatedAt": "2026-11-04 20:31:51",
+      "categoryName": "咖啡",
+      "categoryIcon": "cup.and.saucer.fill",
+      "categoryColor": "brown"
+    },
+    {
+      "productID": 8,
+      "productName": "【演示】火山石烤肠",
+      "price": 6.0,
+      "productImg": "https://campura.one/uploads/ads/imgs/04-sausage-S.png",
+      "productIntro": "【演示】虚构商品与价格，用于广告、促销和地图商户联调；不代表真实商户销售内容。",
+      "mainShopID": 14,
+      "subShopID": null,
+      "categoryID": 3,
+      "createdAt": "2026-11-04 20:31:51",
+      "updatedAt": "2026-11-04 20:31:51",
+      "categoryName": "食品",
+      "categoryIcon": "fork.knife",
+      "categoryColor": "red"
+    },
+    {
+      "productID": 9,
+      "productName": "【演示】草莓清爽果茶",
+      "price": 10.0,
+      "productImg": "https://campura.one/uploads/ads/imgs/05-water-S.png",
+      "productIntro": "【演示】虚构商品与价格，用于广告、促销和地图商户联调；不代表真实商户销售内容。",
+      "mainShopID": 60,
+      "subShopID": null,
+      "categoryID": 2,
+      "createdAt": "2026-11-04 20:31:51",
+      "updatedAt": "2026-11-04 20:31:51",
+      "categoryName": "奶茶与茶饮",
+      "categoryIcon": "takeoutbag.and.cup.and.straw.fill",
+      "categoryColor": "orange"
+    },
+    {
+      "productID": 10,
+      "productName": "【演示】元气柠檬茶",
+      "price": 8.0,
+      "productImg": "https://campura.one/uploads/ads/imgs/06-water-L.png",
+      "productIntro": "【演示】虚构商品与价格，用于广告、促销和地图商户联调；不代表真实商户销售内容。",
+      "mainShopID": 88,
+      "subShopID": null,
+      "categoryID": 2,
+      "createdAt": "2026-11-04 20:31:51",
+      "updatedAt": "2026-11-04 20:31:51",
+      "categoryName": "奶茶与茶饮",
+      "categoryIcon": "takeoutbag.and.cup.and.straw.fill",
+      "categoryColor": "orange"
+    }
+  ],
+  "shops": [
+    {
+      "shopID": 6,
+      "shopName": "库迪咖啡",
+      "shopAddress": [
+        "武昌职业学院（演示）",
+        "建筑",
+        "1F"
+      ],
+      "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+      "subShopsList": [],
+      "productsList": [
+        5
+      ],
+      "adIDs": [
+        7
+      ],
+      "shopLogo": null,
+      "shopImg": null,
+      "saleIDs": [
+        11
+      ],
+      "schoolID": 1,
+      "areaID": null,
+      "accountID": 7,
+      "createdAt": "2026-11-03 14:43:35",
+      "updatedAt": "2026-11-04 20:31:51",
+      "isDemo": true,
+      "mapLocation": {
+        "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+        "mapRevision": 2,
+        "placeID": "12f01be9-d03f-477a-aff9-3820c74cc56e",
+        "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+        "buildingId": "8e165229-38c4-4529-8153-b429588a5380",
+        "levelId": "039f90c2-9cf5-49ed-a413-ff56d3525ad2"
+      }
+    },
+    {
+      "shopID": 14,
+      "shopName": "王者炸串",
+      "shopAddress": [
+        "武昌职业学院（演示）",
+        "建筑",
+        "1F"
+      ],
+      "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+      "subShopsList": [],
+      "productsList": [
+        8
+      ],
+      "adIDs": [
+        10
+      ],
+      "shopLogo": null,
+      "shopImg": null,
+      "saleIDs": [
+        14
+      ],
+      "schoolID": 1,
+      "areaID": null,
+      "accountID": 15,
+      "createdAt": "2026-11-03 14:43:35",
+      "updatedAt": "2026-11-04 20:31:51",
+      "isDemo": true,
+      "mapLocation": {
+        "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+        "mapRevision": 2,
+        "placeID": "26f26a47-f342-4ebc-a260-aa32a6db98c6",
+        "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+        "buildingId": "3fb5dbeb-ccc0-4942-82ff-a124246c0255",
+        "levelId": "e387acd8-3441-4670-ba97-137004ea2a73"
+      }
+    },
+    {
+      "shopID": 60,
+      "shopName": "饮品奶茶",
+      "shopAddress": [
+        "武昌职业学院（演示）",
+        "一食堂",
+        "2F"
+      ],
+      "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+      "subShopsList": [],
+      "productsList": [
+        9
+      ],
+      "adIDs": [
+        11
+      ],
+      "shopLogo": null,
+      "shopImg": null,
+      "saleIDs": [
+        15
+      ],
+      "schoolID": 1,
+      "areaID": null,
+      "accountID": 61,
+      "createdAt": "2026-11-03 14:43:35",
+      "updatedAt": "2026-11-04 20:31:51",
+      "isDemo": true,
+      "mapLocation": {
+        "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+        "mapRevision": 2,
+        "placeID": "81eddf20-1b4c-4722-af21-1aa2ce0444a9",
+        "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+        "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+        "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+      }
+    },
+    {
+      "shopID": 77,
+      "shopName": "山麦烘焙",
+      "shopAddress": [
+        "武昌职业学院（演示）",
+        "建筑",
+        "1F"
+      ],
+      "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+      "subShopsList": [],
+      "productsList": [
+        6
+      ],
+      "adIDs": [
+        8
+      ],
+      "shopLogo": null,
+      "shopImg": null,
+      "saleIDs": [
+        12
+      ],
+      "schoolID": 1,
+      "areaID": null,
+      "accountID": 78,
+      "createdAt": "2026-11-03 14:43:35",
+      "updatedAt": "2026-11-04 20:31:51",
+      "isDemo": true,
+      "mapLocation": {
+        "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+        "mapRevision": 2,
+        "placeID": "a74166bd-7798-4653-a59a-1256e9d7582f",
+        "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+        "buildingId": "8e165229-38c4-4529-8153-b429588a5380",
+        "levelId": "039f90c2-9cf5-49ed-a413-ff56d3525ad2"
+      }
+    },
+    {
+      "shopID": 88,
+      "shopName": "蜜雪冰城",
+      "shopAddress": [
+        "武昌职业学院（演示）",
+        "建筑",
+        "1F"
+      ],
+      "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+      "subShopsList": [],
+      "productsList": [
+        10
+      ],
+      "adIDs": [
+        12
+      ],
+      "shopLogo": null,
+      "shopImg": null,
+      "saleIDs": [
+        16
+      ],
+      "schoolID": 1,
+      "areaID": null,
+      "accountID": 89,
+      "createdAt": "2026-11-03 14:43:35",
+      "updatedAt": "2026-11-04 20:31:51",
+      "isDemo": true,
+      "mapLocation": {
+        "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+        "mapRevision": 2,
+        "placeID": "c8378774-15c3-4053-8f15-a0521afc2e3c",
+        "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+        "buildingId": "56b2bdb1-58d5-4249-92d9-6ba15aab1402",
+        "levelId": "bf1293bf-c9f6-422a-841b-eb2970cd03e9"
+      }
+    },
+    {
+      "shopID": 97,
+      "shopName": "瑞幸咖啡",
+      "shopAddress": [
+        "武昌职业学院（演示）",
+        "建筑",
+        "1F"
+      ],
+      "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+      "subShopsList": [],
+      "productsList": [
+        7
+      ],
+      "adIDs": [
+        9
+      ],
+      "shopLogo": null,
+      "shopImg": null,
+      "saleIDs": [
+        13
+      ],
+      "schoolID": 1,
+      "areaID": null,
+      "accountID": 98,
+      "createdAt": "2026-11-03 14:43:35",
+      "updatedAt": "2026-11-04 20:31:51",
+      "isDemo": true,
+      "mapLocation": {
+        "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+        "mapRevision": 2,
+        "placeID": "e8534a05-8bbe-4e45-82a8-d2bdec8f4571",
+        "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+        "buildingId": "3fb5dbeb-ccc0-4942-82ff-a124246c0255",
+        "levelId": "e387acd8-3441-4670-ba97-137004ea2a73"
+      }
+    }
+  ],
+  "categories": [
+    {
+      "categoryID": 1,
+      "categoryName": "咖啡",
+      "categoryIcon": "cup.and.saucer.fill",
+      "categoryColor": "brown",
+      "createdAt": "2026-06-15 14:15:55",
+      "updatedAt": "2026-06-15 14:15:55"
+    },
+    {
+      "categoryID": 2,
+      "categoryName": "奶茶与茶饮",
+      "categoryIcon": "takeoutbag.and.cup.and.straw.fill",
+      "categoryColor": "orange",
+      "createdAt": "2026-06-15 14:15:55",
+      "updatedAt": "2026-06-15 14:15:55"
+    },
+    {
+      "categoryID": 3,
+      "categoryName": "食品",
+      "categoryIcon": "fork.knife",
+      "categoryColor": "red",
+      "createdAt": "2026-06-15 14:15:55",
+      "updatedAt": "2026-06-15 14:19:16"
+    },
+    {
+      "categoryID": 4,
+      "categoryName": "烘焙甜点",
+      "categoryIcon": "birthday.cake.fill",
+      "categoryColor": "pink",
+      "createdAt": "2026-06-15 14:15:55",
+      "updatedAt": "2026-06-15 14:15:55"
+    },
+    {
+      "categoryID": 5,
+      "categoryName": "水果生鲜",
+      "categoryIcon": "carrot.fill",
+      "categoryColor": "green",
+      "createdAt": "2026-06-15 14:15:55",
+      "updatedAt": "2026-06-15 14:15:55"
+    },
+    {
+      "categoryID": 6,
+      "categoryName": "图书文具",
+      "categoryIcon": "book.closed.fill",
+      "categoryColor": "blue",
+      "createdAt": "2026-06-15 14:15:55",
+      "updatedAt": "2026-06-15 14:15:55"
+    },
+    {
+      "categoryID": 7,
+      "categoryName": "服饰鞋帽",
+      "categoryIcon": "tshirt.fill",
+      "categoryColor": "purple",
+      "createdAt": "2026-06-15 14:15:55",
+      "updatedAt": "2026-06-15 14:15:55"
+    },
+    {
+      "categoryID": 8,
+      "categoryName": "数码产品",
+      "categoryIcon": "desktopcomputer",
+      "categoryColor": "cyan",
+      "createdAt": "2026-06-15 14:15:55",
+      "updatedAt": "2026-06-15 14:15:55"
+    },
+    {
+      "categoryID": 9,
+      "categoryName": "生活用品",
+      "categoryIcon": "basket.fill",
+      "categoryColor": "mint",
+      "createdAt": "2026-06-15 14:15:55",
+      "updatedAt": "2026-06-15 14:15:55"
+    },
+    {
+      "categoryID": 10,
+      "categoryName": "其他",
+      "categoryIcon": "tag.fill",
+      "categoryColor": "accent",
+      "createdAt": "2026-06-15 14:15:55",
+      "updatedAt": "2026-06-15 14:15:55"
+    }
+  ],
+  "images": {
+    "https://campura.one/uploads/ads/imgs/06-water-L.png": "06-water-L.png",
+    "https://campura.one/uploads/ads/imgs/05-water-S.png": "05-water-S.png",
+    "https://campura.one/uploads/ads/imgs/04-sausage-S.png": "04-sausage-S.png",
+    "https://campura.one/uploads/ads/imgs/03-latte-L.png": "03-latte-L.png",
+    "https://campura.one/uploads/ads/imgs/02-breakfast-L.png": "02-breakfast-L.png",
+    "https://campura.one/uploads/ads/imgs/01-americano-S.png": "01-americano-S.png"
+  }
+}
