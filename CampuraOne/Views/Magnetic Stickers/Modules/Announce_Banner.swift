@@ -364,7 +364,7 @@ struct ShortAnnouncementsSheet: View {
     let announces: [AnnouncementItem]
     let initiallyExpandedAnnounceID: Int
     
-    @State private var expandedAnnounceID: Int
+    @State private var expandedAnnounceID: Int?
     
     init(
         announces: [AnnouncementItem],
@@ -393,7 +393,8 @@ struct ShortAnnouncementsSheet: View {
                                         isExpanded: expandedAnnounceID == announce.announceID
                                     ) {
                                         withAnimation(.snappy) {
-                                            expandedAnnounceID = announce.announceID
+                                            expandedAnnounceID = expandedAnnounceID == announce.announceID
+                                                ? nil : announce.announceID
                                         }
                                     }
                                     .id(announce.announceID)
@@ -431,6 +432,8 @@ private struct ShortAnnouncementCard: View {
     let announce: AnnouncementItem
     let isExpanded: Bool
     let onTap: () -> Void
+
+    private var isEmergency: Bool { announce.type == .emergencyShort }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -438,15 +441,13 @@ private struct ShortAnnouncementCard: View {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(announce.typeTitle)
                         .font(.headline)
+                        .foregroundStyle(isEmergency ? Color.orange : Color.primary)
 
-                    HStack(alignment: .firstTextBaseline, spacing: 6) {
-                        typeLabel(type: announce.type)
-                        if isExpanded {
-                            Text(announce.dateRangeText)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
+                    if isExpanded {
+                        Text(announce.dateRangeText)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                     
                 }
@@ -478,13 +479,16 @@ private struct ShortAnnouncementCard: View {
         .padding(16)
         .background {
             RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(Color(uiColor: .secondarySystemGroupedBackground))
+                .fill(isEmergency
+                    ? Color.orange.opacity(0.18)
+                    : Color(uiColor: .secondarySystemGroupedBackground))
         }
         .overlay {
             RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .stroke(
-                    isExpanded ? Color.accentColor.opacity(0.35) : Color.clear,
-                    lineWidth: 1
+                .strokeBorder(
+                    isEmergency ? Color.orange.opacity(0.7)
+                        : isExpanded ? Color.accentColor.opacity(0.35) : Color.clear,
+                    lineWidth: isEmergency ? 1.5 : 1
                 )
         }
         .contentShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
@@ -492,18 +496,6 @@ private struct ShortAnnouncementCard: View {
             onTap()
         }
         .buttonStyle(.plain)
-    }
-    
-    
-    @ViewBuilder func typeLabel(type: AnnouncementType) -> some View {
-        Text(type == .emergencyShort ? "紧急" : "普通")
-            .font(.caption2)
-            .fixedSize()
-            .padding(3)
-            .background(alignment: .center) {
-                RoundedRectangle(cornerRadius: 15, style: .continuous)
-                    .foregroundStyle(announce.type == .emergencyShort ? .orange.opacity(0.4) : .secondary)
-            }
     }
 }
 
