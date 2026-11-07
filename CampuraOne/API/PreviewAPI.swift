@@ -2,6 +2,7 @@
 import Foundation
 import SwiftyJSON
 import UIKit
+import CamapKit
 
 /// Canvas 与独立离线构建使用；未知接口报错，不回退生产服务器。
 @MainActor
@@ -12,12 +13,54 @@ enum PreviewAPI {
             || Bundle.main.bundleIdentifier == "com.LX.CampuraOne.demo"
     }
 
+    /// Explicit launch-only QA states. They exercise the same stores as the
+    /// visible controls; no extra demo rows, server calls or automatic stops.
+    static func configureRouteScreenshot(_ route: RoutePreviewStore) async {
+        let arguments = ProcessInfo.processInfo.arguments
+        guard isEnabled, arguments.contains("--campura-preview-source")
+            || arguments.contains("--campura-preview-origin")
+            || arguments.contains("--campura-preview-guidance") else { return }
+        let ticket = route.requestID
+        let navigation = StudentNavigationStore.shared
+        for _ in 0..<200 {
+            guard !Task.isCancelled, route.requestID == ticket, route.isPresented else { return }
+            if navigation.plan?.hasRoute == true, !navigation.isWorking, !route.isCalculating {
+                if arguments.contains("--campura-preview-source"), let source = navigation.plan?.sources.first {
+                    route.selectedSource = source
+                    await navigation.loadSource(source)
+                } else if arguments.contains("--campura-preview-origin") {
+                    route.isSelectingOrigin = true
+                } else if arguments.contains("--campura-preview-guidance") {
+                    route.startGuidance()
+                    route.pausePlayback()
+                }
+                return
+            }
+            do { try await Task.sleep(for: .milliseconds(50)) } catch { return }
+        }
+    }
+
+    static func configureContentScreenshot(_ browser: ContentBrowserStore) async {
+        let arguments = ProcessInfo.processInfo.arguments
+        guard isEnabled, let index = arguments.firstIndex(of: "--campura-preview-floor"),
+              arguments.indices.contains(index + 1), let page = browser.current,
+              case .place(let placeID) = page.reference else { return }
+        for _ in 0..<200 {
+            guard !Task.isCancelled, browser.current === page else { return }
+            if let place = CampusMapStore.shared.snapshot?.document.features.first(where: { $0.id == placeID }) {
+                page.placeLevelID = place.levels?.first { $0.label == arguments[index + 1] }?.id
+                return
+            }
+            do { try await Task.sleep(for: .milliseconds(50)) } catch { return }
+        }
+    }
+
     static let token = "preview.local.only"
     static let user: [String: Any] = [
-        "userID": 1, "userName": "林同学", "studentID": 20260001, "shopIDs": []
+        "userID": 1, "userName": "曹维勤", "studentID": 20260001, "shopIDs": []
     ]
     static let student: [String: Any] = [
-        "studentID": 20260001, "studentName": "林同学", "schoolID": 1,
+        "studentID": 20260001, "studentName": "曹维勤", "schoolID": 1,
         "compoundID": 1, "departmentID": 2, "classID": 3
     ]
     private static let marketing: [String: Any] = {
@@ -27,9 +70,37 @@ enum PreviewAPI {
         return value
     }()
 
+    // Published directory snapshot; catalog keeps precedence for the existing
+    // product/promotion fixtures. Map browsing stays fully offline in Demo.
+    private static let mapMerchants: [[String: Any]] = {
+        guard let url = Bundle.main.url(forResource: "map-merchants", withExtension: "json", subdirectory: "Marketing"),
+              let data = try? Data(contentsOf: url),
+              let rows = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] else { return [] }
+        return rows
+    }()
+
     private static func marketingRows(_ key: String) -> [[String: Any]] {
-        (marketing[key] as? [[String: Any]] ?? []).map { row in
+        var rows = marketing[key] as? [[String: Any]] ?? []
+        if key == "shops" {
+            let existing = Set(rows.compactMap { $0["shopID"] as? Int })
+            rows += mapMerchants.filter { row in
+                guard let id = row["shopID"] as? Int else { return false }
+                return !existing.contains(id)
+            }
+        }
+        return rows.map { row in
             var row = row
+            if key == "shops", var location = row["mapLocation"] as? [String: Any],
+               let placeID = location["placeID"] as? String,
+               location["masterId"] as? String == PreviewNavigation.document.masterId,
+               let feature = PreviewNavigation.document.features.first(where: { $0.id == placeID }) {
+                // Demo map edits can move an existing UUID to another floor.
+                // Preserve the explicit business identity, read location from this bundle.
+                location["frameId"] = feature.frameId
+                location["buildingId"] = feature.buildingId.map { $0 as Any } ?? NSNull()
+                location["levelId"] = feature.levelId.map { $0 as Any } ?? NSNull()
+                row["mapLocation"] = location
+            }
             for key in ["productName", "saleRule"] {
                 if let text = row[key] as? String {
                     row[key] = text.replacingOccurrences(of: "【演示】", with: "")
@@ -73,6 +144,24 @@ enum PreviewAPI {
     static func response(url: String, parameters: [String: Any]?, method: String = "GET") throws -> JSON {
         let path = URL(string: url)?.lastPathComponent ?? url
         let parameters = parameters ?? [:]
+        if path == "campus_map.php", parameters["format"] as? String == "bindings" {
+            let document = PreviewNavigation.document
+            let entries: [[String: Any]] = marketingRows("shops").compactMap { shop in
+                guard let location = shop["mapLocation"] as? [String: Any],
+                      location["masterId"] as? String == document.masterId,
+                      location["mapRevision"] as? Int == document.baseRevision,
+                      let placeID = location["placeID"] as? String,
+                      let shopID = shop["shopID"] as? Int else { return nil }
+                return ["placeID": placeID, "shopType": "main", "shopID": shopID,
+                        "mainShopID": shopID, "mapLocation": location]
+            }
+            return JSON(["code": 200, "message": "Local preview data", "data": [
+                "schoolID": student["schoolID"]!, "masterId": document.masterId ?? document.id,
+                "mapRevision": document.baseRevision ?? 0,
+                "mapHash": PreviewNavigation.mapETag.trimmingCharacters(in: CharacterSet(charactersIn: "\"")),
+                "bindings": entries
+            ]])
+        }
         if ["campus_map.php", "preferences.php", "feedback.php", "plan.php"].contains(path) {
             return try PreviewNavigation.response(path: path, method: method, parameters: parameters)
         }
@@ -116,11 +205,12 @@ enum PreviewAPI {
             let messages = [
                 "辅导员通知：\(assemblyDayText)下午一点到操场集合，依次排队完成班级投票选票。请携带学生证，按班级顺序入场。",
                 "\(inspectionDayText)晚上开展宿舍检查。请同学们提前整理寝室，保持消防通道畅通。",
-                "教学楼附近正在施工，请绕行围挡区域，注意安全，勿从施工入口通行。",
-                "本周校园活动征集志愿者，协助现场引导与秩序维护。有意参加的同学请联系班委报名。"
+                PreviewNavigation.constructionNoticeText,
+                "本周校园活动征集志愿者，协助现场引导与秩序维护。有意参加的同学请联系班委报名。",
+                "# 国庆假期防溺水安全提醒\n\n国庆假期外出游玩，请同学们注意水域安全。\n\n- 不到无安全设施、无救援人员的水域游泳。\n- 不擅自下水施救；发现有人落水，立即呼救并拨打 **110** 或 **119**。\n- 与同伴出行时互相提醒，及时向家人或辅导员报备行程。\n\n请将安全放在第一位，平安返校。"
             ]
             data = messages.enumerated().map { index, message -> [String: Any] in
-                ["announceID": index + 1, "schoolID": 1, "version": 1, "content": message, "type": index < 2 ? 1 : 0,
+                ["announceID": index + 1, "schoolID": 1, "version": 1, "content": message, "type": index == 4 ? 2 : index < 2 ? 1 : 0,
                  "target": ["allSchool": true], "startTime": iso(day(-1)), "endTime": iso(day(7)),
                  "createdAt": iso(day(-1).addingTimeInterval(Double(index) * 60))]
             }.filter {
@@ -134,30 +224,71 @@ enum PreviewAPI {
             let mode = parameters["mode"] as? String ?? "all"
             let products = marketingRows("products")
             let shops = marketingRows("shops")
+            let categories = marketingRows("categories")
+            func category(for product: [String: Any]) -> [String: Any] {
+                let category = categories.first { $0["categoryID"] as? Int == product["categoryID"] as? Int } ?? [:]
+                return ["categoryID", "categoryName", "categoryIcon", "categoryColor"].reduce(into: [:]) { result, key in
+                    result[key] = product[key] ?? category[key]
+                }
+            }
+            func shopName(for product: [String: Any]) -> String {
+                shops.first { $0["shopID"] as? Int == product["mainShopID"] as? Int }?["shopName"] as? String ?? ""
+            }
             let productRows: [[String: Any]] = products.map { product in
-                ["type": "product", "targetID": product["productID"]!, "title": product["productName"]!,
-                 "subtitle": "¥\(product["price"] ?? "")", "imageURL": product["productImg"] ?? ""]
+                var row: [String: Any] = [
+                    "id": "product-\(product["productID"]!)", "type": "product",
+                    "targetID": product["productID"]!, "title": product["productName"]!,
+                    "subtitle": [shopName(for: product), "¥\(product["price"] ?? "")"].filter { !$0.isEmpty }.joined(separator: " · "),
+                    "imageURL": product["productImg"] ?? ""
+                ]
+                row.merge(category(for: product)) { current, _ in current }
+                return row
             }
             let promotionRows: [[String: Any]] = marketingRows("promotions").map { sale in
                 let product = products.first { $0["productID"] as? Int == sale["productID"] as? Int }
-                return ["type": "promotion", "targetID": sale["saleID"]!, "title": sale["saleRule"]!,
-                        "subtitle": product?["productName"] ?? "", "imageURL": product?["productImg"] ?? ""]
+                var row: [String: Any] = [
+                    "id": "promotion-\(sale["saleID"]!)", "type": "promotion",
+                    "targetID": sale["saleID"]!, "title": sale["saleRule"]!,
+                    "subtitle": [product?["productName"] as? String ?? "", product.map(shopName) ?? ""].filter { !$0.isEmpty }.joined(separator: " · "),
+                    "imageURL": product?["productImg"] ?? ""
+                ]
+                if let product { row.merge(category(for: product)) { current, _ in current } }
+                return row
             }
             let shopRows: [[String: Any]] = shops.map { shop in
                 ["id": "main-shop-\(shop["shopID"]!)", "type": "shop", "targetID": shop["shopID"]!,
                  "title": shop["shopName"]!, "subtitle": (shop["shopAddress"] as? [String] ?? []).joined(separator: " · ")]
             }
-            let rowsWithSubShop = promotionRows + productRows + shopRows
-            let matches = rowsWithSubShop.filter { row in
+            let rows = promotionRows + productRows + shopRows
+            let matches = rows.filter { row in
                 (mode == "all" || mode == "smart" || row["type"] as? String == mode)
-                && (query.isEmpty || "\(row["title"] ?? "") \(row["subtitle"] ?? "")".localizedCaseInsensitiveContains(query))
+                && (query.isEmpty || ["title", "subtitle", "categoryName"].contains { key in
+                    (row[key] as? String ?? "").localizedCaseInsensitiveContains(query)
+                })
             }
-            let results = Array(matches.dropFirst(max(0, parameters["offset"] as? Int ?? 0)).prefix(max(0, parameters["limit"] as? Int ?? 20)))
-            data = ["results": results, "suggestions": mode == "smart" ? Array(results.prefix(2)) : []]
+            // Keep normal global results grouped; smart suggestions prefer direct
+            // title matches and are independent of result pagination, like search.php.
+            let ranked = mode == "smart" ? matches.enumerated().sorted { left, right in
+                let leftScore = searchScore(left.element, query: query)
+                let rightScore = searchScore(right.element, query: query)
+                return leftScore == rightScore ? left.offset < right.offset : leftScore > rightScore
+            }.map(\.element) : matches
+            let results = Array(ranked.dropFirst(max(0, parameters["offset"] as? Int ?? 0)).prefix(max(0, parameters["limit"] as? Int ?? 20)))
+            data = ["results": results, "suggestions": mode == "smart" ? Array(ranked.prefix(8)) : []]
         default:
             throw APIClientError.invalidPayload("此内容暂不可用：\(path)")
         }
         return JSON(["code": 200, "message": "Local preview data", "data": data])
+    }
+
+    private static func searchScore(_ row: [String: Any], query: String) -> Int {
+        guard !query.isEmpty else { return 0 }
+        let title = row["title"] as? String ?? ""
+        if title.localizedCaseInsensitiveCompare(query) == .orderedSame { return 100 }
+        if title.localizedCaseInsensitiveContains(query) { return 60 }
+        let category = row["categoryName"] as? String ?? ""
+        if category.localizedCaseInsensitiveContains(query) { return 30 }
+        return 10
     }
 
     static var advertisementRows: [[String: Any]] {
@@ -175,14 +306,28 @@ enum PreviewAPI {
             [("社团实践", 14, "学生活动中心")],
             [("大学英语", 10, "教学楼 202室")]
         ]
-        let events = (-7...21).flatMap { offset in
+        var events: [String] = []
+        for offset in -7...21 {
             let courses = week[((offset % 7) + 7) % 7]
-            return courses.enumerated().map { index, course in
-                event(uid: "course-\(offset)-\(index)", title: course.0, day: offset,
-                      hour: course.1, duration: 90, location: course.2)
+            for (index, course) in courses.enumerated() {
+                #if DEMO
+                if offset == 0,
+                   let start = Calendar.current.date(bySettingHour: course.1, minute: 0, second: 0, of: day(0)),
+                   start >= Date(), start < PreviewNavigation.demoClassStart.addingTimeInterval(5400) {
+                    continue
+                }
+                #endif
+                events.append(event(uid: "course-\(offset)-\(index)", title: course.0, day: offset,
+                                    hour: course.1, duration: 90, location: course.2))
             }
         }
+        #if DEMO
+        return calendar([event(uid: "next-software-engineering", title: "软件工程",
+                               start: PreviewNavigation.demoClassStart, duration: 90,
+                               location: "1号教学楼 1201室")] + events)
+        #else
         return calendar(events)
+        #endif
     }
 
     static var calendarICS: String {
@@ -197,6 +342,10 @@ enum PreviewAPI {
 
     private static func event(uid: String, title: String, day offset: Int, hour: Int, duration: Int, location: String) -> String {
         let start = Calendar.current.date(bySettingHour: hour, minute: 0, second: 0, of: day(offset))!
+        return event(uid: uid, title: title, start: start, duration: duration, location: location)
+    }
+
+    private static func event(uid: String, title: String, start: Date, duration: Int, location: String) -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.timeZone = TimeZone(secondsFromGMT: 0)

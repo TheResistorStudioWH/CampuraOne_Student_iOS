@@ -63,6 +63,13 @@ extension RemoteDataService {
         return .document(CampusMapSnapshot(schoolID: schoolID, document: document, etag: response.etag))
     }
 
+    func fetchCampusMerchantBindings(schoolID: Int) async throws -> CampusMerchantBindings {
+        try decodeNavigation(await APIClient.shared.request(
+            url: APIConfig.api_download(APIConfig.DLPath.campusMap), method: .get,
+            parameters: ["schoolID": schoolID, "format": "bindings"],
+            cachePolicy: .reloadIgnoringLocalCacheData).json)
+    }
+
     /// Source lookups deliberately do not use the normal active-list filter.
     /// An expired display period can still have a currently valid navigation effect.
     func fetchNavigationSource(announceID: Int) async throws -> NavigationSourceNotice? {
@@ -112,7 +119,8 @@ extension NavigationPreferencesStore {
 extension CampusMapStore {
     static let shared = CampusMapStore(client: Client(
         school: { try await RemoteDataService.shared.fetchMyStudentProfile().schoolID },
-        fetch: { try await RemoteDataService.shared.fetchCampusMap(schoolID: $0, etag: $1) }
+        fetch: { try await RemoteDataService.shared.fetchCampusMap(schoolID: $0, etag: $1) },
+        merchants: { try await RemoteDataService.shared.fetchCampusMerchantBindings(schoolID: $0) }
     ))
 }
 

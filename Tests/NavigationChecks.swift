@@ -1,6 +1,7 @@
 import Foundation
 import CamapKit
 import CoreLocation
+import MapKit
 
 private enum CheckError: Error { case unavailable }
 
@@ -114,7 +115,43 @@ private enum CheckError: Error { case unavailable }
         try await sessions(fixture)
         try await preferences()
         try await maps()
+        mapPresentation()
         print("Navigation checks passed: \(count)")
+    }
+
+    private static func mapPresentation() {
+        let coordinates = [
+            CLLocationCoordinate2D(latitude: 30.371, longitude: 114.392),
+            CLLocationCoordinate2D(latitude: 30.373, longitude: 114.395),
+            CLLocationCoordinate2D(latitude: 30.372, longitude: 114.396)
+        ]
+        for (size, top, bottom) in [(CGSize(width: 390, height: 844), 65.0, 422.0),
+                                    (CGSize(width: 375, height: 667), 40.0, 245.0),
+                                    (CGSize(width: 844, height: 390), 0.0, 170.0)] {
+            let rect = CampusMapViewport.fittingRect(coordinates: coordinates, size: size, topInset: top, bottomInset: bottom)!
+            check(coordinates.allSatisfy { coordinate in
+                let point = MKMapPoint(coordinate)
+                let x = (point.x - rect.minX) / rect.width * size.width
+                let y = (point.y - rect.minY) / rect.height * size.height
+                return x >= 20 && x <= size.width - 20 && y >= top + 15 && y <= size.height - bottom - 15
+            }, "Fitted route stays above the real panel, below controls and inside horizontal padding")
+        }
+        let single = CampusMapViewport.fittingRect(coordinates: [coordinates[0]], size: .init(width: 390, height: 844), topInset: 65, bottomInset: 422)!
+        check(single.width > 0 && single.height > 0, "Single place has a finite context view rather than infinite zoom")
+        check(CampusMapViewport.fittingRect(coordinates: coordinates, size: .init(width: 390, height: 844), topInset: 65, bottomInset: 780) == nil,
+              "Expanded reading sheet does not trigger a nearly invisible map refit")
+        check(CampusMapViewport.fittingRect(coordinates: [.init(latitude: .nan, longitude: 114)], size: .init(width: 390, height: 844), topInset: 0, bottomInset: 0) == nil,
+              "Invalid map coordinates cannot reach the camera")
+        check(CampusMapViewport.fittingRect(coordinates: coordinates, size: .zero, topInset: 0, bottomInset: 0) == nil,
+              "No camera fit happens before layout")
+        let items = [CampusMarkerLayout.Item(id: "a", point: .init(x: 20, y: 10)),
+                     .init(id: "b", point: .init(x: 40, y: 20)), .init(id: "c", point: .init(x: 240, y: 10))]
+        let clusters = CampusMarkerLayout.clusters(items)
+        check(clusters.count == 2 && clusters.map { $0.items.count }.sorted() == [1, 2], "Nearby merchant markers cluster without losing individual buildings")
+        check(Set(clusters.flatMap(\.items).map(\.id)) == Set(items.map(\.id)), "Every cluster member remains reachable")
+        check(clusters.map(\.id) == CampusMarkerLayout.clusters(items.reversed()).map(\.id), "Clustering is stable across response iteration order")
+        check(CampusMarkerLayout.clusters([.init(id: "bad", point: .init(x: CGFloat.nan, y: 0))]).isEmpty,
+              "Non-finite projected markers are not rendered")
     }
 
     private static func sessions(_ fixture: NavigationFixture) async throws {

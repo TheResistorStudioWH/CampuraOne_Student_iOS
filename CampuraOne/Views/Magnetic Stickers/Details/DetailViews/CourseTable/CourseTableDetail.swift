@@ -77,9 +77,9 @@ struct CourseTableDetail: DashboardDetailContent {
                     VStack(spacing: 2) {
                         Image(systemName: "calendar.badge.clock")
                             .symbolRenderingMode(.multicolor)
-                            .font(.system(size: 19, weight: .semibold))
+                            .font(.system(size: 16, weight: .semibold))
                         Text("今天")
-                            .font(.system(size: 10, weight: .semibold))
+                            .font(.system(size: 9, weight: .semibold))
                     }
                     .foregroundStyle(.blue)
                 }
@@ -99,7 +99,7 @@ struct CourseTableDetail: DashboardDetailContent {
         } label: {
             Image(systemName: "calendar")
                 .symbolRenderingMode(.multicolor)
-                .font(.system(size: 21, weight: .semibold))
+                .font(.system(size: 18, weight: .semibold))
                 .foregroundStyle(.red)
         }
         .accessibilityLabel("选择日程日期")
@@ -130,13 +130,15 @@ struct CourseTableDetail: DashboardDetailContent {
         @ViewBuilder label: () -> Label
     ) -> some View {
         label()
-            .frame(width: width, height: width)
+            .frame(width: width * 0.8, height: width * 0.8)
             .background(color.opacity(0.14), in: UnevenRoundedRectangle(
                 topLeadingRadius: 0,
                 bottomLeadingRadius: 0,
-                bottomTrailingRadius: 13,
-                topTrailingRadius: 13
+                bottomTrailingRadius: 10,
+                topTrailingRadius: 10
             ))
+            .frame(minWidth: 44, minHeight: 44, alignment: .leading)
+            .contentShape(Rectangle())
             .beButton(action)
             .buttonStyle(.plain)
     }

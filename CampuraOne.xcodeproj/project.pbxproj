@@ -7,15 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DA1104000000000000000003 /* Marketing in Resources */ = {isa = PBXBuildFile; fileRef = DA1104000000000000000004 /* Marketing */; };
-		DA1104000000000000000001 /* school-1-v2.camap in Resources */ = {isa = PBXBuildFile; fileRef = DA1104000000000000000002 /* school-1-v2.camap */; };
+		005CA666C2FB77AF326E141D /* NavigationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69568C66AB135A8DAE4C600 /* NavigationService.swift */; };
 		0B05CA57308F732700C604AE /* CamapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0B05CA56308F732700C604AE /* CamapKit */; };
 		0B12AC872FDFC72500ECFC94 /* SalesLineDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B12AC862FDFC71C00ECFC94 /* SalesLineDetail.swift */; };
+		0B59BC843D3640579835388E /* CampusMapStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676DE9245404476115682AF0 /* CampusMapStore.swift */; };
 		0B6FF15F2FC45C360002559F /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 0B6FF15E2FC45C360002559F /* SwiftyJSON */; };
 		0B6FF1622FC45C820002559F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 0B6FF1612FC45C820002559F /* Alamofire */; };
 		0B8303262FDF0D7300B5269A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0B8303212FDF0D7300B5269A /* Assets.xcassets */; };
-		CA1029000000000000000201 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = CA1029000000000000000200 /* AppIcon.icon */; };
-		CA1029000000000000000202 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = CA1029000000000000000200 /* AppIcon.icon */; };
 		0B8303282FDF0D7300B5269A /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8302E32FDF0D7300B5269A /* APIClient.swift */; };
 		0B8303292FDF0D7300B5269A /* APIConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8302E42FDF0D7300B5269A /* APIConfig.swift */; };
 		0B83032A2FDF0D7300B5269A /* RemoteDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8302E72FDF0D7300B5269A /* RemoteDataService.swift */; };
@@ -65,6 +63,12 @@
 		0BD38C3630133A4A005DB96D /* StartupPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD38C3530133A41005DB96D /* StartupPage.swift */; };
 		0BD38C3930133A6B005DB96D /* SetupPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD38C3830133A63005DB96D /* SetupPage.swift */; };
 		0BE0CEB32FD9573B009CB551 /* PagingView in Frameworks */ = {isa = PBXBuildFile; productRef = 0BE0CEB22FD9573B009CB551 /* PagingView */; };
+		253424F2453426B91F754333 /* PreviewNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70580B9C7BF2286B0644F8D3 /* PreviewNavigation.swift */; };
+		2B5A6F7BBCF09D3887915495 /* NavigationPreferencesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C968856456A914F8A3C12BE /* NavigationPreferencesStore.swift */; };
+		30AEE7AB57D42A86568F8DA9 /* StudentNavigationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203D188AF8ECF50558DFBB81 /* StudentNavigationStore.swift */; };
+		3F1FB9D6D1B3D9D6EEA6C40A /* Data-Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03FFDA34A73A95A5C7401AE /* Data-Navigation.swift */; };
+		84C424524EC2E5ADD882FBBB /* NavigationHistorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72919449A22A5719E331BE21 /* NavigationHistorySection.swift */; };
+		98A95A1E6CAC8259CBA45545 /* APIClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72F5F132C9EF0C00C198DD9 /* APIClientError.swift */; };
 		B486BAAD46714B68AF7AC71D /* PreviewAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAAC00FB6114B70BAF27D9C /* PreviewAPI.swift */; };
 		CA1022000000000000000002 /* APIDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1022000000000000000001 /* APIDate.swift */; };
 		CA1027000000000000000001 /* DashboardTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1027000000000000000002 /* DashboardTile.swift */; };
@@ -91,19 +95,26 @@
 		CA1029000000000000000108 /* PetaKitUIX in Frameworks */ = {isa = PBXBuildFile; productRef = CA1029000000000000000104 /* PetaKitUIX */; };
 		CA1029000000000000000109 /* PetaToolKit in Frameworks */ = {isa = PBXBuildFile; productRef = CA1029000000000000000105 /* PetaToolKit */; };
 		CA102900000000000000010A /* PetaKitWatchUIX in Frameworks */ = {isa = PBXBuildFile; productRef = CA1029000000000000000106 /* PetaKitWatchUIX */; };
-		005CA666C2FB77AF326E141D /* NavigationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69568C66AB135A8DAE4C600 /* NavigationService.swift */; };
-		253424F2453426B91F754333 /* PreviewNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70580B9C7BF2286B0644F8D3 /* PreviewNavigation.swift */; };
-		3F1FB9D6D1B3D9D6EEA6C40A /* Data-Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03FFDA34A73A95A5C7401AE /* Data-Navigation.swift */; };
-		84C424524EC2E5ADD882FBBB /* NavigationHistorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72919449A22A5719E331BE21 /* NavigationHistorySection.swift */; };
-		2B5A6F7BBCF09D3887915495 /* NavigationPreferencesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C968856456A914F8A3C12BE /* NavigationPreferencesStore.swift */; };
-		0B59BC843D3640579835388E /* CampusMapStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676DE9245404476115682AF0 /* CampusMapStore.swift */; };
-		30AEE7AB57D42A86568F8DA9 /* StudentNavigationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203D188AF8ECF50558DFBB81 /* StudentNavigationStore.swift */; };
-		98A95A1E6CAC8259CBA45545 /* APIClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72F5F132C9EF0C00C198DD9 /* APIClientError.swift */; };
-		D5449F41454B8EF3D04013A1 /* AIModelSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D210807B171D227B8E0A34 /* AIModelSettingsView.swift */; };
+		CA1029000000000000000201 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = CA1029000000000000000200 /* AppIcon.icon */; };
+		CA1029000000000000000202 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = CA1029000000000000000200 /* AppIcon.icon */; };
 		CA1102000000000000000002 /* Data-ContentPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1102000000000000000001 /* Data-ContentPreview.swift */; };
 		CA1102000000000000000004 /* ContentPreviewService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1102000000000000000003 /* ContentPreviewService.swift */; };
 		CA1102000000000000000006 /* RoutePreviewStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1102000000000000000005 /* RoutePreviewStore.swift */; };
 		CA1102000000000000000023 /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = CA1102000000000000000022 /* BottomSheet */; };
+		D5449F41454B8EF3D04013A1 /* AIModelSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D210807B171D227B8E0A34 /* AIModelSettingsView.swift */; };
+		DA1104000000000000000001 /* CampuraOne/OfflineResources/school-1-v2.camap in Resources */ = {isa = PBXBuildFile; fileRef = DA1104000000000000000002 /* CampuraOne/OfflineResources/school-1-v2.camap */; };
+		DA1104000000000000000003 /* CampuraOne/OfflineResources/Marketing in Resources */ = {isa = PBXBuildFile; fileRef = DA1104000000000000000004 /* CampuraOne/OfflineResources/Marketing */; };
+		84C6CA59D11C41EFAF922CC1 /* PriceWatchModels.swift in Sources */ = { isa = PBXBuildFile; fileRef = 26D76CB84F578C3B889C1E7B /* PriceWatchModels.swift */; };
+		B334E3A59EB6044B207B5314 /* PriceWatchStore.swift in Sources */ = { isa = PBXBuildFile; fileRef = 0FBA307CF2EFCE118E6FCAB4 /* PriceWatchStore.swift */; };
+		7D7BFA8D850372DEB670D819 /* PriceWatchTile.swift in Sources */ = { isa = PBXBuildFile; fileRef = 6B1FCC2DBEEE9C4BA9065BD7 /* PriceWatchTile.swift */; };
+		9A5143184AC0D33E607100D8 /* PriceWatchDetailView.swift in Sources */ = { isa = PBXBuildFile; fileRef = 2EECF256715B69E119722A05 /* PriceWatchDetailView.swift */; };
+		C43C5496F5118C2D83E7A939 /* PromotionActivityAttributes.swift in Sources */ = { isa = PBXBuildFile; fileRef = B253EDF56AD63122F20CA7EA /* PromotionActivityAttributes.swift */; };
+		D4960E99E0434F3C0EA6986D /* PromotionLiveActivityController.swift in Sources */ = { isa = PBXBuildFile; fileRef = 1BF32A29DA8BD69D007920B3 /* PromotionLiveActivityController.swift */; };
+		3D5B8289CE68EF8CA84C3CBE /* PriceWatchService.swift in Sources */ = { isa = PBXBuildFile; fileRef = 8A251B2833B4C6BA6FC93795 /* PriceWatchService.swift */; };
+		C2F086F1B25920043F6D55C0 /* PromotionLiveActivity.swift in Sources */ = { isa = PBXBuildFile; fileRef = A4C09BEF216311440711BC88; };
+		D389D37D09D7274265C82E18 /* PromotionActivityAttributes.swift in Sources */ = { isa = PBXBuildFile; fileRef = B253EDF56AD63122F20CA7EA; };
+		B539C0656B05143BFBCE652F /* CampuraOneLiveActivities.appex in Embed App Extensions */ = { isa = PBXBuildFile; fileRef = B0C00C86FA7325106B40E64F; settings = { ATTRIBUTES = (RemoveHeadersOnCopy,); }; };
+		C104F2AD2CA9E3F687DF1AE6 /* PriceWatchPreviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = A152A68B4329E9CCBD79EA6E; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -121,6 +132,7 @@
 			remoteGlobalIDString = CA1028000000000000000001;
 			remoteInfo = CampuraOneWatch;
 		};
+		F40B0C5C123F124D814E2D9C /* PBXContainerItemProxy */ = { isa = PBXContainerItemProxy; containerPortal = 0B3F59312FC3380E00980B94; proxyType = 1; remoteGlobalIDString = 6F6E93F9F19EB960967341AB; remoteInfo = CampuraOneLiveActivities; };
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -135,11 +147,10 @@
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5DD42085A1FBF476696ABA7D /* Embed App Extensions */ = { isa = PBXCopyFilesBuildPhase; buildActionMask = 2147483647; dstPath = ""; dstSubfolderSpec = 13; files = (B539C0656B05143BFBCE652F,); name = "Embed App Extensions"; runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		DA1104000000000000000004 /* Marketing */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "CampuraOne/OfflineResources/Marketing"; sourceTree = SOURCE_ROOT; };
-		DA1104000000000000000002 /* school-1-v2.camap */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CampuraOne/OfflineResources/school-1-v2.camap"; sourceTree = SOURCE_ROOT; };
 		0B12AC862FDFC71C00ECFC94 /* SalesLineDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalesLineDetail.swift; sourceTree = "<group>"; };
 		0B3F59392FC3380E00980B94 /* CampuraOne.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CampuraOne.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0B8302DF2FDF0D7300B5269A /* AnnouncementListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementListView.swift; sourceTree = "<group>"; };
@@ -186,13 +197,19 @@
 		0B83031D2FDF0D7300B5269A /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		0B83031F2FDF0D7300B5269A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0B8303212FDF0D7300B5269A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		CA1029000000000000000200 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		0B8303222FDF0D7300B5269A /* CampuraOneApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampuraOneApp.swift; sourceTree = "<group>"; };
 		0B8303232FDF0D7300B5269A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0B8303242FDF0D7300B5269A /* PreviewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContainer.swift; sourceTree = "<group>"; };
 		0BD38C3530133A41005DB96D /* StartupPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartupPage.swift; sourceTree = "<group>"; };
 		0BD38C3830133A63005DB96D /* SetupPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPage.swift; sourceTree = "<group>"; };
+		203D188AF8ECF50558DFBB81 /* StudentNavigationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentNavigationStore.swift; sourceTree = "<group>"; };
+		2C968856456A914F8A3C12BE /* NavigationPreferencesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationPreferencesStore.swift; sourceTree = "<group>"; };
 		4CAAC00FB6114B70BAF27D9C /* PreviewAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewAPI.swift; sourceTree = "<group>"; };
+		57D210807B171D227B8E0A34 /* AIModelSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIModelSettingsView.swift; sourceTree = "<group>"; };
+		676DE9245404476115682AF0 /* CampusMapStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampusMapStore.swift; sourceTree = "<group>"; };
+		70580B9C7BF2286B0644F8D3 /* PreviewNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewNavigation.swift; sourceTree = "<group>"; };
+		72919449A22A5719E331BE21 /* NavigationHistorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationHistorySection.swift; sourceTree = "<group>"; };
+		B03FFDA34A73A95A5C7401AE /* Data-Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data-Navigation.swift"; sourceTree = "<group>"; };
 		CA1022000000000000000001 /* APIDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIDate.swift; sourceTree = "<group>"; };
 		CA1027000000000000000002 /* DashboardTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardTile.swift; sourceTree = "<group>"; };
 		CA1027000000000000000004 /* DashboardDetailPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardDetailPresentation.swift; sourceTree = "<group>"; };
@@ -207,18 +224,25 @@
 		CA1028000000000000000010 /* SchoolCalendarCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolCalendarCore.swift; sourceTree = "<group>"; };
 		CA1028000000000000000021 /* ImportantAnnouncementsDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportantAnnouncementsDetail.swift; sourceTree = "<group>"; };
 		CA1029000000000000000002 /* WatchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WatchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E69568C66AB135A8DAE4C600 /* NavigationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NavigationService.swift"; sourceTree = "<group>"; };
-		70580B9C7BF2286B0644F8D3 /* PreviewNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreviewNavigation.swift"; sourceTree = "<group>"; };
-		B03FFDA34A73A95A5C7401AE /* Data-Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data-Navigation.swift"; sourceTree = "<group>"; };
-		72919449A22A5719E331BE21 /* NavigationHistorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NavigationHistorySection.swift"; sourceTree = "<group>"; };
-		2C968856456A914F8A3C12BE /* NavigationPreferencesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NavigationPreferencesStore.swift"; sourceTree = "<group>"; };
-		676DE9245404476115682AF0 /* CampusMapStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CampusMapStore.swift"; sourceTree = "<group>"; };
-		203D188AF8ECF50558DFBB81 /* StudentNavigationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StudentNavigationStore.swift"; sourceTree = "<group>"; };
-		F72F5F132C9EF0C00C198DD9 /* APIClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClientError.swift; sourceTree = "<group>"; };
-		57D210807B171D227B8E0A34 /* AIModelSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIModelSettingsView.swift; sourceTree = "<group>"; };
+		CA1029000000000000000200 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		CA1102000000000000000001 /* Data-ContentPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data-ContentPreview.swift"; sourceTree = "<group>"; };
-		CA1102000000000000000003 /* ContentPreviewService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentPreviewService.swift"; sourceTree = "<group>"; };
-		CA1102000000000000000005 /* RoutePreviewStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RoutePreviewStore.swift"; sourceTree = "<group>"; };
+		CA1102000000000000000003 /* ContentPreviewService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentPreviewService.swift; sourceTree = "<group>"; };
+		CA1102000000000000000005 /* RoutePreviewStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutePreviewStore.swift; sourceTree = "<group>"; };
+		DA1104000000000000000002 /* CampuraOne/OfflineResources/school-1-v2.camap */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CampuraOne/OfflineResources/school-1-v2.camap"; sourceTree = SOURCE_ROOT; };
+		DA1104000000000000000004 /* CampuraOne/OfflineResources/Marketing */ = {isa = PBXFileReference; lastKnownFileType = folder; path = CampuraOne/OfflineResources/Marketing; sourceTree = SOURCE_ROOT; };
+		E69568C66AB135A8DAE4C600 /* NavigationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationService.swift; sourceTree = "<group>"; };
+		F72F5F132C9EF0C00C198DD9 /* APIClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClientError.swift; sourceTree = "<group>"; };
+		26D76CB84F578C3B889C1E7B /* PriceWatchModels.swift */ = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PriceWatchModels.swift"; sourceTree = "<group>"; };
+		0FBA307CF2EFCE118E6FCAB4 /* PriceWatchStore.swift */ = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PriceWatchStore.swift"; sourceTree = "<group>"; };
+		6B1FCC2DBEEE9C4BA9065BD7 /* PriceWatchTile.swift */ = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PriceWatchTile.swift"; sourceTree = "<group>"; };
+		2EECF256715B69E119722A05 /* PriceWatchDetailView.swift */ = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PriceWatchDetailView.swift"; sourceTree = "<group>"; };
+		B253EDF56AD63122F20CA7EA /* PromotionActivityAttributes.swift */ = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PromotionActivityAttributes.swift"; sourceTree = "<group>"; };
+		1BF32A29DA8BD69D007920B3 /* PromotionLiveActivityController.swift */ = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PromotionLiveActivityController.swift"; sourceTree = "<group>"; };
+		8A251B2833B4C6BA6FC93795 /* PriceWatchService.swift */ = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PriceWatchService.swift"; sourceTree = "<group>"; };
+		A4C09BEF216311440711BC88 /* PromotionLiveActivity.swift */ = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PromotionLiveActivity.swift"; sourceTree = "<group>"; };
+		23D102FD9030A18B0FF0AA7E /* Info.plist */ = { isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B0C00C86FA7325106B40E64F /* CampuraOneLiveActivities.appex */ = { isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CampuraOneLiveActivities.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A152A68B4329E9CCBD79EA6E /* PriceWatchPreviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceWatchPreviews.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -252,8 +276,16 @@
 			path = WatchUITests;
 			sourceTree = "<group>";
 		};
-		CA1102000000000000000011 /* ContentPreview */ = {isa = PBXFileSystemSynchronizedRootGroup; path = ContentPreview; sourceTree = "<group>"; };
-		CA1102000000000000000012 /* ContentPreview */ = {isa = PBXFileSystemSynchronizedRootGroup; path = ContentPreview; sourceTree = "<group>"; };
+		CA1102000000000000000011 /* ContentPreview */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ContentPreview;
+			sourceTree = "<group>";
+		};
+		CA1102000000000000000012 /* ContentPreview */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ContentPreview;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -289,12 +321,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DC9E452ADF0627EF06C8BBE6 /* Frameworks */ = { isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		0B3F59302FC3380E00980B94 = {
 			isa = PBXGroup;
 			children = (
+				BA218356141F4448D2238C92 /* CampuraOneLiveActivities */,
 				CA1029000000000000000203 /* Design */,
 				CA1029000000000000000003 /* WatchUITests */,
 				CA1028000000000000000003 /* CampuraOneWatch */,
@@ -303,25 +337,10 @@
 			);
 			sourceTree = "<group>";
 		};
-		CA1029000000000000000203 /* Design */ = {
-			isa = PBXGroup;
-			children = (
-				CA1029000000000000000204 /* StudentAppIcon */,
-			);
-			path = Design;
-			sourceTree = "<group>";
-		};
-		CA1029000000000000000204 /* StudentAppIcon */ = {
-			isa = PBXGroup;
-			children = (
-				CA1029000000000000000200 /* AppIcon.icon */,
-			);
-			path = StudentAppIcon;
-			sourceTree = "<group>";
-		};
 		0B3F593A2FC3380E00980B94 /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				B0C00C86FA7325106B40E64F /* CampuraOneLiveActivities.appex */,
 				CA1029000000000000000002 /* WatchUITests.xctest */,
 				CA1028000000000000000002 /* CampuraOneWatch.app */,
 				0B3F59392FC3380E00980B94 /* CampuraOne.app */,
@@ -342,14 +361,15 @@
 		0B8302E82FDF0D7300B5269A /* API */ = {
 			isa = PBXGroup;
 			children = (
+				8A251B2833B4C6BA6FC93795 /* PriceWatchService.swift */,
 				CA1102000000000000000003 /* ContentPreviewService.swift */,
 				70580B9C7BF2286B0644F8D3 /* PreviewNavigation.swift */,
 				E69568C66AB135A8DAE4C600 /* NavigationService.swift */,
 				0B8302E32FDF0D7300B5269A /* APIClient.swift */,
 				F72F5F132C9EF0C00C198DD9 /* APIClientError.swift */,
 				4CAAC00FB6114B70BAF27D9C /* PreviewAPI.swift */,
-				DA1104000000000000000002 /* school-1-v2.camap */,
-				DA1104000000000000000004 /* Marketing */,
+				DA1104000000000000000002 /* CampuraOne/OfflineResources/school-1-v2.camap */,
+				DA1104000000000000000004 /* CampuraOne/OfflineResources/Marketing */,
 				0B8302E42FDF0D7300B5269A /* APIConfig.swift */,
 				CA1022000000000000000001 /* APIDate.swift */,
 				0B8302E52FDF0D7300B5269A /* APIResponse.swift */,
@@ -372,6 +392,7 @@
 		0B8302F32FDF0D7300B5269A /* DataStructure */ = {
 			isa = PBXGroup;
 			children = (
+				CBFD50E54DDD75AFA13D02AF /* PriceWatch */,
 				CA1102000000000000000001 /* Data-ContentPreview.swift */,
 				B03FFDA34A73A95A5C7401AE /* Data-Navigation.swift */,
 				0B8302ED2FDF0D7300B5269A /* Data-ADs&Sales.swift */,
@@ -428,6 +449,7 @@
 		0B8303032FDF0D7300B5269A /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				0B0503959B815327261420CB /* PriceWatch */,
 				CA1102000000000000000011 /* ContentPreview */,
 				21432E88D3C8EB87DCAE4625 /* Navigation */,
 				0B8303012FDF0D7300B5269A /* AnnounceModels */,
@@ -459,6 +481,7 @@
 		0B83030C2FDF0D7300B5269A /* DetailViews */ = {
 			isa = PBXGroup;
 			children = (
+				B27F9F71415E2DF51BA2EFCF /* PriceWatch */,
 				0B12AC862FDFC71C00ECFC94 /* SalesLineDetail.swift */,
 				CA1027000000000000000011 /* CourseTable */,
 				0B83030B2FDF0D7300B5269A /* SchoolCalendarDetail.swift */,
@@ -481,6 +504,7 @@
 		0B8303162FDF0D7300B5269A /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				BB5093722916F5C162993E04 /* PriceWatch */,
 				0B83030F2FDF0D7300B5269A /* AD_LargeBanner.swift */,
 				0B8303102FDF0D7300B5269A /* AD_Small.swift */,
 				0B8303112FDF0D7300B5269A /* Announce_Banner.swift */,
@@ -530,6 +554,7 @@
 		0B8303252FDF0D7300B5269A /* CampuraOne */ = {
 			isa = PBXGroup;
 			children = (
+				EAE71926259CA37CA2643546 /* Activities */,
 				CA1006000000000000000001 /* Advertisements */,
 				0B8302E22FDF0D7300B5269A /* 请求demo */,
 				0B8302E82FDF0D7300B5269A /* API */,
@@ -563,6 +588,17 @@
 			path = Setup;
 			sourceTree = "<group>";
 		};
+		21432E88D3C8EB87DCAE4625 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				CA1102000000000000000005 /* RoutePreviewStore.swift */,
+				2C968856456A914F8A3C12BE /* NavigationPreferencesStore.swift */,
+				676DE9245404476115682AF0 /* CampusMapStore.swift */,
+				203D188AF8ECF50558DFBB81 /* StudentNavigationStore.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
 		CA1027000000000000000011 /* CourseTable */ = {
 			isa = PBXGroup;
 			children = (
@@ -584,17 +620,43 @@
 			path = SchoolCalendar;
 			sourceTree = "<group>";
 		};
-		21432E88D3C8EB87DCAE4625 /* Navigation */ = {
+		CA1029000000000000000203 /* Design */ = {
 			isa = PBXGroup;
 			children = (
-				CA1102000000000000000005 /* RoutePreviewStore.swift */,
-				2C968856456A914F8A3C12BE /* NavigationPreferencesStore.swift */,
-				676DE9245404476115682AF0 /* CampusMapStore.swift */,
-				203D188AF8ECF50558DFBB81 /* StudentNavigationStore.swift */,
+				CA1029000000000000000204 /* StudentAppIcon */,
 			);
-			path = Navigation;
+			path = Design;
 			sourceTree = "<group>";
 		};
+		CA1029000000000000000204 /* StudentAppIcon */ = {
+			isa = PBXGroup;
+			children = (
+				CA1029000000000000000200 /* AppIcon.icon */,
+			);
+			path = StudentAppIcon;
+			sourceTree = "<group>";
+		};
+		CBFD50E54DDD75AFA13D02AF /* PriceWatch */ = { isa = PBXGroup; children = (
+				26D76CB84F578C3B889C1E7B /* PriceWatchModels.swift */,
+			); path = "PriceWatch"; sourceTree = "<group>"; };
+		0B0503959B815327261420CB /* PriceWatch */ = { isa = PBXGroup; children = (
+				0FBA307CF2EFCE118E6FCAB4 /* PriceWatchStore.swift */,
+			); path = "PriceWatch"; sourceTree = "<group>"; };
+		BB5093722916F5C162993E04 /* PriceWatch */ = { isa = PBXGroup; children = (
+				6B1FCC2DBEEE9C4BA9065BD7 /* PriceWatchTile.swift */,
+			); path = "PriceWatch"; sourceTree = "<group>"; };
+		B27F9F71415E2DF51BA2EFCF /* PriceWatch */ = { isa = PBXGroup; children = (
+				A152A68B4329E9CCBD79EA6E /* PriceWatchPreviews.swift */,
+				2EECF256715B69E119722A05 /* PriceWatchDetailView.swift */,
+			); path = "PriceWatch"; sourceTree = "<group>"; };
+		EAE71926259CA37CA2643546 /* Activities */ = { isa = PBXGroup; children = (
+				1BF32A29DA8BD69D007920B3 /* PromotionLiveActivityController.swift */,
+				B253EDF56AD63122F20CA7EA /* PromotionActivityAttributes.swift */,
+			); path = "Activities"; sourceTree = "<group>"; };
+		BA218356141F4448D2238C92 /* CampuraOneLiveActivities */ = { isa = PBXGroup; children = (
+				23D102FD9030A18B0FF0AA7E /* Info.plist */,
+				A4C09BEF216311440711BC88 /* PromotionLiveActivity.swift */,
+			); path = "CampuraOneLiveActivities"; sourceTree = "<group>"; };
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -602,6 +664,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0B3F59442FC3381000980B94 /* Build configuration list for PBXNativeTarget "CampuraOne" */;
 			buildPhases = (
+				5DD42085A1FBF476696ABA7D /* Embed App Extensions */,
 				CA102800000000000000000B /* Embed Watch Content */,
 				0B3F59352FC3380E00980B94 /* Sources */,
 				0B3F59362FC3380E00980B94 /* Frameworks */,
@@ -610,15 +673,16 @@
 			buildRules = (
 			);
 			dependencies = (
+				8E271C9D398E08A7EB54F32E /* PBXTargetDependency */,
 				CA102800000000000000000D /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				CA1102000000000000000012 /* ContentPreview */,
-				CA1102000000000000000011 /* ContentPreview */,
 				0B4CA4F92FE01365008B3B2D /* Map Layer */,
 				0B9F190F2FFBBBF300C84458 /* AuthAccount */,
 				CA0922000000000000000001 /* Components */,
 				CA1006000000000000000001 /* Advertisements */,
+				CA1102000000000000000011 /* ContentPreview */,
+				CA1102000000000000000012 /* ContentPreview */,
 			);
 			name = CampuraOne;
 			packageProductDependencies = (
@@ -681,6 +745,7 @@
 			productReference = CA1029000000000000000002 /* WatchUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		6F6E93F9F19EB960967341AB /* CampuraOneLiveActivities */ = { isa = PBXNativeTarget; buildConfigurationList = E3D95E93C175123545ECCC60; buildPhases = (D2F878B2E4C60F45F22B01CF, DC9E452ADF0627EF06C8BBE6, 93615D6038EE2D7FAA7283EB,); buildRules = (); dependencies = (); name = CampuraOneLiveActivities; productName = CampuraOneLiveActivities; productReference = B0C00C86FA7325106B40E64F; productType = "com.apple.product-type.app-extension"; };
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -727,6 +792,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				6F6E93F9F19EB960967341AB /* CampuraOneLiveActivities */,
 				CA1029000000000000000001 /* WatchUITests */,
 				CA1028000000000000000001 /* CampuraOneWatch */,
 				0B3F59382FC3380E00980B94 /* CampuraOne */,
@@ -740,8 +806,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B8303262FDF0D7300B5269A /* Assets.xcassets in Resources */,
-				DA1104000000000000000001 /* school-1-v2.camap in Resources */,
-				DA1104000000000000000003 /* Marketing in Resources */,
+				DA1104000000000000000001 /* CampuraOne/OfflineResources/school-1-v2.camap in Resources */,
+				DA1104000000000000000003 /* CampuraOne/OfflineResources/Marketing in Resources */,
 				CA1029000000000000000201 /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -761,6 +827,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		93615D6038EE2D7FAA7283EB /* Resources */ = { isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -768,6 +835,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C104F2AD2CA9E3F687DF1AE6 /* PriceWatchPreviews.swift in Sources */,
+				84C6CA59D11C41EFAF922CC1 /* PriceWatchModels.swift in Sources */,
+				B334E3A59EB6044B207B5314 /* PriceWatchStore.swift in Sources */,
+				7D7BFA8D850372DEB670D819 /* PriceWatchTile.swift in Sources */,
+				9A5143184AC0D33E607100D8 /* PriceWatchDetailView.swift in Sources */,
+				C43C5496F5118C2D83E7A939 /* PromotionActivityAttributes.swift in Sources */,
+				D4960E99E0434F3C0EA6986D /* PromotionLiveActivityController.swift in Sources */,
+				3D5B8289CE68EF8CA84C3CBE /* PriceWatchService.swift in Sources */,
 				CA1102000000000000000006 /* RoutePreviewStore.swift in Sources */,
 				CA1102000000000000000004 /* ContentPreviewService.swift in Sources */,
 				CA1102000000000000000002 /* Data-ContentPreview.swift in Sources */,
@@ -865,6 +940,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D2F878B2E4C60F45F22B01CF /* Sources */ = { isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (C2F086F1B25920043F6D55C0, D389D37D09D7274265C82E18,); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -878,6 +954,7 @@
 			target = CA1028000000000000000001 /* CampuraOneWatch */;
 			targetProxy = CA102900000000000000000A /* PBXContainerItemProxy */;
 		};
+		8E271C9D398E08A7EB54F32E /* PBXTargetDependency */ = { isa = PBXTargetDependency; target = 6F6E93F9F19EB960967341AB; targetProxy = F40B0C5C123F124D814E2D9C; };
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -945,6 +1022,143 @@
 			};
 			name = Debug;
 		};
+		0B3F59432FC3381000980B94 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 3839Y9532A;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		0B3F59452FC3381000980B94 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PROMOTION_URL_SCHEME = "campuraone";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = AppIconLegacy;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3839Y9532A;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CampuraOne/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "域校屿";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "用于将课程表、校历添加到系统日历。";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Campura One 需要使用你的当前位置，以便在校园地图中显示你的位置并提供附近地点服务。";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.LX.CampuraOne;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		0B3F59462FC3381000980B94 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PROMOTION_URL_SCHEME = "campuraone";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = AppIconLegacy;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3839Y9532A;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CampuraOne/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "域校屿";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "用于将课程表、校历添加到系统日历。";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Campura One 需要使用你的当前位置，以便在校园地图中显示你的位置并提供附近地点服务。";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.LX.CampuraOne;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		0B3F59472FC3381000980B94 /* Demo */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1009,105 +1223,10 @@
 			};
 			name = Demo;
 		};
-		0B3F59432FC3381000980B94 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 3839Y9532A;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
-				SDKROOT = iphoneos;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		0B3F59452FC3381000980B94 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = AppIconLegacy;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3839Y9532A;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CampuraOne/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "域校屿";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
-				INFOPLIST_KEY_NSCalendarsUsageDescription = "用于将课程表、校历添加到系统日历。";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Campura One 需要使用你的当前位置，以便在校园地图中显示你的位置并提供附近地点服务。";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.LX.CampuraOne;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
 		0B3F59482FC3381000980B94 /* Demo */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				PROMOTION_URL_SCHEME = "campuraone-demo";
 				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = AppIconLegacy;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1115,7 +1234,6 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3839Y9532A;
 				ENABLE_PREVIEWS = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG DEMO $(inherited)";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CampuraOne/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "域校屿";
@@ -1136,6 +1254,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.LX.CampuraOne.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG DEMO $(inherited)";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1144,45 +1263,6 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Demo;
-		};
-		0B3F59462FC3381000980B94 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = AppIconLegacy;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3839Y9532A;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CampuraOne/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "域校屿";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
-				INFOPLIST_KEY_NSCalendarsUsageDescription = "用于将课程表、校历添加到系统日历。";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Campura One 需要使用你的当前位置，以便在校园地图中显示你的位置并提供附近地点服务。";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.LX.CampuraOne;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
 		};
 		CA1028000000000000000008 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1215,38 +1295,6 @@
 				WATCHOS_DEPLOYMENT_TARGET = 11.0;
 			};
 			name = Debug;
-		};
-		DE0000000000000000000003 /* Demo */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3839Y9532A;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "域校屿";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKApplication = YES;
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.LX.CampuraOne.demo;
-				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.LX.CampuraOne.demo.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "watchos watchsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 11.0;
-			};
-			name = Demo;
 		};
 		CA1028000000000000000009 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -1297,23 +1345,6 @@
 			};
 			name = Debug;
 		};
-		DE0000000000000000000004 /* Demo */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 3839Y9532A;
-				GENERATE_INFOPLIST_FILE = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.LX.CampuraOne.watchuitests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SUPPORTED_PLATFORMS = "watchos watchsimulator";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				TEST_TARGET_NAME = CampuraOneWatch;
-				WATCHOS_DEPLOYMENT_TARGET = 11.0;
-			};
-			name = Demo;
-		};
 		CA1029000000000000000009 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1331,6 +1362,58 @@
 			};
 			name = Release;
 		};
+		DE0000000000000000000003 /* Demo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3839Y9532A;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "域校屿";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKApplication = YES;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.LX.CampuraOne.demo;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.LX.CampuraOne.demo.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Demo;
+		};
+		DE0000000000000000000004 /* Demo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3839Y9532A;
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.LX.CampuraOne.watchuitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = CampuraOneWatch;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Demo;
+		};
+		A0BE0F9D606FCE6D3AE68C9E /* Debug */ = { isa = XCBuildConfiguration; buildSettings = { APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; DEVELOPMENT_TEAM = 3839Y9532A; ENABLE_PREVIEWS = YES; GENERATE_INFOPLIST_FILE = YES; INFOPLIST_FILE = CampuraOneLiveActivities/Info.plist; INFOPLIST_KEY_CFBundleDisplayName = "促销倒计时"; IPHONEOS_DEPLOYMENT_TARGET = 18.0; LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@executable_path/../../Frameworks",); MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = com.LX.CampuraOne.LiveActivities; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SKIP_INSTALL = YES; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)"; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Debug; };
+		359C3D1314B4A61ED6E3414C /* Demo */ = { isa = XCBuildConfiguration; buildSettings = { APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; DEVELOPMENT_TEAM = 3839Y9532A; ENABLE_PREVIEWS = YES; GENERATE_INFOPLIST_FILE = YES; INFOPLIST_FILE = CampuraOneLiveActivities/Info.plist; INFOPLIST_KEY_CFBundleDisplayName = "促销倒计时"; IPHONEOS_DEPLOYMENT_TARGET = 18.0; LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@executable_path/../../Frameworks",); MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = com.LX.CampuraOne.demo.LiveActivities; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SKIP_INSTALL = YES; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG DEMO $(inherited)"; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Demo; };
+		3701FC851057869542B30D30 /* Release */ = { isa = XCBuildConfiguration; buildSettings = { APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; DEVELOPMENT_TEAM = 3839Y9532A; ENABLE_PREVIEWS = YES; GENERATE_INFOPLIST_FILE = YES; INFOPLIST_FILE = CampuraOneLiveActivities/Info.plist; INFOPLIST_KEY_CFBundleDisplayName = "促销倒计时"; IPHONEOS_DEPLOYMENT_TARGET = 18.0; LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@executable_path/../../Frameworks",); MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = com.LX.CampuraOne.LiveActivities; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SKIP_INSTALL = YES; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)"; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Release; };
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1374,25 +1457,10 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		E3D95E93C175123545ECCC60 /* Widget configurations */ = { isa = XCConfigurationList; buildConfigurations = (A0BE0F9D606FCE6D3AE68C9E, 359C3D1314B4A61ED6E3414C, 3701FC851057869542B30D30,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		CA1029000000000000000101 /* XCRemoteSwiftPackageReference "PetaToolKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/PetaHertZ-Studio/PetaToolKit.git";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-		CA1029000000000000000102 /* XCRemoteSwiftPackageReference "PetaKitUIX" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/PetaHertZ-Studio/PetaKitUIX.git";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		0B05CA55308F732700C604AE /* XCRemoteSwiftPackageReference "CampuraOne_Camap_SDK" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TheResistorStudioWH/CampuraOne_Camap_SDK.git";
@@ -1433,7 +1501,30 @@
 				minimumVersion = 0.1.1;
 			};
 		};
-		CA1102000000000000000021 /* XCRemoteSwiftPackageReference "BottomSheet" */ = {isa = XCRemoteSwiftPackageReference; repositoryURL = "https://github.com/lucaszischka/BottomSheet.git"; requirement = {kind = exactVersion; version = 3.1.1; }; };
+		CA1029000000000000000101 /* XCRemoteSwiftPackageReference "PetaToolKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/PetaHertZ-Studio/PetaToolKit.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		CA1029000000000000000102 /* XCRemoteSwiftPackageReference "PetaKitUIX" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/PetaHertZ-Studio/PetaKitUIX.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		CA1102000000000000000021 /* XCRemoteSwiftPackageReference "BottomSheet" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lucaszischka/BottomSheet.git";
+			requirement = {
+				kind = exactVersion;
+				version = 3.1.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1467,11 +1558,31 @@
 			package = 0B6FF1602FC45C820002559F /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
-		CA1029000000000000000103 /* PetaToolKit */ = {isa = XCSwiftPackageProductDependency; package = CA1029000000000000000101 /* XCRemoteSwiftPackageReference "PetaToolKit" */; productName = PetaToolKit; };
-		CA1029000000000000000104 /* PetaKitUIX */ = {isa = XCSwiftPackageProductDependency; package = CA1029000000000000000102 /* XCRemoteSwiftPackageReference "PetaKitUIX" */; productName = PetaKitUIX; };
-		CA1029000000000000000105 /* PetaToolKit */ = {isa = XCSwiftPackageProductDependency; package = CA1029000000000000000101 /* XCRemoteSwiftPackageReference "PetaToolKit" */; productName = PetaToolKit; };
-		CA1029000000000000000106 /* PetaKitWatchUIX */ = {isa = XCSwiftPackageProductDependency; package = CA1029000000000000000102 /* XCRemoteSwiftPackageReference "PetaKitUIX" */; productName = PetaKitWatchUIX; };
-		CA1102000000000000000022 /* BottomSheet */ = {isa = XCSwiftPackageProductDependency; package = CA1102000000000000000021 /* XCRemoteSwiftPackageReference "BottomSheet" */; productName = BottomSheet; };
+		CA1029000000000000000103 /* PetaToolKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CA1029000000000000000101 /* XCRemoteSwiftPackageReference "PetaToolKit" */;
+			productName = PetaToolKit;
+		};
+		CA1029000000000000000104 /* PetaKitUIX */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CA1029000000000000000102 /* XCRemoteSwiftPackageReference "PetaKitUIX" */;
+			productName = PetaKitUIX;
+		};
+		CA1029000000000000000105 /* PetaToolKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CA1029000000000000000101 /* XCRemoteSwiftPackageReference "PetaToolKit" */;
+			productName = PetaToolKit;
+		};
+		CA1029000000000000000106 /* PetaKitWatchUIX */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CA1029000000000000000102 /* XCRemoteSwiftPackageReference "PetaKitUIX" */;
+			productName = PetaKitWatchUIX;
+		};
+		CA1102000000000000000022 /* BottomSheet */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CA1102000000000000000021 /* XCRemoteSwiftPackageReference "BottomSheet" */;
+			productName = BottomSheet;
+		};
 /* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0B3F59312FC3380E00980B94 /* Project object */;

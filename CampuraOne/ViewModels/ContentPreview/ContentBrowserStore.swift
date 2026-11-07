@@ -8,6 +8,8 @@ final class ContentPreviewPage: ObservableObject, Identifiable {
     let advertisement: Advertisement?
     let model: LoadableListViewModel<ContentPreviewDetail>
     @Published var categoryID: Int?
+    @Published var placeLevelID: String?
+    @Published var placeQuery = ""
     @Published var scrollID: String?
 
     init(reference: CampusContentReference, advertisement: Advertisement? = nil, repository: ContentPreviewRepository) {

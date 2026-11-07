@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 import PetaKitUIX
 import PetaToolKit
 
@@ -95,6 +96,7 @@ struct DashboardNotificationSettings {
 
 struct DashboardNotificationSettingsView: View {
     let featureTitle: String
+    @Environment(\.openURL) private var openURL
     @State private var preference: DashboardNotificationPreference
     private let settings: DashboardNotificationSettings
 
@@ -138,15 +140,54 @@ struct DashboardNotificationSettingsView: View {
                     .buttonStyle(.plain)
                 }
             } header: {
-                Text("\(featureTitle)通知")
+                Text("\(featureTitle) · 普通通知")
             } footer: {
                 Text("当前先保存通知偏好；各磁贴的具体提醒功能将分别接入此设置。")
+            }
+
+            Section {
+                HStack(spacing: 12) {
+                    Image(systemName: "bell.badge.waveform.fill")
+                        .font(.title3)
+                        .frame(width: 28)
+                        .foregroundStyle(Color.accentColor)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("播报通知")
+                            .foregroundStyle(.primary)
+                        Text("前往系统设置管理 Siri 播报")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Spacer()
+                    Image(systemName: "arrow.up.right")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.tertiary)
+                }
+                .beButton(openSystemNotificationSettings)
+                .buttonStyle(.plain)
+                .accessibilityHint("打开 Campura One 的系统通知设置")
+                .accessibilityIdentifier("dashboard.notifications.announcements")
+            } header: {
+                Text("播报通知")
+            } footer: {
+                Text("Siri 播报由系统统一管理，适用于整个 App。")
             }
         }
         .scrollContentBackground(.hidden)
         .navigationTitle("管理当前功能磁贴的通知")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { preference = settings.preference() }
+    }
+
+    private func openSystemNotificationSettings() {
+        guard let url = URL(string: UIApplication.openNotificationSettingsURLString) else { return }
+        openURL(url) { accepted in
+            if !accepted, let fallback = URL(string: UIApplication.openSettingsURLString) {
+                openURL(fallback)
+            }
+        }
     }
 }
 

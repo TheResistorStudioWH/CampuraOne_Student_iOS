@@ -14,6 +14,7 @@ struct CampusMapControls: View {
     let navigationCameraMode: NavigationCameraMode
     let navigationCameraAvailable: Bool
     let toggleNavigationCamera: () -> Void
+    var recenterNavigation: () -> Void = {}
 
     var body: some View {
         VStack(alignment: .trailing, spacing: 8) {
@@ -32,7 +33,7 @@ struct CampusMapControls: View {
                 Label(mode.title, systemImage: mode.symbol)
                     .labelStyle(.iconOnly)
                     .font(.subheadline.weight(.medium))
-                    .padding(12)
+                    .frame(width: 44, height: 44)
                     .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
             }
             .accessibilityLabel("地图显示方式")
@@ -42,29 +43,34 @@ struct CampusMapControls: View {
             if navigationCameraAvailable {
                 Image(systemName: navigationCameraMode.symbol)
                     .font(.subheadline.weight(.medium))
-                    .frame(width: 18, height: 18)
-                    .padding(12)
+                    .frame(width: 44, height: 44)
                     .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
                     .beButton(toggleNavigationCamera)
                     .accessibilityLabel("切换导航视角")
                     .accessibilityValue(navigationCameraMode.title)
                     .accessibilityHint("在正北朝上与前进方向之间切换")
                     .accessibilityIdentifier("campus.map.navigation-camera")
+
+                MapPanelIconButton(title: "回到当前位置并继续跟随", symbol: "location.fill", tint: .accentColor,
+                                   action: recenterNavigation)
+                    .accessibilityIdentifier("campus.map.resume-following")
             }
 
             if isUncalibrated, mode != .original {
                 HStack(spacing: 12) {
                     Label(isEditing ? "完成摆放" : "摆放", systemImage: isEditing ? "checkmark" : "hand.draw")
+                        .frame(minHeight: 44).contentShape(Rectangle())
                         .beButton(toggleEditing)
                         .accessibilityIdentifier("campus.map.placement")
                     if isEditing {
-                        Image(systemName: "arrow.counterclockwise")
+                        Image(systemName: "arrow.counterclockwise").frame(width: 44, height: 44)
+                            .contentShape(Rectangle())
                             .beButton(resetPlacement)
                             .accessibilityLabel("重置临时位置")
                     }
                 }
                 .font(.subheadline.weight(.medium))
-                .padding(12)
+                .padding(.horizontal, 12)
                 .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
                 if isEditing {
                     Text("拖动移动 · 双指旋转\n位置仅保留于本次登录")
@@ -80,6 +86,7 @@ struct CampusMapControls: View {
 
 /// The compact map status row sits immediately above the horizontal StatusBar.
 struct CampusMapStatusRow: View {
+    @State private var showsStatusDetails = false
     @EnvironmentObject private var authSession: AuthSession
     @ObservedObject private var map = CampusMapStore.shared
     @ObservedObject private var navigation = StudentNavigationStore.shared
@@ -91,6 +98,7 @@ struct CampusMapStatusRow: View {
 
     private var statusMessage: String? {
         if let error = map.errorMessage { return "地图未更新：\(error)" }
+        if let error = map.merchantError { return "商家信息未更新：\(error)" }
         if !map.isLoading, map.snapshot == nil { return "校园地图尚不可用" }
         if let snapshot = map.snapshot, snapshot.document.frames.isEmpty { return "尚未发布绘制区域" }
         if let plan = navigation.plan, map.snapshot?.hash != plan.mapHash { return "地图与路线版本不一致，请刷新" }
@@ -113,6 +121,8 @@ struct CampusMapStatusRow: View {
                     if map.isLoading { ProgressView().controlSize(.mini) }
                 }
                 .statusBarCapsuleStyle()
+                .frame(minWidth: 44, minHeight: 44)
+                .contentShape(Rectangle())
                 .beButton(refresh)
                 .buttonStyle(.plain)
                 .disabled(map.isLoading || navigation.isWorking)
@@ -124,11 +134,19 @@ struct CampusMapStatusRow: View {
                     .font(.system(size: 12))
                     .lineLimit(1)
                     .statusBarCapsuleStyle()
+                    .frame(minHeight: 44)
+                    .contentShape(Rectangle())
+                    .beButton { showsStatusDetails = true }
+                    .buttonStyle(.plain)
+                    .accessibilityHint("查看完整提示")
                     .accessibilityIdentifier("campus.map.message")
             }
         }
         .padding(.horizontal, 2)
         .frame(maxWidth: .infinity, alignment: .leading)
+        .alert("校园地图", isPresented: $showsStatusDetails) {
+            Button("知道了", role: .cancel) {}
+        } message: { Text(statusMessage ?? "地图信息已更新。") }
     }
 
     private func refresh() {

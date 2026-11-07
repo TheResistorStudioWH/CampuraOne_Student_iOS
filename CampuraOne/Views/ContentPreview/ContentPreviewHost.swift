@@ -8,10 +8,23 @@ import PetaToolKit
 struct ContentPreviewHost: View {
     @ObservedObject var browser: ContentBrowserStore
     @ObservedObject var route: RoutePreviewStore
+    @ObservedObject private var navigation = StudentNavigationStore.shared
+    @ObservedObject private var map = CampusMapStore.shared
+    @Environment(\.dynamicTypeSize) private var typeSize
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var position: BottomSheetPosition = .hidden
+    @State private var browsingPosition: BottomSheetPosition = .relative(0.5)
+    @State private var routePosition: BottomSheetPosition = .relative(0.5)
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     let openRoute: (RoutePreviewTarget) -> Void
     let returnFromRoute: () -> Void
+
+    private var initialPosition: BottomSheetPosition {
+        #if DEBUG
+        if PreviewAPI.isEnabled, ProcessInfo.processInfo.arguments.contains("--campura-preview-expanded") { return .relativeTop(0.92) }
+        #endif
+        return typeSize.isAccessibilitySize ? .relativeTop(0.92) : .relative(0.5)
+    }
 
     private var isPresented: Bool { browser.isPresented || route.isPresented }
 
@@ -19,33 +32,75 @@ struct ContentPreviewHost: View {
         Color.clear
             .bottomSheet(bottomSheetPosition: $position,
                          switchablePositions: [.dynamicBottom, .relative(0.5), .relativeTop(0.92)],
-                         headerContent: { header }, mainContent: { content })
+                         headerContent: {
+                             header
+                                 .accessibilityAction(named: Text("展开卡片")) { position = .relativeTop(0.92) }
+                                 .accessibilityAction(named: Text("收起卡片")) { position = .dynamicBottom }
+                         }, mainContent: { content })
             .showDragIndicator(true)
             .enableSwipeToDismiss(true)
             .enableTapToDismiss(false)
             .enableContentDrag(false)
             .enableBackgroundBlur(false)
+            .enableAccountingForKeyboardHeight(true)
             .customAnimation(reduceMotion ? .linear(duration: 0.12) : .spring(response: 0.38, dampingFraction: 0.88))
             .customBackground(
-                RoundedRectangle(cornerRadius: 28, style: .continuous).fill(.regularMaterial)
+                panelBackground
                     .readSize { size in
                         if abs(browser.panelHeight - size.height) > 1 { browser.panelHeight = size.height }
                         if abs(route.panelHeight - size.height) > 1 { route.panelHeight = size.height }
                     }
             )
             .onDismiss { close() }
-            .onChange(of: isPresented, initial: true) { _, shown in
-                position = shown ? .relative(0.5) : .hidden
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+                if isPresented { position = .relativeTop(0.92) }
             }
-            .onChange(of: browser.current?.id) { _, _ in
-                if browser.isPresented { position = .relative(0.5) }
+            .onChange(of: isPresented, initial: true) { _, shown in
+                position = shown ? initialPosition : .hidden
+            }
+            .onChange(of: browser.current?.id) { old, _ in
+                // Keep the user's chosen height while moving through the same
+                // detail stack; a return should not collapse a long shop list.
+                if old == nil, browser.isPresented, !route.isPresented { position = initialPosition }
             }
             .onChange(of: route.isPresented) { _, shown in
-                if shown { position = .relative(0.5) }
+                if shown {
+                    browsingPosition = position
+                    position = initialPosition
+                } else if browser.isPresented { position = browsingPosition }
+            }
+            .onChange(of: route.selectedSource?.id) { old, source in
+                if source != nil {
+                    if old == nil { routePosition = position }
+                    position = .relativeTop(0.92)
+                } else if route.isPresented { position = routePosition }
+            }
+            .onChange(of: route.isSelectingOrigin) { _, selecting in
+                if selecting {
+                    routePosition = position
+                    position = .relativeTop(0.92)
+                } else if route.isPresented { position = routePosition }
+            }
+            .onChange(of: typeSize) { _, size in
+                if isPresented, size.isAccessibilitySize { position = .relativeTop(0.92) }
+            }
+            .onChange(of: map.focusRequest?.id) { _, _ in
+                if map.focusRequest != nil, browser.isPresented, !route.isPresented { position = .dynamicBottom }
+            }
+            .onChange(of: navigation.isGuiding) { _, guiding in
+                if !guiding, route.isPresented, route.selectedSource == nil, !route.isSelectingOrigin { position = .relative(0.5) }
             }
             .onChange(of: route.overviewRequest) { _, _ in
                 if route.isPresented { position = .dynamicBottom }
             }
+    }
+
+    @ViewBuilder private var panelBackground: some View {
+        if reduceTransparency {
+            RoundedRectangle(cornerRadius: 28, style: .continuous).fill(Color(uiColor: .systemBackground))
+        } else {
+            RoundedRectangle(cornerRadius: 28, style: .continuous).fill(.regularMaterial)
+        }
     }
 
     @ViewBuilder private var header: some View {
@@ -53,7 +108,7 @@ struct ContentPreviewHost: View {
             RoutePreviewHeader(route: route, onBack: routeBack, onClose: close)
         } else if let page = browser.current {
             if case .place(let id) = page.reference {
-                CampusPlaceHeader(placeID: id, onClose: close, openRoute: openRoute)
+                CampusPlaceHeader(placeID: id, browser: browser, onClose: close, openRoute: openRoute)
             } else {
                 ContentDetailHeader(page: page, browser: browser, onClose: close, openRoute: openRoute)
             }
@@ -66,7 +121,8 @@ struct ContentPreviewHost: View {
                 .id(route.requestID)
         } else if let page = browser.current {
             if case .place(let id) = page.reference {
-                CampusPlaceContent(placeID: id)
+                CampusPlaceContent(placeID: id, page: page, browser: browser)
+                    .id(page.id)
             } else {
                 ContentPreviewDetailView(page: page, browser: browser)
                     .id(page.id)
@@ -99,32 +155,26 @@ struct PreviewPanelHeader<Actions: View>: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .top, spacing: 12) {
                 if showBack {
-                    Image(systemName: "chevron.left")
-                        .font(.headline)
-                        .padding(10)
-                        .background(.quaternary, in: Circle())
-                        .beButton(onBack)
-                        .accessibilityLabel("返回")
+                    MapPanelIconButton(title: "返回", symbol: "chevron.left", action: onBack)
+                        .accessibilityIdentifier("content.preview.back")
                 }
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title).font(.title2.bold()).lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityAddTraits(.isHeader)
                     if let subtitle, !subtitle.isEmpty {
                         Text(subtitle).font(.subheadline).foregroundStyle(.secondary).lineLimit(2)
                     }
                 }
                 Spacer(minLength: 0)
-                Image(systemName: "xmark")
-                    .font(.subheadline.bold())
-                    .padding(10)
-                    .background(.quaternary, in: Circle())
-                    .beButton(onClose)
-                    .accessibilityLabel("关闭预览")
+                MapPanelIconButton(title: "关闭预览", symbol: "xmark", action: onClose)
                     .accessibilityIdentifier("content.preview.close")
             }
+            .accessibilityElement(children: .contain)
             actions
         }
         .padding(.horizontal, 20)
-        .padding(.vertical, 12)
+        .padding(.vertical, 10)
         .buttonStyle(.plain)
     }
 }
@@ -133,6 +183,7 @@ private struct ContentDetailHeader: View {
     @ObservedObject var page: ContentPreviewPage
     @ObservedObject var model: LoadableListViewModel<ContentPreviewDetail>
     @ObservedObject var browser: ContentBrowserStore
+    @ObservedObject private var map = CampusMapStore.shared
     let onClose: () -> Void
     let openRoute: (RoutePreviewTarget) -> Void
 
@@ -149,20 +200,27 @@ private struct ContentDetailHeader: View {
             if let detail {
                 if let shop = detail.merchants.first, detail.merchants.count == 1 {
                     let target = browser.repository.boundPlace(for: shop)
-                    Label(target == nil ? "商家暂未设置位置" : "路线 · \(shop.name)", systemImage: "arrow.triangle.turn.up.right.diamond.fill")
-                        .font(.subheadline.weight(.semibold))
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 11)
-                        .foregroundStyle(target == nil ? Color.secondary : Color.accentColor)
-                        .background(Color.accentColor.opacity(target == nil ? 0.05 : 0.12), in: RoundedRectangle(cornerRadius: 14))
-                        .beButton { if let target { openRoute(target) } }
-                        .disabled(target == nil)
-                        .accessibilityIdentifier("content.preview.route")
+                    if let target {
+                        HStack(spacing: 10) {
+                            MapPanelAction(title: "路线", symbol: "arrow.triangle.turn.up.right.diamond.fill", prominent: true) { openRoute(target) }
+                                .accessibilityIdentifier("content.preview.route")
+                            MapPanelIconButton(title: "在地图上查看商家", symbol: "scope", tint: .accentColor) {
+                                if let id = target.destination { map.focus(on: [id]) }
+                            }
+                            .accessibilityIdentifier("content.preview.map")
+                        }
+                    } else {
+                        Label(map.isLoading ? "正在读取商家位置…" : map.merchantError != nil ? "商家位置暂不可用" : "商家暂未设置位置",
+                              systemImage: map.isLoading ? "location.magnifyingglass" : "mappin.slash")
+                            .font(.subheadline).foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                    }
                 } else {
                     Text(detail.merchants.isEmpty ? "暂未关联商家" : "请在下方选择适用商家")
                         .font(.caption).foregroundStyle(.secondary)
                 }
             }
         }
+        .task { await map.loadIfNeeded() }
     }
 }

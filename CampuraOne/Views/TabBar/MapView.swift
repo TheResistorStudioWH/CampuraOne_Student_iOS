@@ -204,12 +204,16 @@ struct MapView: View {
     @State var isToolDrawExpand = false
 
     private var navigationCameraAvailable: Bool {
+        #if DEMO
+        return false
+        #else
         guard navigation.isGuiding, navigation.isCurrent, let plan = navigation.plan, plan.hasRoute,
               plan.mapHash == campusMap.snapshot?.hash,
               let frame = campusMap.snapshot?.document.frames.first(where: { $0.id == campusMap.selectedFrameID }),
               frame.bindings["mapkit"] != nil,
               plan.route?.frameId == frame.id else { return false }
         return true
+        #endif
     }
     
     
@@ -218,11 +222,13 @@ struct MapView: View {
             ZStack(alignment: .bottom) {
                 CampusMapSurface(cameraPosition: $cameraPosition,
                                  location: locationManager.location,
-                                 controlsTopInset: searchBarHeight,
+                                 controlsTopInset: hasContentPanel ? 0 : searchBarHeight,
                                  controlsHidden: isToolDrawExpand,
                                  navigationCameraMode: navigationCameraMode,
                                  navigationCameraAvailable: navigationCameraAvailable,
-                                 toggleNavigationCamera: toggleNavigationCamera)
+                                 toggleNavigationCamera: toggleNavigationCamera,
+                                 isActive: isActive,
+                                 recenterNavigation: recenterMap)
                 VStack {
                     VStack(alignment: .leading, spacing: 0) {
                         CampusMapStatusRow()
@@ -304,7 +310,12 @@ struct MapView: View {
             if phase == .active, let userID = authSession.currentUser?.userID {
                 Task {
                     await campusMap.load(userID: userID, force: true)
-                    if navigation.isGuiding, navigation.plan != nil { await navigation.replan() }
+                    #if !DEMO
+                    if navigation.isGuiding, navigation.plan != nil {
+                        routePreview.stopGuidance()
+                        await navigation.replan()
+                    }
+                    #endif
                 }
             }
         }
@@ -314,6 +325,7 @@ struct MapView: View {
                 locationManager.requestAuthorizationAndStart()
                 configureHeadingUpdates()
             } else {
+                routePreview.pausePlayback()
                 locationManager.setHeadingUpdatesEnabled(false)
                 locationManager.stopUpdatingLocation()
             }
@@ -344,6 +356,7 @@ struct MapView: View {
         }
         
         .onDisappear {
+            routePreview.pausePlayback()
             locationManager.setHeadingUpdatesEnabled(false)
             locationManager.stopUpdatingLocation()
             navigation.setPaused(true)
@@ -368,6 +381,9 @@ struct MapView: View {
             lastCameraHeading = nil
             configureHeadingUpdates()
             if navigationCameraAvailable { updateNavigationCamera(animated: true) }
+        }
+        .onChange(of: routePreview.mapBrowsingRequest) { _, _ in
+            if navigation.isGuiding { isFollowingNavigation = false }
         }
         .onChange(of: cameraPosition) { _, position in
             if navigationCameraAvailable, isFollowingNavigation, position.positionedByUser {

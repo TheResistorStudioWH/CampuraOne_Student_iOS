@@ -94,7 +94,7 @@ struct CourseWeekGrid: View {
     let events: [[ICSEventItem]]
     @Binding var selectedDate: Date
     private let calendar = Calendar.current
-    @ScaledMetric(relativeTo: .caption) private var rowHeight: CGFloat = 100
+    @ScaledMetric(relativeTo: .caption) private var rowHeight: CGFloat = 60
     private let headerHeight: CGFloat = 60
 
     private var slots: [Int] {
@@ -115,7 +115,7 @@ struct CourseWeekGrid: View {
                         } else {
                             ForEach(slots, id: \.self) { slot in
                                 Text(String(format: "%02d:%02d", slot / 60, slot % 60))
-                                    .padding(.top, 6)
+                                    .padding(.top, 4)
                                     .frame(height: rowHeight, alignment: .top)
                             }
                         }
@@ -171,16 +171,18 @@ struct CourseWeekGrid: View {
                         ForEach(courses) { event in
                             Text(event.title)
                                 .font(.system(size: 11, weight: .medium))
-                                .lineLimit(courses.count > 1 ? 1 : 3)
+                                .lineLimit(courses.count > 1 ? 1 : 2)
                                 .fixedSize(horizontal: false, vertical: true)
                             if courses.count == 1, let location = event.location, !location.isEmpty {
-                                Text(location).font(.system(size: 9)).foregroundStyle(.secondary)
+                                Text(location).font(.system(size: 8)).foregroundStyle(.secondary)
+                                    .allowsTightening(true)
                                     .lineLimit(2).fixedSize(horizontal: false, vertical: true)
                             }
                         }
                         Spacer(minLength: 0)
                     }
-                    .padding(6)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 4)
                     .frame(width: width, height: rowHeight, alignment: .topLeading)
                     .background(alignment: .top) {
                         Rectangle().fill(.secondary.opacity(0.12)).frame(height: 0.5)

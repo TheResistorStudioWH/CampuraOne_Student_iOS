@@ -326,3 +326,78 @@ nonisolated enum CampusMapResponse: Sendable {
     case document(CampusMapSnapshot)
 }
 
+
+/// Shared local-metre geometry for turn cards and the map arrow. Playback is
+/// supplied by Demo only; formal builds project an actual location onto the line.
+nonisolated struct NavigationGuidanceGeometry {
+    struct Sample {
+        let position: Point
+        let forward: Point
+        let segment: Int
+        let distanceToTurn: Double
+        let instruction: String
+        let symbol: String
+    }
+    let points: [Point]
+    var lengths: [Double] { zip(points, points.dropFirst()).map { hypot($0.x - $1.x, $0.y - $1.y) } }
+    var total: Double { lengths.reduce(0, +) }
+
+    func sample(at progress: Double) -> Sample? {
+        let lengths = lengths
+        guard points.count >= 2 else { return nil }
+        var remaining = min(max(0, progress), total)
+        for i in lengths.indices {
+            let length = lengths[i]
+            guard length > 0.001 else { continue }
+            if remaining > length, i < lengths.count - 1 { remaining -= length; continue }
+            let ratio = min(1, remaining / length)
+            let a = points[i], b = points[i + 1]
+            let position = Point(a.x + (b.x - a.x) * ratio, a.y + (b.y - a.y) * ratio)
+            // Skip near-straight vertices so every drawn road node isn't a turn.
+            var turn = i + 1, distance = max(0, length - remaining)
+            while turn < points.count - 1 {
+                let before = points[turn - 1], at = points[turn], after = points[turn + 1]
+                let u = Point(at.x - before.x, at.y - before.y)
+                let v = Point(after.x - at.x, after.y - at.y)
+                let angle = atan2(u.x * v.y - u.y * v.x, u.x * v.x + u.y * v.y)
+                if abs(angle) > 5 * .pi / 6 {
+                    return Sample(position: position, forward: Point(b.x - a.x, b.y - a.y), segment: i,
+                                  distanceToTurn: distance, instruction: "掉头", symbol: "arrow.uturn.down")
+                }
+                if abs(angle) > .pi / 6 {
+                    // CAMAP local axes: +x east, +y north before binding rotation.
+                    return Sample(position: position, forward: Point(b.x - a.x, b.y - a.y), segment: i,
+                                  distanceToTurn: distance, instruction: angle > 0 ? "左转" : "右转",
+                                  symbol: angle > 0 ? "arrow.turn.up.left" : "arrow.turn.up.right")
+                }
+                distance += lengths[turn]; turn += 1
+            }
+            return Sample(position: position, forward: Point(b.x - a.x, b.y - a.y), segment: i,
+                          distanceToTurn: distance, instruction: "到达目的地附近", symbol: "flag.checkered")
+        }
+        return nil
+    }
+
+    func nextVertex(after progress: Double) -> Double {
+        var sum = 0.0
+        for length in lengths { sum += length; if sum > progress + 0.5 { return sum } }
+        return total
+    }
+
+    func projectedProgress(of point: Point, after progress: Double) -> (distance: Double, progress: Double)? {
+        var sum = 0.0
+        var best: (distance: Double, progress: Double)?
+        for i in lengths.indices {
+            let a = points[i], b = points[i + 1], length = lengths[i]
+            defer { sum += length }
+            guard length > 0.001, sum + length >= progress - 15 else { continue }
+            let ratio = min(1, max(0, ((point.x - a.x) * (b.x - a.x) + (point.y - a.y) * (b.y - a.y)) / (length * length)))
+            let projected = Point(a.x + (b.x - a.x) * ratio, a.y + (b.y - a.y) * ratio)
+            let distance = hypot(point.x - projected.x, point.y - projected.y)
+            if best == nil || distance < best!.distance - 0.1 {
+                best = (distance, sum + length * ratio)
+            }
+        }
+        return best
+    }
+}

@@ -81,6 +81,8 @@ struct ContentView: View {
     @ObservedObject private var contentBrowser = ContentBrowserStore.shared
     @ObservedObject private var routePreview = RoutePreviewStore.shared
     @State private var routeReturnTab: AppTab?
+    @State private var contentReturnTab: AppTab?
+    @ObservedObject private var campusMap = CampusMapStore.shared
 
     private var announcementLifecycle: String {
         "\(userProfile?.studentID ?? -1)-\(scenePhase == .active)"
@@ -223,17 +225,41 @@ struct ContentView: View {
                let index = ProcessInfo.processInfo.arguments.firstIndex(of: "--campura-preview-content"),
                ProcessInfo.processInfo.arguments.indices.contains(index + 1) {
                 switch ProcessInfo.processInfo.arguments[index + 1] {
-                case "shop": contentBrowser.open(.mainShop(1))
+                case "shop": contentBrowser.open(.mainShop(77))
                 case "subshop": contentBrowser.open(.subShop(1, mainShopID: 1))
-                case "product": contentBrowser.open(.product(1))
-                case "promotion": contentBrowser.open(.promotion(1))
+                case "product": contentBrowser.open(.product(5))
+                case "promotion": contentBrowser.open(.promotion(11))
+                case "place":
+                    currentTab = .map
+                    contentBrowser.open(.place(PreviewNavigation.placePreviewID))
                 case "route": routePreview.open(.nextCourse)
                 default: break
                 }
             }
             #endif
         }
+        .task(id: contentBrowser.current?.id) {
+            #if DEBUG
+            await PreviewAPI.configureContentScreenshot(contentBrowser)
+            #endif
+        }
+        .task(id: routePreview.requestID) {
+            #if DEBUG
+            await PreviewAPI.configureRouteScreenshot(routePreview)
+            #endif
+        }
+        .onChange(of: campusMap.focusRequest?.id) { _, _ in
+            if campusMap.focusRequest != nil, contentBrowser.isPresented, !routePreview.isPresented, currentTab != .map {
+                contentReturnTab = currentTab
+                currentTab = .map
+            }
+        }
         .onChange(of: contentBrowser.isPresented) { _, shown in
+            if !shown, !routePreview.isPresented, let previous = contentReturnTab {
+                currentTab = previous
+                contentReturnTab = nil
+                routeReturnTab = nil
+            }
             if shown { UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) }
         }
         .onChange(of: routePreview.isPresented) { _, shown in
@@ -242,8 +268,9 @@ struct ContentView: View {
                 currentTab = .map
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             } else if let previous = routeReturnTab {
-                currentTab = previous
+                currentTab = contentBrowser.isPresented ? previous : contentReturnTab ?? previous
                 routeReturnTab = nil
+                if !contentBrowser.isPresented { contentReturnTab = nil }
             }
         }
         .task(id: announcementLifecycle) {

@@ -18,20 +18,6 @@ extension ContentBrowserStore {
             }
         },
         promotions: { try await RemoteDataService.shared.fetchPromotionEvents() },
-        boundPlace: { reference in
-            #if DEMO
-            // The bundled campus has no verified binding for the local coffee fixture.
-            return nil
-            #else
-            #if DEBUG
-            if PreviewAPI.isEnabled, case .subShop(1, _) = reference {
-                return .place(id: PreviewNavigation.merchantID, name: "生活区咖啡窗口", frameID: PreviewNavigation.frameID)
-            }
-            #endif
-            // The current production contract has no merchant-to-CAMAP binding.
-            // Never infer one from a matching name, address, or numeric shop ID.
-            return nil
-            #endif
-        }
+        boundPlace: { CampusMapStore.shared.routeTarget(for: $0) }
     )))
 }

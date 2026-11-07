@@ -10,11 +10,8 @@ struct SchoolCalendarDateWheel: View {
     @ScaledMetric(relativeTo: .caption2) private var weekdaySize: CGFloat = 9
     @ScaledMetric(relativeTo: .body) private var daySize: CGFloat = 16
     @State private var window: SchoolCalendarDateWindow
-    @State private var position: ScrollPosition
-    @State private var visibleDay: Date
+    @State private var position: Date?
     @State private var presentedDay: Date
-    @State private var itemWidth: CGFloat = 0
-    @State private var isUserScrolling = false
 
     init(
         selection: Binding<Date>,
@@ -26,8 +23,7 @@ struct SchoolCalendarDateWheel: View {
         self.hasEvents = hasEvents
         let day = calendar.startOfDay(for: selection.wrappedValue)
         _window = State(initialValue: SchoolCalendarDateWindow(centeredOn: day, calendar: calendar))
-        _position = State(initialValue: ScrollPosition(x: 0))
-        _visibleDay = State(initialValue: day)
+        _position = State(initialValue: day)
         _presentedDay = State(initialValue: day)
     }
 
@@ -52,7 +48,8 @@ struct SchoolCalendarDateWheel: View {
             }
             .scrollIndicators(.hidden)
             .scrollTargetBehavior(SchoolCalendarDaySnapBehavior(dayWidth: cellWidth))
-            .scrollPosition($position)
+            .scrollPosition(id: $position, anchor: .center)
+            .defaultScrollAnchor(.center, for: .initialOffset)
             .background {
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
                     .fill(Color.accentColor.opacity(0.13))
@@ -63,31 +60,19 @@ struct SchoolCalendarDateWheel: View {
                     .frame(width: cellWidth, height: wheelHeight)
                     .allowsHitTesting(false)
             }
-            .onScrollGeometryChange(for: Int.self) { geometry in
-                guard cellWidth > 0 else { return 0 }
-                return Int(((geometry.contentOffset.x + geometry.contentInsets.leading) / cellWidth).rounded())
-            } action: { _, index in
-                // Reading geometry keeps the event preview live during a drag. Do not write
-                // scrollPosition here: doing so would keep restarting the native gesture.
-                guard window.days.indices.contains(index) else { return }
-                visibleDay = window.days[index]
-                if isUserScrolling { updateSelection(visibleDay) }
+            .onChange(of: position) { _, day in
+                // SwiftUI resolves the cell at the center anchor. Do not derive
+                // selection from pixel offsets: scroll insets and lazy layout
+                // can otherwise put the selected day beside the fixed highlight.
+                if let day { updateSelection(day) }
             }
             .onScrollPhaseChange { _, phase in
-                let wasUserScrolling = isUserScrolling
-                isUserScrolling = phase == .tracking || phase == .interacting || phase == .decelerating
                 if phase == .idle {
-                    if wasUserScrolling { updateSelection(visibleDay) }
-                    let oldCount = window.days.count
                     window.extendIfNeeded(around: selectedDay)
-                    if window.days.count != oldCount {
-                        scrollTo(selectedDay)
-                    }
                 }
             }
             .onChange(of: cellWidth, initial: true) { _, width in
-                itemWidth = width
-                scrollTo(selectedDay)
+                if width > 0 { scrollTo(selectedDay) }
             }
         }
         .frame(height: wheelHeight)
@@ -156,8 +141,8 @@ struct SchoolCalendarDateWheel: View {
     }
 
     private func scrollTo(_ day: Date) {
-        guard itemWidth > 0, let index = window.days.firstIndex(of: day) else { return }
-        position.scrollTo(x: CGFloat(index) * itemWidth)
+        guard window.days.contains(day) else { return }
+        position = day
     }
 
     private func accessibilityTitle(_ day: Date) -> String {

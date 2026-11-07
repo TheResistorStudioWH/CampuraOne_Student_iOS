@@ -1,4 +1,5 @@
 import Foundation
+import CamapKit
 
 /// IDs in main_shops and sub_shops are independent namespaces.
 enum CampusContentReference: Hashable, Identifiable {
@@ -144,3 +145,54 @@ enum RecentlyViewedItem: Identifiable {
     }
 }
 
+
+/// Business identity comes from the published association, never a feature name.
+nonisolated struct CampusMerchantBindings: Decodable, Sendable {
+    struct Location: Decodable, Sendable {
+        let masterId: String
+        let mapRevision: Int
+        let placeID: String
+        let frameId: String
+        let buildingId: String?
+        let levelId: String?
+    }
+    struct Entry: Decodable, Sendable, Identifiable {
+        let placeID: String
+        let shopType: String
+        let shopID: Int
+        let mainShopID: Int
+        let mapLocation: Location
+        var id: String { placeID }
+        var reference: CampusContentReference? {
+            guard shopID > 0, mainShopID > 0 else { return nil }
+            switch shopType {
+            case "main" where shopID == mainShopID: return .mainShop(shopID)
+            case "sub": return .subShop(shopID, mainShopID: mainShopID)
+            default: return nil
+            }
+        }
+    }
+    let schoolID: Int
+    let masterId: String
+    let mapRevision: Int
+    let mapHash: String
+    let bindings: [Entry]
+
+    func matches(_ snapshot: CampusMapSnapshot) -> Bool {
+        schoolID == snapshot.schoolID && masterId == snapshot.document.masterId
+            && mapRevision == snapshot.document.baseRevision && mapHash == snapshot.hash
+    }
+
+    func validatedEntries(in snapshot: CampusMapSnapshot) -> [Entry] {
+        guard matches(snapshot) else { return [] }
+        return bindings.filter { entry in
+            let location = entry.mapLocation
+            guard entry.reference != nil, entry.placeID == location.placeID,
+                  location.masterId == masterId, location.mapRevision == mapRevision,
+                  let feature = snapshot.document.features.first(where: { $0.id == entry.placeID }),
+                  feature.kind == "merchant" else { return false }
+            return feature.frameId == location.frameId && feature.buildingId == location.buildingId
+                && feature.levelId == location.levelId
+        }
+    }
+}

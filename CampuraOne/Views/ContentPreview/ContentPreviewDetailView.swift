@@ -17,12 +17,16 @@ struct ContentPreviewDetailView: View {
             if let detail = model.items.first {
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 20) {
-                        hero(detail).id("photo")
-                        if let event = detail.promotion { promotionInfo(event).id("promotion") }
+                        if page.advertisement != nil || detail.imageURL?.isEmpty == false {
+                            hero(detail).id("photo")
+                        }
+                        if let event = detail.promotion {
+                            promotionInfo(event).id("promotion")
+                            PromotionWatchControls(event: event, merchantName: detail.merchants.map(\.name).joined(separator: "、"))
+                        }
                         if let product = detail.product {
                             VStack(alignment: .leading, spacing: 8) {
-                                Text(product.productPrice, format: .currency(code: "CNY"))
-                                    .font(.title2.bold()).foregroundStyle(Color.accentColor)
+                                priceSummary(product, merchants: detail.merchants)
                                 if detail.promotion != nil {
                                     contentRow(product.productName, subtitle: "查看商品", symbol: "bag") {
                                         browser.push(.product(product.productID))
@@ -60,6 +64,7 @@ struct ContentPreviewDetailView: View {
                 }
                 .scrollPosition(id: $page.scrollID, anchor: .top)
                 .scrollIndicators(.hidden)
+                .scrollDismissesKeyboard(.interactively)
             } else if model.isLoading {
                 ProgressView("正在加载…").frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
@@ -80,6 +85,23 @@ struct ContentPreviewDetailView: View {
 
     private var isShop: Bool {
         switch page.reference { case .mainShop, .subShop: return true; default: return false }
+    }
+
+    private func priceSummary(_ product: Product, merchants: [ContentMerchant]) -> some View {
+        let price = Text(product.productPrice, format: .currency(code: "CNY"))
+            .font(.title2.bold()).foregroundStyle(Color.accentColor)
+        let watch = ProductPriceWatchButton(product: product, merchantName: merchants.map(\.name).joined(separator: "、"))
+        return ViewThatFits(in: .horizontal) {
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                price.fixedSize()
+                Spacer(minLength: 0)
+                watch.fixedSize(horizontal: true, vertical: false)
+            }
+            VStack(alignment: .leading, spacing: 12) {
+                price
+                watch
+            }
+        }
     }
 
     private func hero(_ detail: ContentPreviewDetail) -> some View {
@@ -159,6 +181,8 @@ struct ContentPreviewDetailView: View {
             .foregroundStyle(page.categoryID == id ? Color.accentColor : .secondary)
             .padding(.horizontal, 13).padding(.vertical, 8)
             .background(Color.accentColor.opacity(page.categoryID == id ? 0.12 : 0.04), in: Capsule())
+            .frame(minHeight: 44)
+            .contentShape(Rectangle())
             .beButton { page.categoryID = id }
             .buttonStyle(.plain)
             .accessibilityAddTraits(page.categoryID == id ? .isSelected : [])
@@ -166,7 +190,8 @@ struct ContentPreviewDetailView: View {
 
     private func contentRow(_ title: String, subtitle: String?, symbol: String, action: @escaping () -> Void) -> some View {
         HStack(spacing: 12) {
-            Image(systemName: symbol).foregroundStyle(Color.accentColor).frame(width: 28)
+            Image(systemName: symbol).font(.system(size: 18)).foregroundStyle(Color.accentColor).frame(width: 28)
+                .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 4) {
                 Text(title).font(.subheadline.weight(.semibold))
                 if let subtitle, !subtitle.isEmpty { Text(subtitle).font(.caption).foregroundStyle(.secondary) }

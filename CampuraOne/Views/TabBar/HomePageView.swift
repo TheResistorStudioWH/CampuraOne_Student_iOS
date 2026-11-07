@@ -84,6 +84,9 @@ struct HomePageView: View {
 
             SchoolCalendarTile(context: tileContext)
                 .frame(height: layout.largeTileHeight)
+
+            PriceWatchTile(context: tileContext)
+                .frame(height: layout.smallTileHeight)
         }
         .frame(minWidth: 0, maxWidth: .infinity)
     }

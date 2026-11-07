@@ -242,7 +242,7 @@ struct SearchResultList: View {
             } else if let errorMessage = viewModel.errorMessage,
                       viewModel.items.isEmpty {
                 errorView(errorMessage)
-            } else if displayedResults.isEmpty {
+            } else if displayedResults.isEmpty && smartSuggestions.isEmpty {
                 emptyResultView
             } else {
                 resultList
@@ -270,6 +270,10 @@ struct SearchResultList: View {
                 ForEachWithIndex(displayedResults) { index, item in
                     resultRow(item)
                         .modifier(SearchResultArrival(index: index))
+                }
+
+                if displayedResults.isEmpty {
+                    emptyResultView
                 }
             }
             .padding(.vertical, 4)
@@ -346,6 +350,7 @@ struct SearchResultList: View {
         .font(.caption.weight(.semibold))
         .padding(.horizontal, 11)
         .padding(.vertical, 5)
+        .background(Color(uiColor: .secondarySystemGroupedBackground), in: Capsule())
         .contentShape(Capsule())
         .beButton {
             openPreview(suggestion.info)

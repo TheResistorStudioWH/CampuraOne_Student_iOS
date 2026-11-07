@@ -162,6 +162,14 @@ struct AppRootView: View {
             StudentNavigationStore.shared.bind(userID: userID)
             ContentBrowserStore.shared.bind(userID: userID)
             RoutePreviewStore.shared.bind(userID: userID)
+            PriceWatchStore.shared.bind(userID: userID, studentID: authSession.currentUser?.studentID)
+        }
+        .onOpenURL { url in
+            PriceWatchStore.shared.handlePromotionURL(url, expectedScheme: PromotionLiveActivityController.urlScheme)
+        }
+        .task(id: "price-watch-\(advertisementLifecycle)") {
+            if case .restoring = authSession.state { return }
+            if scenePhase == .active { await PromotionLiveActivityController.shared.reconcile() }
         }
         .task(id: advertisementLifecycle) {
             guard !Task.isCancelled else { return }

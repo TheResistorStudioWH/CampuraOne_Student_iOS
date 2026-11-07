@@ -1,0 +1,2900 @@
+[
+  {
+    "shopID": 2,
+    "shopName": "单点现炒",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 3,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "0bdd7990-407b-44f3-ad01-0b1fd3489f25",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "0c825f32-e5e2-4024-8dba-aa6072188eed",
+      "levelId": "a0fcde1f-7861-4101-91c3-f0abd9bcf457"
+    }
+  },
+  {
+    "shopID": 3,
+    "shopName": "稻粔茶泡饭",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 4,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "0e3eb431-d470-4d61-b7e3-1939c6b2a6ba",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 4,
+    "shopName": "中国邮政",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 5,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "0f207532-c0be-4580-8ed7-00e27ca9beca",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "3fb5dbeb-ccc0-4942-82ff-a124246c0255",
+      "levelId": "e387acd8-3441-4670-ba97-137004ea2a73"
+    }
+  },
+  {
+    "shopID": 5,
+    "shopName": "后街校园超市",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 6,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "0fcfd510-0097-49d4-aafe-48bb21a1244c",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "8e165229-38c4-4529-8153-b429588a5380",
+      "levelId": "039f90c2-9cf5-49ed-a413-ff56d3525ad2"
+    }
+  },
+  {
+    "shopID": 6,
+    "shopName": "库迪咖啡",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [
+      5
+    ],
+    "adIDs": [
+      7
+    ],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [
+      11
+    ],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 7,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "12f01be9-d03f-477a-aff9-3820c74cc56e",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "8e165229-38c4-4529-8153-b429588a5380",
+      "levelId": "039f90c2-9cf5-49ed-a413-ff56d3525ad2"
+    }
+  },
+  {
+    "shopID": 7,
+    "shopName": "飘香木桶饭",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 8,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "1c42f108-0704-4e94-8a62-0e3649c08c44",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 8,
+    "shopName": "黄焖鸡米饭",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 9,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "1cfe5b10-3001-4ca7-b631-f303518faabd",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 9,
+    "shopName": "便利店",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 10,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "1da074fb-339d-4735-981d-b84e5ee5d185",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "d8b33dd5-8afe-4612-ad08-2b797f6362bd",
+      "levelId": null
+    }
+  },
+  {
+    "shopID": 10,
+    "shopName": "满口香包子",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 11,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "1e7e9167-fd44-46ab-b77b-f5be267872c5",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "0c825f32-e5e2-4024-8dba-aa6072188eed",
+      "levelId": "a0fcde1f-7861-4101-91c3-f0abd9bcf457"
+    }
+  },
+  {
+    "shopID": 11,
+    "shopName": "舍得牛肉面",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 12,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "210c33e1-2c28-43f1-8778-960e5da0c05c",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 12,
+    "shopName": "千业数码",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 13,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "224079f6-9cf6-4f8a-8d0d-f3608bbdd163",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "8e165229-38c4-4529-8153-b429588a5380",
+      "levelId": "039f90c2-9cf5-49ed-a413-ff56d3525ad2"
+    }
+  },
+  {
+    "shopID": 13,
+    "shopName": "冯妈妈热干面",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 14,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "243a5d96-e59c-47cc-8774-b9c562480da7",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 14,
+    "shopName": "王者炸串",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [
+      8
+    ],
+    "adIDs": [
+      10
+    ],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [
+      14
+    ],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 15,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "26f26a47-f342-4ebc-a260-aa32a6db98c6",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "3fb5dbeb-ccc0-4942-82ff-a124246c0255",
+      "levelId": "e387acd8-3441-4670-ba97-137004ea2a73"
+    }
+  },
+  {
+    "shopID": 15,
+    "shopName": "煎饼铺",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 16,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "2a189873-e394-4254-8651-6c85e5d30b37",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "56b2bdb1-58d5-4249-92d9-6ba15aab1402",
+      "levelId": "bf1293bf-c9f6-422a-841b-eb2970cd03e9"
+    }
+  },
+  {
+    "shopID": 16,
+    "shopName": "煎饼铺",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 17,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "2c577b30-07ea-4a5c-aa23-bffc7254601b",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "3fb5dbeb-ccc0-4942-82ff-a124246c0255",
+      "levelId": "e387acd8-3441-4670-ba97-137004ea2a73"
+    }
+  },
+  {
+    "shopID": 17,
+    "shopName": "中国联通",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 18,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "32f528a8-1bab-4d91-bb97-5e20b493fd86",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "8e165229-38c4-4529-8153-b429588a5380",
+      "levelId": "039f90c2-9cf5-49ed-a413-ff56d3525ad2"
+    }
+  },
+  {
+    "shopID": 18,
+    "shopName": "昌职文印",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 19,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "364e4e26-39c1-453d-88b8-5f7c4b0b2a61",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "8e165229-38c4-4529-8153-b429588a5380",
+      "levelId": "039f90c2-9cf5-49ed-a413-ff56d3525ad2"
+    }
+  },
+  {
+    "shopID": 19,
+    "shopName": "百香林蛋糕",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 20,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "3671526d-11d2-4479-b151-d11f5dc5c0d1",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "8e165229-38c4-4529-8153-b429588a5380",
+      "levelId": "039f90c2-9cf5-49ed-a413-ff56d3525ad2"
+    }
+  },
+  {
+    "shopID": 20,
+    "shopName": "老汉口热干面",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 21,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "37e46dd9-5344-453a-87f6-f37c3a78ae5f",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 21,
+    "shopName": "营养套餐",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 22,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "3f688c6e-d974-4bc7-8dc7-93b34ddac354",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 22,
+    "shopName": "京东",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 23,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "411a3087-aa86-474f-8b60-e120c2e926a3",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "19ca1b01-d531-433c-8a6d-52f2360956ad",
+      "levelId": "bfefe522-4139-4e02-b4e4-6a530e722c9b"
+    }
+  },
+  {
+    "shopID": 23,
+    "shopName": "菜鸟驿站",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 24,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "41b30222-abf4-42e6-ae08-9b1b4096f753",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "88092cfd-5f15-4558-9255-25ce4a43a252",
+      "levelId": "a288550e-6b35-466f-93aa-fb5ef6f6ab30"
+    }
+  },
+  {
+    "shopID": 24,
+    "shopName": "欢喜港滑蛋饭",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 25,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "42c17bcb-3afc-4d8b-836f-afaa66edd426",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "0c825f32-e5e2-4024-8dba-aa6072188eed",
+      "levelId": "a0fcde1f-7861-4101-91c3-f0abd9bcf457"
+    }
+  },
+  {
+    "shopID": 25,
+    "shopName": "现炒双拼饭",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 26,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "44145023-450c-446b-8e70-14a5298f8a58",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "0c825f32-e5e2-4024-8dba-aa6072188eed",
+      "levelId": "a0fcde1f-7861-4101-91c3-f0abd9bcf457"
+    }
+  },
+  {
+    "shopID": 26,
+    "shopName": "螺蛳粉面普",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 27,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "44f22fed-9fd4-41fe-91fe-54d4dc4db606",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "3fb5dbeb-ccc0-4942-82ff-a124246c0255",
+      "levelId": "e387acd8-3441-4670-ba97-137004ea2a73"
+    }
+  },
+  {
+    "shopID": 27,
+    "shopName": "特色猪油炒饭",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 28,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "4814c45c-cbe5-49cf-8daa-48e9618c640d",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 28,
+    "shopName": "古茗",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 29,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "49a4eb18-f59b-48e7-86d6-0157fac307d6",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "56b2bdb1-58d5-4249-92d9-6ba15aab1402",
+      "levelId": "bf1293bf-c9f6-422a-841b-eb2970cd03e9"
+    }
+  },
+  {
+    "shopID": 29,
+    "shopName": "港式深井烧腊",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 30,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "4aaeba6d-f36c-4803-b8f0-50dbbd474e9c",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 30,
+    "shopName": "土豆泥拌饭",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 31,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "4b140f16-2bbe-4cd5-81ee-f5e4ecd653f2",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 31,
+    "shopName": "麦可西饼蛋糕店",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 32,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "4bb0a6fa-6036-45cb-9983-5d0052814225",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "8e165229-38c4-4529-8153-b429588a5380",
+      "levelId": "039f90c2-9cf5-49ed-a413-ff56d3525ad2"
+    }
+  },
+  {
+    "shopID": 32,
+    "shopName": "老汉口热干面",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 33,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "52ff2b9c-97a8-4d8e-a006-0b000ab308ac",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "0c825f32-e5e2-4024-8dba-aa6072188eed",
+      "levelId": "a0fcde1f-7861-4101-91c3-f0abd9bcf457"
+    }
+  },
+  {
+    "shopID": 33,
+    "shopName": "茶甜喜食",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 34,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "58400ed7-d1ae-4280-815e-61d9bcb8e199",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "0c825f32-e5e2-4024-8dba-aa6072188eed",
+      "levelId": "a0fcde1f-7861-4101-91c3-f0abd9bcf457"
+    }
+  },
+  {
+    "shopID": 34,
+    "shopName": "川味麻辣香锅",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 35,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "58d27a03-7e96-496b-95ab-f4bfcffc1fb8",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 35,
+    "shopName": "兜仕茶",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 36,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "59bf436f-db6c-4635-a01f-89d32afcd706",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 36,
+    "shopName": "同学特色小炒",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 37,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "5b195a6a-6f13-4fa5-b655-d13754b33845",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 37,
+    "shopName": "头号卤匠",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 38,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "5bd95990-a473-4472-aff6-738d307b4803",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "0c825f32-e5e2-4024-8dba-aa6072188eed",
+      "levelId": "a0fcde1f-7861-4101-91c3-f0abd9bcf457"
+    }
+  },
+  {
+    "shopID": 38,
+    "shopName": "荆州美食美味",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 39,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "5fe8faef-ce1c-40e7-94d6-5be7e90002e4",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 39,
+    "shopName": "手工馄饨水饺",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 40,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "61891c1d-152b-44c6-a9d6-b9aae73d945e",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 40,
+    "shopName": "鲜果驿站",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 41,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "64498eb7-fe35-4671-beb3-47600c43fec1",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "8e165229-38c4-4529-8153-b429588a5380",
+      "levelId": "039f90c2-9cf5-49ed-a413-ff56d3525ad2"
+    }
+  },
+  {
+    "shopID": 41,
+    "shopName": "小街胡同牛杂面",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 42,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "64d7d76f-2868-470a-9e9c-66b46565ccc9",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 42,
+    "shopName": "瓦香鸡米饭",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 43,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "663d2ae5-0ca8-400d-801b-a33197d3fe7c",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 43,
+    "shopName": "港式五谷营养粥铺",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 44,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "672b04b4-4732-455a-96ad-dc0d334538d0",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "0c825f32-e5e2-4024-8dba-aa6072188eed",
+      "levelId": "a0fcde1f-7861-4101-91c3-f0abd9bcf457"
+    }
+  },
+  {
+    "shopID": 44,
+    "shopName": "df炸鸡",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 45,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "6809fbef-c0da-4a91-ad79-f3aa0ba9957e",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "8e165229-38c4-4529-8153-b429588a5380",
+      "levelId": "039f90c2-9cf5-49ed-a413-ff56d3525ad2"
+    }
+  },
+  {
+    "shopID": 45,
+    "shopName": "小锅米线",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 46,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "6c783b2a-5c65-4f0f-8c2e-1865e27138d1",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 46,
+    "shopName": "疯狂炸鸡",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 47,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "6c7959b6-6666-4000-a744-3632ccd363a0",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "8e165229-38c4-4529-8153-b429588a5380",
+      "levelId": "039f90c2-9cf5-49ed-a413-ff56d3525ad2"
+    }
+  },
+  {
+    "shopID": 47,
+    "shopName": "襄阳牛肉面",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 48,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "6cd46e9b-267a-4ced-bf42-27752f2a8fd2",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 48,
+    "shopName": "单先生炸鸡",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 49,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "6d0717ec-0be4-45bb-807b-b394a1085b9d",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "56b2bdb1-58d5-4249-92d9-6ba15aab1402",
+      "levelId": "bf1293bf-c9f6-422a-841b-eb2970cd03e9"
+    }
+  },
+  {
+    "shopID": 49,
+    "shopName": "南京脆皮酱香饼",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 50,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "6e079142-f1c0-4fc1-9390-98038f2ba9e1",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 50,
+    "shopName": "台球馆",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 51,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "70c0f272-aef3-4cf0-ab01-17910cec51d2",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "bbe93218-0919-463d-bee5-652598a17b7a",
+      "levelId": "74375655-7dba-41da-84a8-a3e86aea29da"
+    }
+  },
+  {
+    "shopID": 51,
+    "shopName": "大碗小厨私房菜",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 52,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "733b0cc3-6f46-4ca1-bf78-7f785d0a764b",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "0c825f32-e5e2-4024-8dba-aa6072188eed",
+      "levelId": "a0fcde1f-7861-4101-91c3-f0abd9bcf457"
+    }
+  },
+  {
+    "shopID": 52,
+    "shopName": "台球馆",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 53,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "7445c056-c749-4bdd-9c51-7a3c88b66584",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "88092cfd-5f15-4558-9255-25ce4a43a252",
+      "levelId": "673a249b-b144-4617-816b-585607acbe74"
+    }
+  },
+  {
+    "shopID": 53,
+    "shopName": "成都冒烤鸭",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 54,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "74b94713-0a75-4d8a-be80-7d7932109041",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 54,
+    "shopName": "迪哲天鲜果园",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 55,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "74c7930a-5394-46ce-9f6e-a603f1eb7ddf",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "8e165229-38c4-4529-8153-b429588a5380",
+      "levelId": "039f90c2-9cf5-49ed-a413-ff56d3525ad2"
+    }
+  },
+  {
+    "shopID": 55,
+    "shopName": "京东数码",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 56,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "74d7eff5-a565-4308-a829-37086074ea7f",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "8e165229-38c4-4529-8153-b429588a5380",
+      "levelId": "039f90c2-9cf5-49ed-a413-ff56d3525ad2"
+    }
+  },
+  {
+    "shopID": 56,
+    "shopName": "塔斯汀汉堡",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 57,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "76134def-4ed5-47af-bba0-3f76cc043a69",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "c9949c4a-081c-43d6-a863-2967aa58077c",
+      "levelId": "af6b619a-2fa6-40ec-b617-0b6ef1f03e8e"
+    }
+  },
+  {
+    "shopID": 57,
+    "shopName": "叫了个炸鸡",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 58,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "7b6aff69-792d-42eb-8412-7c6d9d280fc8",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "8e165229-38c4-4529-8153-b429588a5380",
+      "levelId": "039f90c2-9cf5-49ed-a413-ff56d3525ad2"
+    }
+  },
+  {
+    "shopID": 58,
+    "shopName": "巴蜀土锑饭",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 59,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "7e09f288-ce30-4201-91bc-a0d0cfe709fd",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 59,
+    "shopName": "襄阳牛肉面",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 60,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "7f0915c4-5723-4ac0-8ef3-a94c65d25e60",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "0c825f32-e5e2-4024-8dba-aa6072188eed",
+      "levelId": "a0fcde1f-7861-4101-91c3-f0abd9bcf457"
+    }
+  },
+  {
+    "shopID": 60,
+    "shopName": "饮品奶茶",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [
+      9
+    ],
+    "adIDs": [
+      11
+    ],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [
+      15
+    ],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 61,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "81eddf20-1b4c-4722-af21-1aa2ce0444a9",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 61,
+    "shopName": "千里香馄饨",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 62,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "81f5f57e-b227-47e4-8928-7ea1edcc6bde",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 62,
+    "shopName": "牛肉面",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 63,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "834ac8f8-1f1f-4f71-8c17-67a5548b27f7",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "c9949c4a-081c-43d6-a863-2967aa58077c",
+      "levelId": "49db0ae4-a670-466a-99b0-e4084e276e70"
+    }
+  },
+  {
+    "shopID": 63,
+    "shopName": "特色小碗菜",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 64,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "8418b641-cef0-4633-aa3f-f51c26e88936",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 64,
+    "shopName": "极兔",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 65,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "84377026-dd07-4086-a36b-02ae54958605",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "19ca1b01-d531-433c-8a6d-52f2360956ad",
+      "levelId": "bfefe522-4139-4e02-b4e4-6a530e722c9b"
+    }
+  },
+  {
+    "shopID": 65,
+    "shopName": "悟空现炒",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 66,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "86a701b4-1252-4d5f-afc8-76679ccecead",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "0c825f32-e5e2-4024-8dba-aa6072188eed",
+      "levelId": "a0fcde1f-7861-4101-91c3-f0abd9bcf457"
+    }
+  },
+  {
+    "shopID": 66,
+    "shopName": "味真香木桶饭",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 67,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "8ad4835a-50cd-41e1-95ad-01a66d21bc21",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "0c825f32-e5e2-4024-8dba-aa6072188eed",
+      "levelId": "a0fcde1f-7861-4101-91c3-f0abd9bcf457"
+    }
+  },
+  {
+    "shopID": 67,
+    "shopName": "黄蜀郎鸡公煲",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 68,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "926e5b82-fb4b-436e-b08e-ede23d823181",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 68,
+    "shopName": "中国移动",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 69,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "938ad162-8628-430c-b299-5c8e6ff5d9d9",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "8e165229-38c4-4529-8153-b429588a5380",
+      "levelId": "039f90c2-9cf5-49ed-a413-ff56d3525ad2"
+    }
+  },
+  {
+    "shopID": 69,
+    "shopName": "萝卜牛肉面",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 70,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "9c2d5b6d-b2f7-4995-b1aa-b5b993875195",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 70,
+    "shopName": "荆楚湘菜",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 71,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "9f7f91ba-7ac4-4786-ae34-99ebeefa0310",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 71,
+    "shopName": "现炒下饭菜",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 72,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "a096d1cc-c76d-44b7-b478-46ded6ee37fd",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "0c825f32-e5e2-4024-8dba-aa6072188eed",
+      "levelId": "a0fcde1f-7861-4101-91c3-f0abd9bcf457"
+    }
+  },
+  {
+    "shopID": 72,
+    "shopName": "黑椒鸡排饭",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 73,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "a0d1fe83-f7bb-4b2d-b48e-b83e5afdb38d",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 73,
+    "shopName": "小笼包",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 74,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "a18b9e34-7abf-4077-ab5f-4666cc9f2fc1",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 74,
+    "shopName": "猪排饭",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 75,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "a205608a-7370-41ee-9440-c40fbfe49a5e",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "0c825f32-e5e2-4024-8dba-aa6072188eed",
+      "levelId": "a0fcde1f-7861-4101-91c3-f0abd9bcf457"
+    }
+  },
+  {
+    "shopID": 75,
+    "shopName": "砂锅粉",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 76,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "a2a0438c-1ee8-4573-bbac-5cd42b17e820",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 76,
+    "shopName": "仙桃水果超市",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 77,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "a3931305-96fc-4707-80c6-99255475100b",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "8e165229-38c4-4529-8153-b429588a5380",
+      "levelId": "039f90c2-9cf5-49ed-a413-ff56d3525ad2"
+    }
+  },
+  {
+    "shopID": 77,
+    "shopName": "山麦烘焙",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [
+      6
+    ],
+    "adIDs": [
+      8
+    ],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [
+      12
+    ],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 78,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "a74166bd-7798-4653-a59a-1256e9d7582f",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "8e165229-38c4-4529-8153-b429588a5380",
+      "levelId": "039f90c2-9cf5-49ed-a413-ff56d3525ad2"
+    }
+  },
+  {
+    "shopID": 78,
+    "shopName": "石磨肠粉",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 79,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "a9044940-600d-43fe-86b9-0f68ad11462c",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 79,
+    "shopName": "顺丰",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 80,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "a9d558f7-b4fd-4414-88e5-6e3c997f984d",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "19ca1b01-d531-433c-8a6d-52f2360956ad",
+      "levelId": "bfefe522-4139-4e02-b4e4-6a530e722c9b"
+    }
+  },
+  {
+    "shopID": 80,
+    "shopName": "华仔烧卤快餐",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 81,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "ab1e42aa-6b5e-4a62-be10-3caf74e983ea",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 81,
+    "shopName": "食圣客自选&犇犇牛肉面",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 82,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "b487c254-16ce-4e1c-b510-87270a7ca5e8",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 82,
+    "shopName": "滑蛋饭",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 83,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "b73269e5-13bd-4635-a06d-e9a068feb38a",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 83,
+    "shopName": "瓦香辣子鸡",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 84,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "b7d80506-6b8a-461f-8730-39336d58ba91",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 84,
+    "shopName": "香酥烤鸭饭",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 85,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "ba4da929-b518-4a0e-a536-80a61c465430",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 85,
+    "shopName": "梅子营养套餐",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 86,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "ba6a2eec-96cd-49a0-b664-6da858cf175c",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 86,
+    "shopName": "麦香香煎饼",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 87,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "c0f9ef89-9a74-49ca-8ed6-c8ee3992ca2a",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "0c825f32-e5e2-4024-8dba-aa6072188eed",
+      "levelId": "a0fcde1f-7861-4101-91c3-f0abd9bcf457"
+    }
+  },
+  {
+    "shopID": 87,
+    "shopName": "秀色可餐",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 88,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "c5b33241-2b72-4fb9-be47-793a5d6651ad",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 88,
+    "shopName": "蜜雪冰城",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [
+      10
+    ],
+    "adIDs": [
+      12
+    ],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [
+      16
+    ],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 89,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "c8378774-15c3-4053-8f15-a0521afc2e3c",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "56b2bdb1-58d5-4249-92d9-6ba15aab1402",
+      "levelId": "bf1293bf-c9f6-422a-841b-eb2970cd03e9"
+    }
+  },
+  {
+    "shopID": 89,
+    "shopName": "霸王牛肉面",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 90,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "d3b5dd5e-db9a-4b86-a6fe-abf20f82e2cc",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 90,
+    "shopName": "辣子鸡干挑面",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 91,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "d48875b9-d4b4-4bc5-baac-9bd6dea2023b",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 91,
+    "shopName": "热干面",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 92,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "d9442080-933d-4330-a831-0cb233d1d65f",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 92,
+    "shopName": "利生校园超市",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 93,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "dc241186-d4a7-4fc2-ab95-2b205d0c3e7d",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "bbe93218-0919-463d-bee5-652598a17b7a",
+      "levelId": "bd6587e3-7127-40d5-8ef0-31c78ca0a89d"
+    }
+  },
+  {
+    "shopID": 93,
+    "shopName": "襄阳牛杂面",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 94,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "e21b46b6-a07e-4634-be3e-e60ec2ec68be",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 94,
+    "shopName": "悦湘小碗菜",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 95,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "e38ee4fe-ebf8-4c72-b463-0f00eaffa2ca",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 95,
+    "shopName": "亦鱼亦饭",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 96,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "e66d46ff-0beb-420e-9313-ffb938b10375",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 96,
+    "shopName": "手工牛肉面",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 97,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "e8431534-0078-486a-a935-29d58fbcf46c",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "0c825f32-e5e2-4024-8dba-aa6072188eed",
+      "levelId": "a0fcde1f-7861-4101-91c3-f0abd9bcf457"
+    }
+  },
+  {
+    "shopID": 97,
+    "shopName": "瑞幸咖啡",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [
+      7
+    ],
+    "adIDs": [
+      9
+    ],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [
+      13
+    ],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 98,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "e8534a05-8bbe-4e45-82a8-d2bdec8f4571",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "d8b33dd5-8afe-4612-ad08-2b797f6362bd",
+      "levelId": null
+    }
+  },
+  {
+    "shopID": 98,
+    "shopName": "口口香营养粥",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 99,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "e9f1cd0e-eac4-4a1b-976a-0f93c149fd2d",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 99,
+    "shopName": "美味饼屋",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 100,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "eaf1a2fc-6bf0-4b7d-b628-fc7368e43a6d",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 100,
+    "shopName": "精品小锅菜",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 101,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "ee735dc1-34e8-4be1-ba9b-8ad21097c3aa",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 101,
+    "shopName": "利生便利店",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 102,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "eea9cd1e-7e19-46b9-a93d-74cfd2db8a1a",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "3fb5dbeb-ccc0-4942-82ff-a124246c0255",
+      "levelId": "e387acd8-3441-4670-ba97-137004ea2a73"
+    }
+  },
+  {
+    "shopID": 102,
+    "shopName": "形象造型",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 103,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "eff8f9b4-fab8-4e3a-bd9a-a7277dba88a4",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "8e165229-38c4-4529-8153-b429588a5380",
+      "levelId": "039f90c2-9cf5-49ed-a413-ff56d3525ad2"
+    }
+  },
+  {
+    "shopID": 103,
+    "shopName": "羊杂面",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "2F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 104,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "f94beb60-2798-4653-9d62-0eb8944f11ab",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "428bd074-2ca3-4f17-acef-d97e44d9464d"
+    }
+  },
+  {
+    "shopID": 104,
+    "shopName": "悦轻肴轻食",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 105,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "fbcb2940-9c8f-4b34-bc93-a6d1c058aef1",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "56b2bdb1-58d5-4249-92d9-6ba15aab1402",
+      "levelId": "bf1293bf-c9f6-422a-841b-eb2970cd03e9"
+    }
+  },
+  {
+    "shopID": 105,
+    "shopName": "山西油泼面",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 106,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "fcdb16b5-2f56-4e8b-a290-16299c7e52d4",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  },
+  {
+    "shopID": 106,
+    "shopName": "尚品零食铺",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "建筑",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 107,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "fd8e6a7c-3771-40fe-bab0-41aed6975df6",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "8e165229-38c4-4529-8153-b429588a5380",
+      "levelId": "039f90c2-9cf5-49ed-a413-ff56d3525ad2"
+    }
+  },
+  {
+    "shopID": 107,
+    "shopName": "隆江猪脚饭",
+    "shopAddress": [
+      "武昌职业学院（演示）",
+      "一食堂",
+      "1F"
+    ],
+    "shopSlogan": "演示商户资料；未开通经营及登录，不代表商户真实信息。",
+    "subShopsList": [],
+    "productsList": [],
+    "adIDs": [],
+    "shopLogo": null,
+    "shopImg": null,
+    "saleIDs": [],
+    "schoolID": 1,
+    "areaID": null,
+    "accountID": 108,
+    "mapLocation": {
+      "masterId": "9c3237e6-f91d-4a2f-8ef5-88fd73027ff4",
+      "mapRevision": 2,
+      "placeID": "fd9c1e85-0bdb-4164-afdd-fb61a1e5eb5e",
+      "frameId": "66f67af4-981f-4469-b055-b193f7240456",
+      "buildingId": "a685aebc-a455-4899-a540-b9c825d79027",
+      "levelId": "f4796e77-54ee-4741-bc36-eef8c8edcbc2"
+    }
+  }
+]

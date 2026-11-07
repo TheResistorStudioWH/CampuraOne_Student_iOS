@@ -32,6 +32,7 @@ final class RemoteDataService {
     // MARK: - 请求学生信息
     
     func fetchMyStudentProfile() async throws -> Student {
+        let priceWatchIdentity = PriceWatchStore.shared.identity
         let json = try await APIClient.shared.get(
             url: APIConfig.api_download(APIConfig.DLPath.studentProfile)
         )
@@ -41,7 +42,9 @@ final class RemoteDataService {
             throw APIClientError.invalidPayload("服务器没有返回有效的学生信息")
         }
 
-        return JSONMapper.makeStudent(from: json["data"])
+        let student = JSONMapper.makeStudent(from: json["data"])
+        PriceWatchStore.shared.resolveSchool(student.schoolID, studentID: student.studentID, for: priceWatchIdentity)
+        return student
     }
     
     // MARK: - 请求学校数据

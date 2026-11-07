@@ -68,13 +68,20 @@ final class StudentNavigationStore: ObservableObject {
 
     func startPreview(origin: NavigationOrigin, destination: String?) async {
         presentationMode = .preview
-        await start(origin: origin, destination: destination, recommendationsEnabled: false)
+        await start(origin: origin, destination: destination, recommendationsEnabled: nil)
     }
+
+    func beginGuidance() {
+        guard isCurrent, plan?.hasRoute == true, !isWorking else { return }
+        previewSuggestionID = nil
+        presentationMode = .guidance
+    }
+    func returnToPreview() { presentationMode = .preview }
 
     /// Closing the UI must not wait for a network mutation, or allow an old
     /// planning response to repopulate the map. Server cleanup is best effort.
     func discardPreview() {
-        guard presentationMode == .preview else { return }
+        guard presentationMode != .none else { return }
         let previous = plan
         let knownVersion = reportedContextVersion ?? previous?.contextVersion
         let account = userID

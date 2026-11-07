@@ -112,3 +112,58 @@ nonisolated enum CampusMapGeometry {
                        latitude: location.coordinate.latitude, accuracyMeters: location.horizontalAccuracy)
     }
 }
+
+/// Fitting uses the actual unobstructed map area, not screen-sized offsets.
+nonisolated enum CampusMapViewport {
+    static func fittingRect(coordinates: [CLLocationCoordinate2D], size: CGSize,
+                            topInset: CGFloat, bottomInset: CGFloat, minimumMeters: Double = 80) -> MKMapRect? {
+        let coordinates = coordinates.filter { CLLocationCoordinate2DIsValid($0) && $0.latitude.isFinite && $0.longitude.isFinite }
+        let points = coordinates.map(MKMapPoint.init)
+        guard let first = points.first, size.width > 0, size.height > 0 else { return nil }
+        let top = max(0, topInset), bottom = max(0, bottomInset)
+        let visibleHeight = size.height - top - bottom
+        // A nearly full-height details sheet is for reading, not a tiny-map refit.
+        guard visibleHeight >= max(64, size.height * 0.18) else { return nil }
+        let usableWidth = max(1, size.width - 48)
+        let minX = points.map(\.x).min()!, maxX = points.map(\.x).max()!
+        let minY = points.map(\.y).min()!, maxY = points.map(\.y).max()!
+        let metersPerPoint = MKMetersPerMapPointAtLatitude(first.coordinate.latitude)
+        guard metersPerPoint.isFinite, metersPerPoint > 0 else { return nil }
+        let scale = max((maxX - minX) * 1.3 / usableWidth,
+                        (maxY - minY) * 1.3 / max(1, visibleHeight - 40),
+                        minimumMeters / metersPerPoint / visibleHeight)
+        let width = scale * size.width, height = scale * size.height
+        let centerY = (minY + maxY) / 2 + scale * (bottom - top) / 2
+        return MKMapRect(x: (minX + maxX) / 2 - width / 2, y: centerY - height / 2, width: width, height: height)
+    }
+}
+
+/// Small deterministic screen-space clusters keep separate buildings reachable
+/// without stacking a wall of labels. These points are never used as GPS.
+nonisolated enum CampusMarkerLayout {
+    struct Item {
+        let id: String
+        let point: CGPoint
+    }
+    struct Cluster: Identifiable {
+        var items: [Item]
+        var id: String { items.map(\.id).sorted().joined(separator: "|") }
+        var center: CGPoint {
+            CGPoint(x: items.map(\.point.x).reduce(0, +) / CGFloat(items.count),
+                    y: items.map(\.point.y).reduce(0, +) / CGFloat(items.count))
+        }
+    }
+
+    static func clusters(_ items: [Item], separation: CGFloat = 64) -> [Cluster] {
+        var clusters: [Cluster] = []
+        for item in items.filter({ $0.point.x.isFinite && $0.point.y.isFinite }).sorted(by: { $0.id < $1.id }) {
+            if let index = clusters.firstIndex(where: { cluster in
+                hypot(cluster.center.x - item.point.x, cluster.center.y - item.point.y) < separation
+                    && cluster.items.allSatisfy { hypot($0.point.x - item.point.x, $0.point.y - item.point.y) < separation * 1.6 }
+            }) {
+                clusters[index].items.append(item)
+            } else { clusters.append(Cluster(items: [item])) }
+        }
+        return clusters
+    }
+}
